@@ -20,16 +20,22 @@ cd <название проекта>
 запускаем сервер
 python manage.py runserver
 
+Создайте файл .env в корне проекта и добавьте туда настройки, например:
+SECRET_KEY='your-secret-key'
+DEBUG=True
+
 pipeline
 stages:
   - linting
 
-flake8:
+lint_quotes:
   stage: linting
-  image: registry.gitlab.com/pipeline-components/flake8:latest
+  image: python:3.9
   script:
-    - pip install -r requirements.txt
-    - flake8 --verbose
+    - pip install flake8 flake8-quotes
+    - flake8
+  only:
+    - main
 
 
 Переходим на сайт
