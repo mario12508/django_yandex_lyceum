@@ -5,7 +5,7 @@ pip install venv
 Запускаем его:
 python -m venv venv
 активируем его:
-source venv/bin/active
+source venv/bin/activate
 
 создаем requirements.txt
 pip install -r requirements.txt
