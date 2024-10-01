@@ -1,11 +1,23 @@
 stages:
-  - linting
+  - lint
+  - test
 
-lint_quotes:
-  stage: linting
-  image: python:3.9
+# Проверка кода с помощью flake8 и isort
+lint:
+  stage: lint
+  image: python:3.10
+  before_script:
+    - pip install flake8 flake8-bugbear flake8-quotes flake8-import-order isort python-dotenv
   script:
-    - pip install flake8 flake8-quotes
-    - flake8
-  only:
-    - main
+    - flake8 --max-line-length=79 .
+    - isort --check-only --diff .
+
+# Запуск тестов с использованием pytest
+test:
+  stage: test
+  image: python:3.10
+  before_script:
+    - pip install -r requirements/prod.txt
+    - pip install pytest
+  script:
+    - pytest --maxfail=1 --disable-warnings -q
