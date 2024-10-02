@@ -1,6 +1,5 @@
 stages:
   - linting
-
 lint_quotes:
   stage: linting
   image: python:3.9
