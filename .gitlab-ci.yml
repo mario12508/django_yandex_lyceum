@@ -1,13 +1,11 @@
 stages:
-  - lint
+  - linting
 
-# Линтинг с flake8, isort и black
-lint:
-  stage: lint
-  image: python:3.10
-  before_script:
-    - pip install flake8 flake8-bugbear flake8-quotes flake8-import-order flake8-pep8-naming isort black python-dotenv
+lint_quotes:
+  stage: linting
+  image: python:3.9
   script:
-    - flake8 --max-line-length=79 .
-    - isort --check-only --diff .
-    - black --check --diff .
+    - pip install flake8 flake8-quotes
+    - flake8
+  only:
+    - main

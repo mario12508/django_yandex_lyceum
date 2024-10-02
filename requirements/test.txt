@@ -6,3 +6,4 @@ gunicorn==20.1.0  # Веб-сервер для продакшн
 python-dotenv==1.0.0
 pytest==8.3.3
 pytest-django==4.9.0
+black==24.8.0
