@@ -11,4 +11,4 @@ lint:
   script:
     - flake8 --max-line-length=79 .
     - isort --check-only --diff .
-    - black --line-length 79 .
+    - black --line-length 79 --check .
