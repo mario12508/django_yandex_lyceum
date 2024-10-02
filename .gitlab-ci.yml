@@ -6,7 +6,6 @@ lint:
   stage: lint
   image: python:3.10
   before_script:
-    - pip install --upgrade pip  # Обновляем pip до последней версии
     - pip install flake8 flake8-bugbear flake8-quotes flake8-import-order pep8-naming isort black python-dotenv
   script:
     - flake8 --max-line-length=79 .
