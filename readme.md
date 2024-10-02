@@ -24,19 +24,6 @@ python manage.py runserver
 SECRET_KEY='your-secret-key'
 DEBUG=True
 
-pipeline
-stages:
-  - linting
-
-lint_quotes:
-  stage: linting
-  image: python:3.9
-  script:
-    - pip install flake8 flake8-quotes
-    - flake8
-  only:
-    - main
-
 
 Переходим на сайт
 http://127.0.0.1:8000/

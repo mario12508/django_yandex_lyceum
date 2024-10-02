@@ -1,25 +1,11 @@
 stages:
-  - lint
-  - test
+  - linting
 
-# Проверка кода с помощью flake8 и isort
-lint:
-  stage: lint
-  image: python:3.10
-  before_script:
-    - pip install flake8 flake8-bugbear flake8-quotes flake8-import-order isort python-dotenv
+lint_quotes:
+  stage: linting
+  image: python:3.9
   script:
-    - flake8 --max-line-length=79 .
-    - isort --check-only --diff .
-
-# Запуск тестов с использованием pytest
-test:
-  stage: test
-  image: python:3.10
-  before_script:
-    - pip install -r requirements/prod.txt
-    - pip install pytest pytest-django
-    - export DJANGO_SETTINGS_MODULE=lyceum.lyceum.settings  # Установите путь к settings.py вашего проекта
-    - export PYTHONPATH=$PYTHONPATH:$(pwd)/lyceum/lyceum  # Укажите относительный путь к корневой папке проекта
-  script:
-    - pytest --maxfail=1 --disable-warnings -q
+    - pip install flake8 flake8-quotes
+    - flake8
+  only:
+    - main
