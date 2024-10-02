@@ -19,6 +19,7 @@ test:
   before_script:
     - pip install -r requirements/prod.txt
     - pip install pytest pytest-django
-    - export DJANGO_SETTINGS_MODULE=myproject.settings  # Установите правильный путь к settings.py вашего проекта
+    - export DJANGO_SETTINGS_MODULE=lyceum.settings  # Установите путь к settings.py вашего проекта
+    - export PYTHONPATH=$PYTHONPATH:$(pwd)/lyceum/lyceum  # Укажите относительный путь к корневой папке проекта
   script:
     - pytest --maxfail=1 --disable-warnings -q
