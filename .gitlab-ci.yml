@@ -1,3 +1,8 @@
+variables:
+  SECRET_KEY: 'bugagaga'
+  DEBUG: 'True'
+  ALLOWED_HOSTS: '.example.com,.anotherhost.com,127.0.0.1'
+
 stages:      
   - linting
   - test
@@ -17,6 +22,8 @@ flake8:
 
 django-tests:
   stage: test
+  image: python:3.12
+
   script:
     - pip install -r requirements/test.txt
     - python3 lyceum/manage.py test
