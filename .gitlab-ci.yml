@@ -13,3 +13,9 @@ flake8:
   script:
     - pip install -r requirements/test.txt
     - flake8 --verbose --inline-quotes 'double' .
+
+django-tests:
+  stage: test
+  script:
+    - python3 manage.py test
+
