@@ -1,9 +1,7 @@
 import os
 import pathlib
 
-from dotenv import load_dotenv
-
-load_dotenv()
+from decouple import config, Csv
 
 
 def load_bool_env(name, default):
@@ -13,11 +11,11 @@ def load_bool_env(name, default):
 
 BASE_DIR = pathlib.Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.getenv("SECRET_KEY")
+SECRET_KEY = config("SECRET_KEY", default="bygagaga")
 
-DEBUG = load_bool_env("DEBUG", False)
+DEBUG = config("DEBUG", default=False, cast=bool)
 
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "").split(",")
+ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="", cast=Csv())
 
 
 # Application definition
