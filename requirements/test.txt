@@ -1,5 +1,6 @@
 Django==4.2.16
 python-dotenv==1.0.1
+django-debug-toolbar==4.4.6
 flake8==6.1.0
 flake8-absolute-import==1.0.0.2
 flake8-commas==2.1.0
