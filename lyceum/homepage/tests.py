@@ -1,13 +1,7 @@
 from django.test import Client, TestCase
 
 
-class CatalogURLTests(TestCase):
-    def test_catalog_list(self):
-        client = Client()
-        response = client.get("/catalog/")
-        self.assertEqual(response.status_code, 200)
-
-    def test_catalog_detail(self):
-        client = Client()
-        response = client.get("/catalog/1/")
+class StaticURLTests(TestCase):
+    def test_catalog_endpoint(self):
+        response = Client().get("/")
         self.assertEqual(response.status_code, 200)
