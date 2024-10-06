@@ -1,11 +1,5 @@
-variables:
-  SECRET_KEY: 'bugagaga'
-  DEBUG: 'True'
-  ALLOWED_HOSTS: '.example.com,.anotherhost.com,127.0.0.1'
-
 stages:      
   - linting
-  - test
 
 black:
   stage: linting
@@ -17,13 +11,15 @@ flake8:
   stage: linting
   image: registry.gitlab.com/pipeline-components/flake8:latest
   script:
+    - python -m pip install --upgrade pip
     - pip install -r requirements/test.txt
-    - flake8 --verbose --inline-quotes 'double' .
+    - flake8 .
 
 django-tests:
-  stage: test
+  stage: linting
   image: python:3.12
-
   script:
+    - python -m pip install --upgrade pip
+    - pip install -r requirements/prod.txt
     - pip install -r requirements/test.txt
-    - python3 lyceum/manage.py test
+    - python lyceum/manage.py test
