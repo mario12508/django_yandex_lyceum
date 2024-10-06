@@ -18,9 +18,11 @@ SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", default="bygagaga")
 
 DEBUG = load_bool_env("DJANGO_DEBUG", False)
 
-ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS",
-                               default=["*"]).split(",")
-
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS")
+if not ALLOWED_HOSTS:
+    ALLOWED_HOSTS = ["*"]
+else:
+    ALLOWED_HOSTS = ALLOWED_HOSTS.split(",")
 
 # Application definition
 
