@@ -1,7 +1,7 @@
 import os
 import pathlib
 
-from decouple import config, Csv
+from decouple import Csv, config
 
 
 def load_bool_env(name, default):
