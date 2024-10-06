@@ -18,5 +18,4 @@ flake8:
 django-tests:
   stage: test
   script:
-    - python3 manage.py test
-
+    - python3 /lyceum/manage.py test
