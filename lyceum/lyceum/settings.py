@@ -7,17 +7,19 @@ load_dotenv()
 
 
 def load_bool_env(name, default):
-    env_value = os.getenv(name, str(default)).lower()
-    return env_value in ("true", "1", "yes", "y", "t")
+    env_value = os.environ.get(name, str(default)).lower()
+
+    return env_value.lower() in ("true", "1", "yes", "y", "t")
 
 
 BASE_DIR = pathlib.Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.getenv("SECRET_KEY")
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", default="bygagaga")
 
-DEBUG = load_bool_env("DEBUG", False)
+DEBUG = load_bool_env("DJANGO_DEBUG", False)
 
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "").split(",")
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS",
+                               default=["*"]).split(",")
 
 
 # Application definition
