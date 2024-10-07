@@ -19,6 +19,8 @@ from django.conf import settings
 from django.contrib import admin
 from django.urls import include, path
 
+from catalog.converters import PositiveIntegerConverter
+
 
 urlpatterns = [
     path("", include("homepage.urls")),
@@ -26,6 +28,8 @@ urlpatterns = [
     path("about/", include("about.urls")),
     path("admin/", admin.site.urls),
 ]
+
+register_converter(PositiveIntegerConverter, 'posint')
 
 if settings.DEBUG:
     import debug_toolbar
