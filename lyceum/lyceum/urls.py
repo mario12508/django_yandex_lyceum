@@ -15,11 +15,11 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
+from catalog.converters import PositiveIntegerConverter
+
 from django.conf import settings
 from django.contrib import admin
-from django.urls import include, path
-
-from catalog.converters import PositiveIntegerConverter
+from django.urls import include, path, register_converter
 
 
 urlpatterns = [
@@ -29,7 +29,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
 ]
 
-register_converter(PositiveIntegerConverter, 'posint')
+register_converter(PositiveIntegerConverter, "posint")
 
 if settings.DEBUG:
     import debug_toolbar

@@ -10,4 +10,4 @@ def item_detail(request, pk):
 
 
 def number_view(request, number):
-    return HttpResponse(f'{number}')
+    return HttpResponse(f"{number}")
