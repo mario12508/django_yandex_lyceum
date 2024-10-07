@@ -15,14 +15,11 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
-from catalog.converters import PositiveIntegerConverter
 
 from django.conf import settings
 from django.contrib import admin
 from django.urls import include, path, register_converter
 
-
-register_converter(PositiveIntegerConverter, "posint")
 
 urlpatterns = [
     path("", include("homepage.urls")),
