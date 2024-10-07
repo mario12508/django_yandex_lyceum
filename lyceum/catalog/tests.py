@@ -14,12 +14,12 @@ class CatalogURLTests(TestCase):
 
     def test_number_view(self):
         client = Client()
-        response = client.get("/re/123")
+        response = client.get("/catalog/re/123/")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content.decode(), "123")
 
     def test_converter_number_view(self):
         client = Client()
-        response = client.get("/converter/456")
+        response = client.get("/catalog/converter/456/")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content.decode(), "456")

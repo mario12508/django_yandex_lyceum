@@ -7,6 +7,6 @@ class StaticURLTests(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_coffee_view(self):
-        response = Client().get("/coffee")
+        response = Client().get("/coffee/")
         self.assertEqual(response.status_code, 418)
         self.assertEqual(response.content.decode(), "Я чайник")
