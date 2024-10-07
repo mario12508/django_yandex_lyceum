@@ -22,14 +22,14 @@ from django.contrib import admin
 from django.urls import include, path, register_converter
 
 
+register_converter(PositiveIntegerConverter, "posint")
+
 urlpatterns = [
     path("", include("homepage.urls")),
     path("catalog/", include("catalog.urls")),
     path("about/", include("about.urls")),
     path("admin/", admin.site.urls),
 ]
-
-register_converter(PositiveIntegerConverter, "posint")
 
 if settings.DEBUG:
     import debug_toolbar
