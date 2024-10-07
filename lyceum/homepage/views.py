@@ -6,4 +6,4 @@ def home(request):
 
 
 def coffee_view(request):
-    return HttpResponse("Я чайник", status=418)
+    return HttpResponse("<body>Я чайник</body>", status=418)
