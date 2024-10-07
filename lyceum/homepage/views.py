@@ -1,3 +1,4 @@
+from http import HTTPStatus
 from django.http import HttpResponse
 
 
@@ -6,4 +7,4 @@ def home(request):
 
 
 def coffee_view(request):
-    return HttpResponse("<body>Я чайник</body>", status=418)
+    return HttpResponse("Я чайник", status=HTTPStatus.IM_A_TEAPOT)
