@@ -9,6 +9,12 @@ def match(text):
     return not alphabet.isdisjoint(text.lower())
 
 
+def reverse_words(text):
+    words = text.split()
+    reversed_words = [word[::-1] for word in words if match(word)]
+    return " ".join(reversed_words)
+
+
 class ReverseRussianWordsMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
@@ -25,8 +31,7 @@ class ReverseRussianWordsMiddleware:
             if REQUEST_COUNTER % 10 == 0:
                 if response_content.isalpha:
                     if match(response_content):
-                        response.content = (response_content[::-1]).encode(
-                            "utf-8",
-                        )
+                        response.content = ((reverse_words(response_content)
+                                             ).encode("utf-8",))
 
         return response

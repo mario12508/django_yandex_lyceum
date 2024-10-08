@@ -17,12 +17,12 @@ class ReverseRussianWordsMiddlewareTest(TestCase):
         for i in range(9):
             response = self.client.get("/coffee/")
             self.assertNotIn(
-                "кинйач Я",
+                "кинйач",
                 response.content.decode(),
                 f"Failed on request {i + 1}",
             )
         response = self.client.get("/coffee/")
-        self.assertIn("кинйач Я", response.content.decode())
+        self.assertIn("кинйач", response.content.decode())
 
     @patch.dict(os.environ, {"DJANGO_ALLOW_REVERSE": "false"})
     def test_reverse_disabled(self):
