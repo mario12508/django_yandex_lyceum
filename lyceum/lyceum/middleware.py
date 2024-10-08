@@ -1,4 +1,4 @@
-from . import settings
+from django.conf import settings
 
 
 REQUEST_COUNTER = 0

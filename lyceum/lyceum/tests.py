@@ -1,18 +1,14 @@
-import os
-from unittest.mock import patch
+from django.test import Client, TestCase, override_settings
 
-from django.test import Client, TestCase
-
-from . import middleware, settings
+from . import middleware
 
 
 class ReverseRussianWordsMiddlewareTest(TestCase):
     def setUp(self):
         self.client = Client()
 
-    @patch.dict(os.environ, {"DJANGO_ALLOW_REVERSE": "true"})
+    @override_settings(ALLOW_REVERSE=True)
     def test_reverse_russian_words_on_10th_request(self):
-        settings.ALLOW_REVERSE = True
         middleware.REQUEST_COUNTER = 0
         for i in range(9):
             response = self.client.get("/coffee/")
@@ -24,9 +20,17 @@ class ReverseRussianWordsMiddlewareTest(TestCase):
         response = self.client.get("/coffee/")
         self.assertIn("кинйач", response.content.decode())
 
-    @patch.dict(os.environ, {"DJANGO_ALLOW_REVERSE": "false"})
+    @override_settings(ALLOW_REVERSE=False)
+    def back_test_reverse_russian_words_on_10th_request(self):
+        middleware.REQUEST_COUNTER = 0
+        for _ in range(9):
+            response = self.client.get("/coffee/")
+            self.assertEqual("Я чайник", response.content.decode())
+        response = self.client.get("/coffee/")
+        self.assertEqual("Я чайник", response.content.decode())
+
+    @override_settings(ALLOW_REVERSE=True)
     def test_reverse_disabled(self):
-        settings.ALLOW_REVERSE = True
         middleware.REQUEST_COUNTER = 0
         for i in range(9):
             response = self.client.get("")
