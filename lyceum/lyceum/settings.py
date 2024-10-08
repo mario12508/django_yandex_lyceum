@@ -24,6 +24,8 @@ if not ALLOWED_HOSTS:
 else:
     ALLOWED_HOSTS = ALLOWED_HOSTS.split(",")
 
+ALLOWED_REVERSE = load_bool_env("DJANGO_ALLOWED_REVERSE", True)
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -48,6 +50,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "debug_toolbar.middleware.DebugToolbarMiddleware",
+    "lyceum.middleware.ReverseRussianWordsMiddleware",
 ]
 
 INTERNAL_IPS = [
