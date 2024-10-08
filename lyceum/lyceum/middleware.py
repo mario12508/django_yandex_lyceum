@@ -31,7 +31,8 @@ class ReverseRussianWordsMiddleware:
             if REQUEST_COUNTER % 10 == 0:
                 if response_content.isalpha:
                     if match(response_content):
-                        response.content = ((reverse_words(response_content)
-                                             ).encode("utf-8",))
+                        response.content = (
+                            reverse_words(response_content)
+                        ).encode("utf-8")
 
         return response
