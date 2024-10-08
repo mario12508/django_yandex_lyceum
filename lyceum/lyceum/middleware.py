@@ -27,7 +27,7 @@ class ReverseRussianWordsMiddleware:
         if "<body>" in response_content:
             response_content = response_content.replace("<body>", "")
             response_content = response_content.replace("</body>", "")
-        if settings.ALLOWED_REVERSE:
+        if settings.ALLOW_REVERSE:
             if REQUEST_COUNTER % 10 == 0:
                 if response_content.isalpha:
                     if match(response_content):

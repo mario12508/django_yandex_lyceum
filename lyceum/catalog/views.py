@@ -10,4 +10,5 @@ def item_detail(request, pk):
 
 
 def number_view(request, number):
-    return HttpResponse(f"{number}")
+    original_value = request.path.split("/")[-2]
+    return HttpResponse(f"{original_value}")

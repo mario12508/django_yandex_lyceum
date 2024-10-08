@@ -24,7 +24,7 @@ if not ALLOWED_HOSTS:
 else:
     ALLOWED_HOSTS = ALLOWED_HOSTS.split(",")
 
-ALLOWED_REVERSE = load_bool_env("DJANGO_ALLOWED_REVERSE", True)
+ALLOW_REVERSE = load_bool_env("DJANGO_ALLOW_REVERSE", True)
 
 # Application definition
 

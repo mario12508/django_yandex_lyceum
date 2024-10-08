@@ -12,7 +12,7 @@ class ReverseRussianWordsMiddlewareTest(TestCase):
 
     @patch.dict(os.environ, {"DJANGO_ALLOW_REVERSE": "true"})
     def test_reverse_russian_words_on_10th_request(self):
-        settings.ALLOWED_REVERSE = True
+        settings.ALLOW_REVERSE = True
         middleware.REQUEST_COUNTER = 0
         for i in range(9):
             response = self.client.get("/coffee/")
@@ -26,7 +26,7 @@ class ReverseRussianWordsMiddlewareTest(TestCase):
 
     @patch.dict(os.environ, {"DJANGO_ALLOW_REVERSE": "false"})
     def test_reverse_disabled(self):
-        settings.ALLOWED_REVERSE = True
+        settings.ALLOW_REVERSE = True
         middleware.REQUEST_COUNTER = 0
         for i in range(9):
             response = self.client.get("")
