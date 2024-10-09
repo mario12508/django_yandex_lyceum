@@ -2,6 +2,7 @@ from django.conf import settings
 
 
 alphabet = set("абвгдеёжзийклмнопрстуфхцчшщъыьэюя")
+REQUEST_COUNTER = 0
 
 
 def match(text):
@@ -16,8 +17,9 @@ def reverse_words(text):
 
 class ReverseRussianWordsMiddleware:
     def __init__(self, get_response):
+        global REQUEST_COUNTER
         self.get_response = get_response
-        self.REQUEST_COUNTER = 0
+        self.REQUEST_COUNTER = REQUEST_COUNTER
 
     def __call__(self, request):
         global match
