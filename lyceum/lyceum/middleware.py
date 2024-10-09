@@ -1,7 +1,6 @@
 from django.conf import settings
 
 
-REQUEST_COUNTER = 0
 alphabet = set("абвгдеёжзийклмнопрстуфхцчшщъыьэюя")
 
 
@@ -18,17 +17,18 @@ def reverse_words(text):
 class ReverseRussianWordsMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
+        self.REQUEST_COUNTER = 0
 
     def __call__(self, request):
-        global REQUEST_COUNTER, match
-        REQUEST_COUNTER += 1
+        global match
+        self.REQUEST_COUNTER += 1
         response = self.get_response(request)
         response_content = response.content.decode("utf-8")
         if "<body>" in response_content:
             response_content = response_content.replace("<body>", "")
             response_content = response_content.replace("</body>", "")
         if settings.ALLOW_REVERSE:
-            if REQUEST_COUNTER % 10 == 0:
+            if self.REQUEST_COUNTER % 10 == 0:
                 if response_content.isalpha:
                     if match(response_content):
                         response.content = (
