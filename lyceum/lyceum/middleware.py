@@ -36,8 +36,8 @@ class ReverseRussianWordsMiddleware:
                         response_content = response_content.replace(
                             "</body>", ""
                         )
-                    response.content = (reverse_words(response_content)).encode(
-                        "utf-8"
-                    )
+                    response.content = (
+                        reverse_words(response_content)
+                    ).encode("utf-8")
 
         return response
