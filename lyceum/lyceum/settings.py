@@ -18,6 +18,8 @@ SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", default="bygagaga")
 
 DEBUG = load_bool_env("DJANGO_DEBUG", False)
 
+REQUEST_COUNTER = 0
+
 ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS")
 if not ALLOWED_HOSTS:
     ALLOWED_HOSTS = ["*"]

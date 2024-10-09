@@ -2,7 +2,7 @@ from django.test import Client, override_settings, TestCase
 
 
 class ReverseRussianWordsMiddlewareTest(TestCase):
-    @override_settings(ALLOW_REVERSE=True)
+    @override_settings(ALLOW_REVERSE=True, REQUEST_COUNTER=1)
     def test_reverse_russian_words_on_10th_request(self):
         client = Client()
         for i in range(9):
@@ -15,7 +15,7 @@ class ReverseRussianWordsMiddlewareTest(TestCase):
         response = client.get("/coffee/")
         self.assertIn("кинйач", response.content.decode())
 
-    @override_settings(ALLOW_REVERSE=False)
+    @override_settings(ALLOW_REVERSE=False, REQUEST_COUNTER=1)
     def back_test_reverse_russian_words_on_10th_request(self):
         client = Client()
         for _ in range(9):
@@ -24,7 +24,7 @@ class ReverseRussianWordsMiddlewareTest(TestCase):
         response = client.get("/coffee/")
         self.assertEqual("Я чайник", response.content.decode())
 
-    @override_settings(ALLOW_REVERSE=True)
+    @override_settings(ALLOW_REVERSE=True, REQUEST_COUNTER=1)
     def test_reverse_disabled(self):
         client = Client()
         for i in range(9):
