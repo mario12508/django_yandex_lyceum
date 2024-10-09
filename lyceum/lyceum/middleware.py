@@ -29,10 +29,9 @@ class ReverseRussianWordsMiddleware:
             response_content = response_content.replace("</body>", "")
         if settings.ALLOW_REVERSE:
             if self.REQUEST_COUNTER % 10 == 0:
-                if response_content.isalpha:
-                    if match(response_content):
-                        response.content = (
-                            reverse_words(response_content)
-                        ).encode("utf-8")
+                if match(response_content):
+                    response.content = (reverse_words(response_content)).encode(
+                        "utf-8"
+                    )
 
         return response
