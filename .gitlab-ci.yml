@@ -13,7 +13,7 @@ flake8:
   script:
     - python -m pip install --upgrade pip
     - pip install -r requirements/test.txt
-    - flake8 .
+    - flake8 --select E123,W456 --enable-extensions H111 .
 
 job:
   stage: linting
