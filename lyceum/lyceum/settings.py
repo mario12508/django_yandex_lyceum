@@ -1,32 +1,19 @@
-import os
 import pathlib
 
-from dotenv import load_dotenv
-
-load_dotenv()
-
-
-def load_bool_env(name, default):
-    env_value = os.environ.get(name, str(default)).lower()
-
-    return env_value.lower() in ("true", "1", "yes", "y", "t")
+from cast_from_env import from_env
 
 
 BASE_DIR = pathlib.Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", default="bygagaga")
+SECRET_KEY = from_env("DJANGO_SECRET_KEY", "bygagaga")
 
-DEBUG = load_bool_env("DJANGO_DEBUG", False)
+DEBUG = from_env("DJANGO_DEBUG", False)
+
+ALLOWED_HOSTS = from_env("DJANGO_ALLOWED_HOSTS", "*").split(",")
+
+ALLOW_REVERSE = from_env("DJANGO_ALLOW_REVERSE", True)
 
 REQUEST_COUNTER = 0
-
-ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS")
-if not ALLOWED_HOSTS:
-    ALLOWED_HOSTS = ["*"]
-else:
-    ALLOWED_HOSTS = ALLOWED_HOSTS.split(",")
-
-ALLOW_REVERSE = load_bool_env("DJANGO_ALLOW_REVERSE", True)
 
 # Application definition
 
