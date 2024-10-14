@@ -1,0 +1,42 @@
+[
+  {
+    "model": "catalog.catalogcategory",
+    "pk": 1,
+    "fields": {
+      "name": "Электроника",
+      "slug": "elektronika",
+      "is_published": true,
+      "weight": 100
+    }
+  },
+  {
+    "model": "catalog.catalogcategory",
+    "pk": 2,
+    "fields": {
+      "name": "Одежда",
+      "slug": "odezhda",
+      "is_published": true,
+      "weight": 200
+    }
+  },
+  {
+    "model": "catalog.catalogtag",
+    "pk": 1,
+    "fields": {
+      "name": "Акция",
+      "slug": "akciya",
+      "is_published": true
+    }
+  },
+  {
+    "model": "catalog.catalogitem",
+    "pk": 1,
+    "fields": {
+      "name": "Смартфон",
+      "text": "Превосходный телефон с лучшими характеристиками.",
+      "is_published": true,
+      "category": 1,
+      "tags": [1]
+    }
+  }
+]

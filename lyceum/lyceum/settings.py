@@ -1,17 +1,27 @@
+import os
 import pathlib
 
-from cast_from_env import from_env
+from dotenv import load_dotenv
+
+load_dotenv()
+
+
+def load_bool_env(name, default):
+    env_value = os.environ.get(name, str(default)).lower()
+
+    return env_value.lower() in ("true", "1", "yes", "y", "t")
 
 
 BASE_DIR = pathlib.Path(__file__).resolve().parent.parent
 
-SECRET_KEY = from_env("DJANGO_SECRET_KEY", "bygagaga")
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", default="bygagaga")
 
-DEBUG = from_env("DJANGO_DEBUG", False)
+DEBUG = load_bool_env("DJANGO_DEBUG", False)
 
-ALLOWED_HOSTS = from_env("DJANGO_ALLOWED_HOSTS", "*").split(",")
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", default="*").split(",")
 
-ALLOW_REVERSE = from_env("DJANGO_ALLOW_REVERSE", True)
+ALLOW_REVERSE = load_bool_env("DJANGO_ALLOW_REVERSE", True)
+
 
 REQUEST_COUNTER = 0
 
@@ -104,7 +114,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = "ru"
 
 TIME_ZONE = "UTC"
 
