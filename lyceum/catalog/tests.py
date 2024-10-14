@@ -33,17 +33,17 @@ class CatalogItemTests(TestCase):
     def setUp(cls):
         super().setUpClass()
 
-        cls.category = catalog.models.CatalogCategory.objects.create(
+        cls.category = catalog.models.Category.objects.create(
             name="Категория 1",
             slug="категория-1",
         )
-        cls.tag = catalog.models.CatalogTag.objects.create(
+        cls.tag = catalog.models.Tag.objects.create(
             name="Тег 1",
             slug="тег-1",
         )
 
     def test_item_creation_valid(self):
-        item = catalog.models.CatalogItem(
+        item = catalog.models.Item(
             name="Товар 1",
             text="Этот товар просто превосходно!",
             category=self.category,
@@ -55,7 +55,7 @@ class CatalogItemTests(TestCase):
         self.assertTrue(item.is_published)
 
     def test_item_creation_invalid_text(self):
-        item = catalog.models.CatalogItem(
+        item = catalog.models.Item(
             name="Товар 2",
             text="Этот товар обычный.",
             category=self.category,
@@ -64,7 +64,7 @@ class CatalogItemTests(TestCase):
             item.full_clean()
 
     def test_item_with_tags(self):
-        item = catalog.models.CatalogItem.objects.create(
+        item = catalog.models.Item.objects.create(
             name="Товар 3",
             text="Это действительно роскошно!",
             category=self.category,
@@ -74,7 +74,7 @@ class CatalogItemTests(TestCase):
         self.assertIn(self.tag, item.tags.all())
 
     def test_item_creation_without_category(self):
-        item = catalog.models.CatalogItem(
+        item = catalog.models.Item(
             name="Товар 4",
             text="Это превосходно!",
         )
@@ -82,7 +82,7 @@ class CatalogItemTests(TestCase):
             item.full_clean()
 
     def test_item_creation_with_empty_name(self):
-        item = catalog.models.CatalogItem(
+        item = catalog.models.Item(
             name="",
             text="Это роскошно!",
             category=self.category,

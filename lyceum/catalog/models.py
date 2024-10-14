@@ -29,7 +29,7 @@ class CoreModel(models.Model):
         abstract = True
 
 
-class CatalogCategory(CoreModel):
+class Category(CoreModel):
     name = models.CharField(max_length=150)
     slug = models.SlugField(
         max_length=200,
@@ -49,7 +49,7 @@ class CatalogCategory(CoreModel):
         return self.name
 
 
-class CatalogTag(CoreModel):
+class Tag(CoreModel):
     name = models.CharField(max_length=150)
     slug = models.SlugField(
         max_length=200,
@@ -65,15 +65,15 @@ class CatalogTag(CoreModel):
         return self.name
 
 
-class CatalogItem(CoreModel):
+class Item(CoreModel):
     name = models.CharField(max_length=150)
     text = models.TextField(validators=[validate_text], verbose_name="Текст")
     category = models.ForeignKey(
-        CatalogCategory,
+        Category,
         on_delete=models.CASCADE,
         verbose_name="Категория",
     )
-    tags = models.ManyToManyField(CatalogTag, verbose_name="Теги")
+    tags = models.ManyToManyField(Tag, verbose_name="Теги")
 
     class Meta:
         verbose_name = _("Товар")
