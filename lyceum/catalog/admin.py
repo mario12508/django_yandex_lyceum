@@ -1,6 +1,6 @@
-from catalog.models import CatalogCategory, CatalogItem, CatalogTag
-
 from django.contrib import admin
+
+from catalog.models import CatalogCategory, CatalogItem, CatalogTag
 
 
 class CatalogItemAdmin(admin.ModelAdmin):

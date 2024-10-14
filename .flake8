@@ -1,4 +1,5 @@
 [flake8]
+ignore=I100,W503
 max-line-length = 79
 inline-quotes = double
 docstring-quotes = double

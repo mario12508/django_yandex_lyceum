@@ -1,9 +1,6 @@
-cast_from_env==0.0.8
-flake8==6.1.0
-flake8-commas==2.1.0
-flake8-comprehensions==3.14.0
+-r prod.txt
+django-debug-toolbar==4.4.6
+flake8==7.1.1
 flake8-import-order==0.18.2
-flake8-quotes==3.3.2
-flake8-return==1.2.0
-flake8-use-pathlib==0.3.0
-pep8-naming==0.13.3
+flake8-quotes==3.4.0
+pep8-naming==0.14.1

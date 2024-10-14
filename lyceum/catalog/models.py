@@ -1,39 +1,44 @@
 import re
 
 from django.core.exceptions import ValidationError
+from django.core.validators import MaxValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 
+def validate_text(value):
+    if "превосходно" not in value.lower() and "роскошно" not in value.lower():
+        raise ValidationError(
+            _("Текст должен содержать слово " '"превосходно" или "роскошно".'),
+        )
+
+
+def validate_slug(value):
+    # Регулярное выражение для проверки разрешенных символов
+    if not re.match(r"^[a-zA-Z0-9-_]+$", value):
+        raise ValidationError(
+            _('Slug должен содержать только буквы, цифры, "-" и "_"'),
+            code="invalid_slug",
+        )
+
+
 class CoreModel(models.Model):
-    name = models.CharField(max_length=150, verbose_name=_("Название"))
-    is_published = models.BooleanField(
-        default=True,
-        verbose_name=_("Опубликовано"),
-    )
+    is_published = models.BooleanField(default=True)
 
     class Meta:
         abstract = True
 
 
-def validate_text(value):
-    if not re.search(r"\b(превосходно|роскошно)\b", value):
-        raise ValidationError(
-            'Текст должен содержать слова "превосходно" или "роскошно".',
-        )
-
-
 class CatalogCategory(CoreModel):
+    name = models.CharField(max_length=150)
     slug = models.SlugField(
         max_length=200,
         unique=True,
-        verbose_name=_("Слаг"),
-        help_text="Только цифры, латинские буквы, символы '-' и '_'.",
+        validators=[validate_slug],
     )
-    weight = models.PositiveSmallIntegerField(
+    weight = models.PositiveIntegerField(
         default=100,
-        verbose_name=_("Вес"),
-        help_text="Значение от 1 до 32767",
+        validators=[MaxValueValidator(32767)],
     )
 
     class Meta:
@@ -45,11 +50,11 @@ class CatalogCategory(CoreModel):
 
 
 class CatalogTag(CoreModel):
+    name = models.CharField(max_length=150)
     slug = models.SlugField(
         max_length=200,
         unique=True,
-        verbose_name=_("Слаг"),
-        help_text="Только цифры, латинские буквы, символы '-' и '_'.",
+        validators=[validate_slug],
     )
 
     class Meta:
@@ -61,16 +66,14 @@ class CatalogTag(CoreModel):
 
 
 class CatalogItem(CoreModel):
-    text = models.TextField(
-        validators=[validate_text],
-        verbose_name=_("Текст"),
-    )
+    name = models.CharField(max_length=150)
+    text = models.TextField(validators=[validate_text], verbose_name="Текст")
     category = models.ForeignKey(
         CatalogCategory,
         on_delete=models.CASCADE,
-        verbose_name=_("Категория"),
+        verbose_name="Категория",
     )
-    tags = models.ManyToManyField(CatalogTag, verbose_name=_("Теги"))
+    tags = models.ManyToManyField(CatalogTag, verbose_name="Теги")
 
     class Meta:
         verbose_name = _("Товар")
