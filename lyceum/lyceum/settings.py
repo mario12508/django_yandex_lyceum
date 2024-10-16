@@ -20,7 +20,8 @@ DEBUG = load_bool_env("DJANGO_DEBUG", False)
 
 ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", default="*").split(",")
 
-ALLOW_REVERSE = load_bool_env("DJANGO_ALLOW_REVERSE", True)
+allowed_host = os.environ.get("ALLOWED_HOSTS", "")
+ALLOWED_HOSTS = ("*",) if allowed_host == "" else allowed_host.split(",")
 
 REQUEST_COUNTER = 0
 
