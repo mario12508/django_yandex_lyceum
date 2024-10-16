@@ -2,7 +2,6 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
 from catalog.validators import ValidateMustContain
-
 from core.models import DefaultModel
 
 

@@ -1,5 +1,7 @@
 [flake8]
 ignore=I100,W503
+exclude=*/migrations/
+per-file-ignores=*/migrations/,*/models.py:I201,
 max-line-length = 79
 inline-quotes = double
 docstring-quotes = double
