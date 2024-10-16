@@ -1,0 +1,142 @@
+[
+  {
+    "model": "catalog.category",
+    "pk": 1,
+    "fields": {
+      "name": "╨н╨╗╨╡╨║╤В╤А╨╛╨╜╨╕╨║╨░",
+      "is_published": true,
+      "slug": "elektronika",
+      "weight": 100
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 2,
+    "fields": {
+      "name": "╨Ю╨┤╨╡╨╢╨┤╨░",
+      "is_published": true,
+      "slug": "odezhda",
+      "weight": 200
+    }
+  },
+  {
+    "model": "catalog.tag",
+    "pk": 1,
+    "fields": {
+      "name": "╨Р╨║╤Ж╨╕╤П",
+      "is_published": true,
+      "slug": "akciya"
+    }
+  },
+  {
+    "model": "catalog.tag",
+    "pk": 2,
+    "fields": {
+      "name": "╨Т╤Л╨│╨╛╨┤╨╜╨╛╨╡ ╨┐╤А╨╡╨┤╨╗╨╛╨╢╨╡╨╜╨╕╨╡",
+      "is_published": true,
+      "slug": "nice"
+    }
+  },
+  {
+    "model": "catalog.tag",
+    "pk": 3,
+    "fields": {
+      "name": "╨Ю╤А╨╕╨│╨╕╨╜╨░╨╗",
+      "is_published": true,
+      "slug": "original"
+    }
+  },
+  {
+    "model": "catalog.tag",
+    "pk": 4,
+    "fields": {
+      "name": "╨н╨║╨╛╨╗╨╛╨│╨╕╤З╨╜╤Л╨╣",
+      "is_published": true,
+      "slug": "ecology"
+    }
+  },
+  {
+    "model": "catalog.tag",
+    "pk": 5,
+    "fields": {
+      "name": "╨Я╤А╨╡╨┤╨╗╨╛╨╢╨╡╨╜╨╕╨╡ ╨╛╨│╤А╨░╨╜╨╕╤З╨╡╨╜╨╜╨╛",
+      "is_published": true,
+      "slug": "limited"
+    }
+  },
+  {
+    "model": "catalog.item",
+    "pk": 1,
+    "fields": {
+      "name": "╨б╨╝╨░╤А╤В╤Д╨╛╨╜",
+      "is_published": true,
+      "text": "╨Я╤А╨╡╨▓╨╛╤Б╤Е╨╛╨┤╨╜╤Л╨╣ ╤В╨╡╨╗╨╡╤Д╨╛╨╜ ╤Б ╨╗╤Г╤З╤И╨╕╨╝╨╕ ╤Е╨░╤А╨░╨║╤В╨╡╤А╨╕╤Б╤В╨╕╨║╨░╨╝╨╕.",
+      "category": 1,
+      "tags": [
+        1
+      ]
+    }
+  },
+  {
+    "model": "catalog.item",
+    "pk": 2,
+    "fields": {
+      "name": "╨║╤А╨╡╨╝ ╨┤╨╗╤П python",
+      "is_published": true,
+      "text": "╨║╤А╨╡╨╝ ╤Б╨┐╨╛╤Б╨╛╨▒╨╜╤Л╨╣ ╤А╨╛╤Б╨║╨╛╤И╨╜╨╛ ╨╕ ╨┐╤А╨╡╨▓╨╛╤Б╤Е╨╛╨┤╨╜╨╛ ╤Г╨▓╨╡╨╗╨╕╤З╨╕╤В╤М ╨▓╨░╤И╨╕ ╨╜╨░╨▓╤Л╨║╨╕ ╨▓ ╨┐╤А╨╛╨│╤А╨░╨╝╨╝╨╕╤А╨╛╨▓╨░╨╜╨╕╨╕",
+      "category": 2,
+      "tags": [
+        1,
+        3
+      ]
+    }
+  },
+  {
+    "model": "catalog.item",
+    "pk": 3,
+    "fields": {
+      "name": "╤И╨░╨╝╨┐╤Г╨╜╤М ╨╢╤Г╨╝╨░╨╣╤Б╤Л╨╝╨▒╨░",
+      "is_published": true,
+      "text": "╤А╨╛╤Б╨║╨╛╤И╨╜╨╛ ╨╕ ╨┐╤А╨╡╨▓╨╛╤Б╤Е╨╛╨┤╨╜╨╛ ╨╖╨░╤Й╨╕╤Й╨░╨╡╤В ╨│╨╛╨╗╨╛╨▓╤Г ╨╛╤В ╨┐╨╡╤А╤Е╨╛╤В╨╕, ╤Б╨║╨░╨╢╨╕ ╨┐╨╡╤А╤Е╨╛╤В╨╕",
+      "category": 2,
+      "tags": [
+        3,
+        4
+      ]
+    }
+  },
+  {
+    "model": "catalog.item",
+    "pk": 4,
+    "fields": {
+      "name": "╨Ъ╨╛╤И╨╡╨╗╤С╨║",
+      "is_published": true,
+      "text": "╨а╨╛╤Б╨║╨╛╤И╨╜╨╛ ╨╕ ╨┐╤А╨╡╨▓╨╛╤Б╤Е╨╛╨┤╨╜╨╛ ╨▓ ╨╜╨╡╨╝ ╤Б╨░╨╝╨╕ ╨┐╨╛╤П╨▓╨╗╤П╤О╤В╤Б╤П ╨┤╨╡╨╜╤М╨│╨╕",
+      "category": 2,
+      "tags": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    }
+  },
+  {
+    "model": "catalog.item",
+    "pk": 5,
+    "fields": {
+      "name": "╨║╨╛╨╗╤М╤Ж╨╛ ╨▓╤Б╨╡╨▓╨╗╨░╤Б╤В╨╕╤П",
+      "is_published": true,
+      "text": "╤А╨╛╤Б╨║╨╛╤И╨╜╤Л╨╣ ╨╕ ╨┐╤А╨╡╨▓╨╛╤Б╤Е╨╛╨┤╨╜╨╛ ╨╖╨╜╨░╤О╤В ╤З╤В╨╛ ╤Н╤В╨╛",
+      "category": 2,
+      "tags": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    }
+  }
+]

@@ -5,12 +5,17 @@ from django.core.validators import MaxValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from core.models import DefaultModel
+
 
 def validate_text(value):
-    if "превосходно" not in value.lower() and "роскошно" not in value.lower():
-        raise ValidationError(
-            _("Текст должен содержать слово " '"превосходно" или "роскошно".'),
-        )
+    words = ["роскошно", "превосходно"]
+    lower_values = [re.sub(r"^\W+|\W+$", "", i) for i in value.lower().split()]
+    if set(lower_values) & set(words):
+        return
+    raise ValidationError(
+        "Обязательно нужно использовать слова роскошно и превосходно",
+    )
 
 
 def validate_slug(value):
@@ -22,15 +27,7 @@ def validate_slug(value):
         )
 
 
-class CoreModel(models.Model):
-    is_published = models.BooleanField(default=True)
-
-    class Meta:
-        abstract = True
-
-
-class Category(CoreModel):
-    name = models.CharField(max_length=150)
+class Category(DefaultModel):
     slug = models.SlugField(
         max_length=200,
         unique=True,
@@ -49,8 +46,7 @@ class Category(CoreModel):
         return self.name
 
 
-class Tag(CoreModel):
-    name = models.CharField(max_length=150)
+class Tag(DefaultModel):
     slug = models.SlugField(
         max_length=200,
         unique=True,
@@ -65,8 +61,7 @@ class Tag(CoreModel):
         return self.name
 
 
-class Item(CoreModel):
-    name = models.CharField(max_length=150)
+class Item(DefaultModel):
     text = models.TextField(validators=[validate_text], verbose_name="Текст")
     category = models.ForeignKey(
         Category,
