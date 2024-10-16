@@ -22,7 +22,7 @@ def validate_slug(value):
     # Регулярное выражение для проверки разрешенных символов
     if not re.match(r"^[a-zA-Z0-9-_]+$", value):
         raise ValidationError(
-            _('Slug должен содержать только буквы, цифры, "-" и "_"'),
+            _('Слаг должен содержать только буквы, цифры, "-" и "_"'),
             code="invalid_slug",
         )
 
@@ -32,15 +32,17 @@ class Category(DefaultModel):
         max_length=200,
         unique=True,
         validators=[validate_slug],
+        verbose_name="слаг",
     )
     weight = models.PositiveIntegerField(
         default=100,
         validators=[MaxValueValidator(32767)],
+        verbose_name="вес",
     )
 
     class Meta:
-        verbose_name = _("Категория")
-        verbose_name_plural = _("Категории")
+        verbose_name = "категория"
+        verbose_name_plural = "категории"
 
     def __str__(self):
         return self.name
@@ -51,28 +53,29 @@ class Tag(DefaultModel):
         max_length=200,
         unique=True,
         validators=[validate_slug],
+        verbose_name="слаг",
     )
 
     class Meta:
-        verbose_name = _("Тег")
-        verbose_name_plural = _("Теги")
+        verbose_name = "тег"
+        verbose_name_plural = "теги"
 
     def __str__(self):
         return self.name
 
 
 class Item(DefaultModel):
-    text = models.TextField(validators=[validate_text], verbose_name="Текст")
+    text = models.TextField(validators=[validate_text], verbose_name="текст")
     category = models.ForeignKey(
         Category,
         on_delete=models.CASCADE,
-        verbose_name="Категория",
+        verbose_name="категория",
     )
-    tags = models.ManyToManyField(Tag, verbose_name="Теги")
+    tags = models.ManyToManyField(Tag, verbose_name="теги")
 
     class Meta:
-        verbose_name = _("Товар")
-        verbose_name_plural = _("Товары")
+        verbose_name = "товар"
+        verbose_name_plural = "товары"
 
     def __str__(self):
         return self.name

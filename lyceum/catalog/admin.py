@@ -3,13 +3,13 @@ from django.contrib import admin
 from catalog.models import Category, Item, Tag
 
 
-class CatalogItemAdmin(admin.ModelAdmin):
-    list_display = ("name", "is_published")
-    list_editable = ("is_published",)
-    list_display_links = ("name",)
-    filter_horizontal = ("tags",)
+@admin.register(Item)
+class ItemAdmin(admin.ModelAdmin):
+    list_display = (Item.name.field.name, Item.is_published.field.name)
+    list_editable = (Item.is_published.field.name,)
+    list_display_links = (Item.name.field.name,)
+    filter_horizontal = (Item.tags.field.name,)
 
 
-admin.site.register(Item, CatalogItemAdmin)
 admin.site.register(Tag)
 admin.site.register(Category)
