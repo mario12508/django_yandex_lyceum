@@ -18,8 +18,9 @@ SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", default="bygagaga")
 
 DEBUG = load_bool_env("DJANGO_DEBUG", False)
 
-allowed_host = os.environ.get("ALLOWED_HOSTS", "")
-ALLOWED_HOSTS = ("*",) if allowed_host == "" else allowed_host.split(",")
+ALLOWED_HOSTS = os.getenv(
+    "DJANGO_ALLOWED_HOSTS", default="127.0.0.1," "localhost",
+).split(",")
 
 ALLOW_REVERSE = load_bool_env("DJANGO_ALLOW_REVERSE", True)
 
@@ -38,7 +39,6 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "debug_toolbar",
 ]
 
 MIDDLEWARE = [
@@ -49,13 +49,13 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "debug_toolbar.middleware.DebugToolbarMiddleware",
     "lyceum.middleware.ReverseRussianWordsMiddleware",
 ]
 
-INTERNAL_IPS = [
-    "127.0.0.1",
-]
+if DEBUG is True:
+    MIDDLEWARE += ("debug_toolbar.middleware.DebugToolbarMiddleware",)
+    INSTALLED_APPS += ("debug_toolbar",)
+    INTERNAL_IPS = ["127.0.0.1", "localhost"]
 
 ROOT_URLCONF = "lyceum.urls"
 
