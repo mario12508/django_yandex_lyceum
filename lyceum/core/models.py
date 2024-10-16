@@ -7,6 +7,7 @@ class DefaultModel(models.Model):
         unique=True,
         verbose_name="название",
         help_text="Название товара",
+        null=False,
     )
     is_published = models.BooleanField(
         default=True,

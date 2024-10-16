@@ -1,9 +1,8 @@
 import re
 
 from django.core.exceptions import ValidationError
-from django.core.validators import MaxValueValidator
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
-from django.utils.translation import gettext_lazy as _
 
 from core.models import DefaultModel
 
@@ -18,27 +17,17 @@ def validate_text(value):
     )
 
 
-def validate_slug(value):
-    # Регулярное выражение для проверки разрешенных символов
-    if not re.match(r"^[a-zA-Z0-9-_]+$", value):
-        raise ValidationError(
-            _('Слаг должен содержать только буквы, цифры, "-" и "_"'),
-            code="invalid_slug",
-        )
-
-
 class Category(DefaultModel):
     slug = models.SlugField(
         max_length=200,
         unique=True,
-        validators=[validate_slug],
         verbose_name="слаг",
         help_text="Используйте только буквы, "
         "цифры, '-', '_'. Не должно быть пустым.",
     )
     weight = models.PositiveIntegerField(
         default=100,
-        validators=[MaxValueValidator(32767)],
+        validators=[MinValueValidator(1), MaxValueValidator(32767)],
         verbose_name="вес",
         help_text="Значение должно быть между 1 и 32767.",
     )
@@ -55,7 +44,6 @@ class Tag(DefaultModel):
     slug = models.SlugField(
         max_length=200,
         unique=True,
-        validators=[validate_slug],
         verbose_name="слаг",
         help_text="Используйте только буквы, "
         "цифры, '-', '_'. Не должно быть пустым.",
@@ -81,6 +69,7 @@ class Item(DefaultModel):
         on_delete=models.CASCADE,
         verbose_name="категория",
         help_text="Выберите категорию для этого товара.",
+        related_name="catalog_items",
     )
     tags = models.ManyToManyField(Tag, verbose_name="теги")
 
