@@ -1,4 +1,5 @@
-from django.test import Client, TestCase, override_settings
+from django.test import Client, TestCase
+from django.test import override_settings
 
 
 class ReverseRussianWordsMiddlewareTest(TestCase):
