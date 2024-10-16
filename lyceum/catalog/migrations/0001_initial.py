@@ -111,7 +111,8 @@ class Migration(migrations.Migration):
                 (
                     "tags",
                     models.ManyToManyField(
-                        to="catalog.tag", verbose_name="Теги",
+                        to="catalog.tag",
+                        verbose_name="Теги",
                     ),
                 ),
             ],
