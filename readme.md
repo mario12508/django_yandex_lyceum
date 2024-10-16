@@ -28,6 +28,9 @@ DEBUG=True
 Переходим на сайт
 http://127.0.0.1:8000/
 
+Для Er диаграммы
+![QuickDBD-export](ER.jpg)
+
 # Проект Lyceum
 
 

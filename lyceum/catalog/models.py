@@ -1,20 +1,9 @@
-import re
-
-from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
+from catalog.validators import ValidateMustContain
+
 from core.models import DefaultModel
-
-
-def validate_text(value):
-    words = ["роскошно", "превосходно"]
-    lower_values = [re.sub(r"^\W+|\W+$", "", i) for i in value.lower().split()]
-    if set(lower_values) & set(words):
-        return
-    raise ValidationError(
-        "Обязательно нужно использовать слова роскошно или превосходно",
-    )
 
 
 class Category(DefaultModel):
@@ -59,7 +48,7 @@ class Tag(DefaultModel):
 
 class Item(DefaultModel):
     text = models.TextField(
-        validators=[validate_text],
+        validators=[ValidateMustContain("превосходно", "роскошно")],
         verbose_name="текст",
         help_text="Обязательно нужно использовать слова "
         "роскошно или превосходно",
