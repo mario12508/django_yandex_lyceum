@@ -14,7 +14,7 @@ def validate_text(value):
     if set(lower_values) & set(words):
         return
     raise ValidationError(
-        "Обязательно нужно использовать слова роскошно и превосходно",
+        "Обязательно нужно использовать слова роскошно или превосходно",
     )
 
 
@@ -33,11 +33,14 @@ class Category(DefaultModel):
         unique=True,
         validators=[validate_slug],
         verbose_name="слаг",
+        help_text="Используйте только буквы, "
+        "цифры, '-', '_'. Не должно быть пустым.",
     )
     weight = models.PositiveIntegerField(
         default=100,
         validators=[MaxValueValidator(32767)],
         verbose_name="вес",
+        help_text="Значение должно быть между 1 и 32767.",
     )
 
     class Meta:
@@ -54,6 +57,8 @@ class Tag(DefaultModel):
         unique=True,
         validators=[validate_slug],
         verbose_name="слаг",
+        help_text="Используйте только буквы, "
+        "цифры, '-', '_'. Не должно быть пустым.",
     )
 
     class Meta:
@@ -65,11 +70,17 @@ class Tag(DefaultModel):
 
 
 class Item(DefaultModel):
-    text = models.TextField(validators=[validate_text], verbose_name="текст")
+    text = models.TextField(
+        validators=[validate_text],
+        verbose_name="текст",
+        help_text="Обязательно нужно использовать слова "
+        "роскошно или превосходно",
+    )
     category = models.ForeignKey(
         Category,
         on_delete=models.CASCADE,
         verbose_name="категория",
+        help_text="Выберите категорию для этого товара.",
     )
     tags = models.ManyToManyField(Tag, verbose_name="теги")
 

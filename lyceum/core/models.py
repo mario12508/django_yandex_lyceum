@@ -6,10 +6,12 @@ class DefaultModel(models.Model):
         max_length=150,
         unique=True,
         verbose_name="название",
+        help_text="Название товара",
     )
     is_published = models.BooleanField(
         default=True,
         verbose_name="опубликовано",
+        help_text="Опубликован ли товар на сайте",
     )
 
     class Meta:
