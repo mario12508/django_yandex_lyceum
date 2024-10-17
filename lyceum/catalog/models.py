@@ -1,12 +1,11 @@
+import unicodedata
+
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
-import unicodedata
-
 from catalog.validators import ValidateMustContain
 from core.models import DefaultModel
-
 
 translit_dict = {
     "а": "a",
