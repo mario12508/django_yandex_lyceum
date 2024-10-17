@@ -1,0 +1,159 @@
+[
+  {
+    "model": "catalog.category",
+    "pk": 1,
+    "fields": {
+      "name": "Электроника",
+      "is_published": true,
+      "slug": "electronics",
+      "weight": 100,
+      "normalized_name": "элektpohиka"
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 2,
+    "fields": {
+      "name": "Одежда",
+      "is_published": true,
+      "slug": "cloth",
+      "weight": 100,
+      "normalized_name": "oдeждa"
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 3,
+    "fields": {
+      "name": "Мебель",
+      "is_published": true,
+      "slug": "Furniture",
+      "weight": 100,
+      "normalized_name": "meбeль"
+    }
+  },
+  {
+    "model": "catalog.tag",
+    "pk": 1,
+    "fields": {
+      "name": "Акция",
+      "is_published": true,
+      "slug": "Promotion",
+      "normalized_name": "akция"
+    }
+  },
+  {
+    "model": "catalog.tag",
+    "pk": 2,
+    "fields": {
+      "name": "Оригинал",
+      "is_published": true,
+      "slug": "original",
+      "normalized_name": "opигиhaл"
+    }
+  },
+  {
+    "model": "catalog.tag",
+    "pk": 3,
+    "fields": {
+      "name": "Популярное",
+      "is_published": true,
+      "slug": "Popular",
+      "normalized_name": "пoпyляphoe"
+    }
+  },
+  {
+    "model": "catalog.tag",
+    "pk": 4,
+    "fields": {
+      "name": "Гарантия",
+      "is_published": true,
+      "slug": "Guarantee",
+      "normalized_name": "гapahtия"
+    }
+  },
+  {
+    "model": "catalog.tag",
+    "pk": 5,
+    "fields": {
+      "name": "Премиальное",
+      "is_published": true,
+      "slug": "Premium",
+      "normalized_name": "пpemиaльhoe"
+    }
+  },
+  {
+    "model": "catalog.item",
+    "pk": 1,
+    "fields": {
+      "name": "Планшет",
+      "is_published": true,
+      "text": "Роскошно созданный планшет",
+      "category": 1,
+      "tags": [
+        1,
+        2,
+        5
+      ]
+    }
+  },
+  {
+    "model": "catalog.item",
+    "pk": 2,
+    "fields": {
+      "name": "IPhone",
+      "is_published": true,
+      "text": "Абсолютный оригинал, превосходно созданный",
+      "category": 1,
+      "tags": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    }
+  },
+  {
+    "model": "catalog.item",
+    "pk": 3,
+    "fields": {
+      "name": "Кошелёк",
+      "is_published": true,
+      "text": "В нем роскошно сами появляются деньги",
+      "category": 2,
+      "tags": [
+        1,
+        2
+      ]
+    }
+  },
+  {
+    "model": "catalog.item",
+    "pk": 4,
+    "fields": {
+      "name": "Диван",
+      "is_published": true,
+      "text": "Превосходно созданный диван",
+      "category": 3,
+      "tags": [
+        1,
+        2
+      ]
+    }
+  },
+  {
+    "model": "catalog.item",
+    "pk": 5,
+    "fields": {
+      "name": "Компьютер",
+      "is_published": true,
+      "text": "Лучший превосходно созданный компьютер",
+      "category": 3,
+      "tags": [
+        1,
+        5
+      ]
+    }
+  }
+]
