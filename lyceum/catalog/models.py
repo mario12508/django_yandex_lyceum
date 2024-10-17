@@ -1,8 +1,34 @@
+from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
+import unicodedata
+
 from catalog.validators import ValidateMustContain
 from core.models import DefaultModel
+
+
+translit_dict = {
+    "а": "a",
+    "е": "e",
+    "о": "o",
+    "р": "p",
+    "с": "c",
+    "у": "y",
+    "х": "x",
+    "в": "b",
+    "к": "k",
+    "м": "m",
+    "н": "h",
+    "т": "t",
+}
+
+
+def normalize_name(value):
+    normalized = unicodedata.normalize("NFKD", value).strip().lower()
+    return "".join(
+        translit_dict.get(char, char) for char in normalized if char.isalnum()
+    )
 
 
 class Category(DefaultModel):
@@ -19,6 +45,23 @@ class Category(DefaultModel):
         verbose_name="вес",
         help_text="Значение должно быть между 1 и 32767.",
     )
+    normalized_name = models.CharField(
+        max_length=150,
+        unique=True,
+        editable=False,
+        verbose_name="нормализованное имя",
+    )
+
+    def clean(self):
+        self.normalized_name = normalize_name(self.name)
+        if (
+            Category.objects.filter(normalized_name=self.normalized_name)
+            .exclude(pk=self.pk)
+            .exists()
+        ):
+            raise ValidationError(
+                {"name": "Категория с таким именем уже существует."},
+            )
 
     class Meta:
         verbose_name = "категория"
@@ -36,6 +79,23 @@ class Tag(DefaultModel):
         help_text="Используйте только буквы, "
         "цифры, '-', '_'. Не должно быть пустым.",
     )
+    normalized_name = models.CharField(
+        max_length=150,
+        unique=True,
+        editable=False,
+        verbose_name="нормализованное имя",
+    )
+
+    def clean(self):
+        self.normalized_name = normalize_name(self.name)
+        if (
+            Tag.objects.filter(normalized_name=self.normalized_name)
+            .exclude(pk=self.pk)
+            .exists()
+        ):
+            raise ValidationError(
+                {"name": "Тег с таким именем уже существует."},
+            )
 
     class Meta:
         verbose_name = "тег"

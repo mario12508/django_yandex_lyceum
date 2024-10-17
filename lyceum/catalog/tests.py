@@ -89,3 +89,139 @@ class CatalogItemTests(TestCase):
         )
         with self.assertRaises(ValidationError):
             item.full_clean()
+
+    def test_category_name_normalization(self):
+        category = catalog.models.Category(
+            name="Тег",
+            slug="slug",
+        )
+        category.full_clean()
+        category.save()
+
+        similar_category = catalog.models.Category(
+            name="Teг",
+            slug="slug2",
+        )
+        with self.assertRaises(ValidationError):
+            similar_category.full_clean()
+
+    def test_tag_name_normalization(self):
+        tag = catalog.models.Tag(
+            name="Москва",
+            slug="moscow",
+        )
+        tag.full_clean()
+        tag.save()
+
+        similar_tag = catalog.models.Tag(
+            name="Mocквa",
+            slug="moscow2",
+        )
+        with self.assertRaises(ValidationError):
+            similar_tag.full_clean()
+
+    def test_case_insensitivity_in_normalization(self):
+        category = catalog.models.Category(
+            name="Москва",
+            slug="moscow",
+        )
+        category.full_clean()
+        category.save()
+
+        similar_category = catalog.models.Category(
+            name="москва",
+            slug="moscow-lower",
+        )
+        with self.assertRaises(ValidationError):
+            similar_category.full_clean()
+
+    def test_punctuation_insensitivity_in_normalization(self):
+        category = catalog.models.Category(
+            name="Москва!",
+            slug="moscow",
+        )
+        category.full_clean()
+        category.save()
+
+        similar_category = catalog.models.Category(
+            name="Москва.",
+            slug="moscow-dot",
+        )
+        with self.assertRaises(ValidationError):
+            similar_category.full_clean()
+
+    # New tests for spaces and punctuation
+    def test_normalization_with_extra_spaces(self):
+        category = catalog.models.Category(
+            name="Москва",
+            slug="moscow",
+        )
+        category.full_clean()
+        category.save()
+
+        similar_category = catalog.models.Category(
+            name="  Москва  ",
+            slug="moscow-spaces",
+        )
+        with self.assertRaises(ValidationError):
+            similar_category.full_clean()
+
+    def test_normalization_with_leading_and_trailing_spaces(self):
+        category = catalog.models.Category(
+            name="Москва",
+            slug="moscow",
+        )
+        category.full_clean()
+        category.save()
+
+        similar_category = catalog.models.Category(
+            name="Москва   ",
+            slug="moscow-trailing-spaces",
+        )
+        with self.assertRaises(ValidationError):
+            similar_category.full_clean()
+
+    def test_normalization_with_spaces_between_words(self):
+        category = catalog.models.Category(
+            name="Москва",
+            slug="moscow",
+        )
+        category.full_clean()
+        category.save()
+
+        similar_category = catalog.models.Category(
+            name="М о с к в а",
+            slug="moscow-between-spaces",
+        )
+        with self.assertRaises(ValidationError):
+            similar_category.full_clean()
+
+    def test_normalization_with_dashes_and_commas(self):
+        tag = catalog.models.Tag(
+            name="Москва",
+            slug="moscow",
+        )
+        tag.full_clean()
+        tag.save()
+
+        similar_tag = catalog.models.Tag(
+            name="Москва-,",
+            slug="moscow-punctuation",
+        )
+        with self.assertRaises(ValidationError):
+            similar_tag.full_clean()
+
+    def test_normalization_with_special_characters(self):
+        tag = catalog.models.Tag(
+            name="Москва",
+            slug="moscow",
+        )
+        tag.full_clean()
+        tag.save()
+
+        similar_tag = catalog.models.Tag(
+            name="Москва!@#$%^&*",
+            slug="moscow-special-chars",
+        )
+        with self.assertRaises(ValidationError):
+            similar_tag.full_clean()
