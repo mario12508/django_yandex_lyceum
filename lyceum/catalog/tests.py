@@ -43,6 +43,7 @@ class CatalogItemTests(TestCase):
         )
 
     def test_item_creation_valid(self):
+        initial_count = catalog.models.Item.objects.count()
         item = catalog.models.Item(
             name="Товар 1",
             text="Этот товар просто превосходно!",
@@ -51,8 +52,10 @@ class CatalogItemTests(TestCase):
         item.full_clean()
         item.save()
 
-        self.assertEqual(item.name, "Товар 1")
-        self.assertTrue(item.is_published)
+        self.assertEqual(
+            catalog.models.Item.objects.count(),
+            initial_count + 1,
+        )
 
     def test_item_creation_invalid_text(self):
         item = catalog.models.Item(

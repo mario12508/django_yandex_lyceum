@@ -11,10 +11,8 @@ class ValidateMustContain:
 
     def __call__(self, value):
         values = [re.sub(r"^\W+|\W+$", "", i) for i in value.lower().split()]
-        for i in values:
-            for j in self.words:
-                if j == i:
-                    return
-        raise ValidationError(
-            "Обязательно нужно использовать слова " + ", ".join(self.words),
-        )
+        if not set(self.words) & set(values):
+            raise ValidationError(
+                f"Обязательно нужно использовать одно из следующих слов: "
+                f"{', '.join(self.words)}",
+            )
