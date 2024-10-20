@@ -6,3 +6,4 @@ flake8-quotes==3.4.0
 pep8-naming==0.14.1
 sorl-thumbnail==12.11.0
 django-cleanup==9.0.0
+pillow==11.0.0
