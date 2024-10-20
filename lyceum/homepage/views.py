@@ -1,10 +1,13 @@
 from http import HTTPStatus
 
 from django.http import HttpResponse
+from django.shortcuts import render
 
 
 def home(request):
-    return HttpResponse("<body>Главная</body>")
+    templates = "main.html"
+    context = {}
+    return render(request, templates, context)
 
 
 def coffee_view(request):

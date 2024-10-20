@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Главная страница{% endblock %}
+
+{% block content %}
+    <div class="jumbotron">
+        <h1>Добро пожаловать на наш сайт!</h1>
+        <p>На главной странице можно найти краткую информацию о нашем проекте.</p>
+        <a class="btn btn-primary" href="{% url 'catalog:item_list' %}" role="button">Посмотреть товары</a>
+    </div>
+    <div class="row">
+        <div class="col-lg-4">
+            <h2>Товар 1</h2>
+            <img src="{% static 'img/racoon.png' %}" class="img-fluid" alt="Товар 1">
+            <p>Описание товара 1.</p>
+            <a class="btn btn-secondary" href="{% url 'catalog:item_detail' 1 %}">Подробнее</a>
+        </div>
+    </div>
+{% endblock %}

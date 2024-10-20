@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Товар {{ pk }}{% endblock %}
+
+{% block content %}
+    <h1>Товар {{ pk }}</h1>
+    <img src="{% static 'img/racoon.png' %}" class="img-fluid" alt="Товар {{ pk }}">
+    <p>Подробное описание товара {{ pk }}.</p>
+    <a class="btn btn-secondary" href="{% url 'catalog:item_list' %}">Вернуться к списку</a>
+{% endblock %}

@@ -1,8 +1,21 @@
+# from django_cleanup import cleanup
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
+from sorl.thumbnail import ImageField
 
 from catalog.validators import ValidateMustContain
 from core.models import CategoryAndTags, DefaultModel
+
+
+class Image(models.Model):
+    image = ImageField(upload_to='items/gallery/')
+
+    class Meta:
+        verbose_name = "изображение"
+        verbose_name_plural = "изображения"
+
+    def __str__(self):
+        return f"Image {self.id}"
 
 
 class Category(CategoryAndTags):
@@ -45,6 +58,19 @@ class Item(DefaultModel):
         related_name="catalog_items",
     )
     tags = models.ManyToManyField(Tag, verbose_name="теги")
+    main_image = ImageField(
+        upload_to="items/main/",
+        blank=True,
+        null=True,
+        help_text="Основная крупная картинка товара, связь 1:1",
+        verbose_name="главное изображение",
+    )
+    images = models.ManyToManyField(
+        "Image",
+        related_name="items",
+        blank=True,
+        verbose_name="дополнительные изображения",
+    )
 
     class Meta:
         verbose_name = "товар"
