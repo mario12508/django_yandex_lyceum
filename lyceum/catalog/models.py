@@ -8,7 +8,7 @@ from core.models import CategoryAndTags, DefaultModel
 
 
 class Image(models.Model):
-    image = ImageField(upload_to='items/gallery/')
+    image = ImageField(upload_to="items/gallery/")
 
     class Meta:
         verbose_name = "изображение"
