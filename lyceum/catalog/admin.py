@@ -1,8 +1,9 @@
 from django.contrib import admin
+from django.utils.html import format_html
 
 from sorl.thumbnail import get_thumbnail
 
-from catalog.models import Category, Image, Item, Tag
+from catalog.models import Category, Item, MainImage, Tag
 
 
 class ImageInline(admin.TabularInline):
@@ -22,9 +23,10 @@ class ItemAdmin(admin.ModelAdmin):
 
     def thumbnail(self, obj):
         if obj.main_image:
-            return (
-                f'<img src="{get_thumbnail(obj.main_image, "300x300").url}'
-                f'" width="30" height="30" />'
+            thumbnail_url = get_thumbnail(obj.main_image, "300x300").url
+            return format_html(
+                '<img src="{}" width="30" height="30" />',
+                thumbnail_url,
             )
         return "No Image"
 
@@ -34,4 +36,4 @@ class ItemAdmin(admin.ModelAdmin):
 
 admin.site.register(Tag)
 admin.site.register(Category)
-admin.site.register(Image)
+admin.site.register(MainImage)

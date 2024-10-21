@@ -7,7 +7,7 @@ from catalog.validators import ValidateMustContain
 from core.models import CategoryAndTags, DefaultModel
 
 
-class Image(models.Model):
+class MainImage(models.Model):
     image = ImageField(upload_to="items/gallery/")
 
     class Meta:
@@ -66,7 +66,7 @@ class Item(DefaultModel):
         verbose_name="главное изображение",
     )
     images = models.ManyToManyField(
-        "Image",
+        "MainImage",
         related_name="items",
         blank=True,
         verbose_name="дополнительные изображения",
