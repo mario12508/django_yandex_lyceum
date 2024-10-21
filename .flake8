@@ -1,7 +1,7 @@
 [flake8]
-ignore=I100,W503
-exclude=*/migrations/
-per-file-ignores=*/migrations/,*/models.py:I201,lyceum/tests.py:I101,*/admin.py:I201,
+application-import-names = about,catalog,core,homepage
+exclude = .git,__pycache__,venv,*/migrations/
+import-order-style = google
 max-line-length = 79
 inline-quotes = double
 docstring-quotes = double
