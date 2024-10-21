@@ -74,14 +74,18 @@ class Item(DefaultModel):
 
     @property
     def get_image_300x300(self):
-        return get_thumbnail(self.MainImage, "300x300", crop="center", quality=51)
+        return get_thumbnail(
+            self.MainImage,
+            "300x300",
+            crop="center",
+            quality=51,
+        )
 
     def img_tmb(self):
         if self.MainImage:
-            return mark_safe(
-                f'<img src="{self.get_image_300x300.url}"/>'
-            )
+            return mark_safe(f'<img src="{self.get_image_300x300.url}"/>')
         return "Нет картинки"
+
     img_tmb.allow_tags = True
     img_tmb.short_description = "миниатюра"
 
