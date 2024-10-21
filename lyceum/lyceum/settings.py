@@ -144,6 +144,8 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 MEDIA_ROOT = BASE_DIR / "media"
 MEDIA_URL = "media/"
 
+THUMBNAIL_BACKEND = 'sorl.thumbnail.base.ThumbnailBackend'
+
 
 __all__ = [
     "BASE_DIR",
@@ -168,4 +170,5 @@ __all__ = [
     "DEFAULT_AUTO_FIELD",
     "MEDIA_ROOT",
     "MEDIA_URL",
+    "THUMBNAIL_BACKEND",
 ]

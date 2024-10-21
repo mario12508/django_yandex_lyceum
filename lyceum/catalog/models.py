@@ -1,7 +1,7 @@
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils.safestring import mark_safe
-from sorl.thumbnail import ImageField, get_thumbnail
+from sorl.thumbnail import get_thumbnail, ImageField
 
 from catalog.validators import ValidateMustContain
 from core.models import CategoryAndTags, DefaultModel
