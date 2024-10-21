@@ -6,3 +6,6 @@ class AboutURLTests(TestCase):
         client = Client()
         response = client.get("/about/")
         self.assertEqual(response.status_code, 200)
+
+
+__all__ = ["AboutURLTests"]

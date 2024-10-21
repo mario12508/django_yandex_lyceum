@@ -228,3 +228,6 @@ class CatalogItemTests(TestCase):
         )
         with self.assertRaises(ValidationError):
             similar_tag.full_clean()
+
+
+__all__ = ["CatalogItemTests", "CatalogURLTests"]

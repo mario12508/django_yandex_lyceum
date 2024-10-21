@@ -1,13 +1,13 @@
-# from django_cleanup import cleanup
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
-from sorl.thumbnail import ImageField
+from django.utils.safestring import mark_safe
+from sorl.thumbnail import ImageField, get_thumbnail
 
 from catalog.validators import ValidateMustContain
 from core.models import CategoryAndTags, DefaultModel
 
 
-class MainImage(models.Model):
+class Image(models.Model):
     image = ImageField(upload_to="items/gallery/")
 
     class Meta:
@@ -58,7 +58,7 @@ class Item(DefaultModel):
         related_name="catalog_items",
     )
     tags = models.ManyToManyField(Tag, verbose_name="теги")
-    main_image = ImageField(
+    MainImage = ImageField(
         upload_to="items/main/",
         blank=True,
         null=True,
@@ -66,11 +66,24 @@ class Item(DefaultModel):
         verbose_name="главное изображение",
     )
     images = models.ManyToManyField(
-        "MainImage",
+        "Image",
         related_name="items",
         blank=True,
         verbose_name="дополнительные изображения",
     )
+
+    @property
+    def get_image_300x300(self):
+        return get_thumbnail(self.MainImage, "300x300", crop="center", quality=51)
+
+    def img_tmb(self):
+        if self.MainImage:
+            return mark_safe(
+                f'<img src="{self.get_image_300x300.url}"/>'
+            )
+        return "Нет картинки"
+    img_tmb.allow_tags = True
+    img_tmb.short_description = "миниатюра"
 
     class Meta:
         verbose_name = "товар"
@@ -78,3 +91,6 @@ class Item(DefaultModel):
 
     def __str__(self):
         return self.name
+
+
+__all__ = ["Category", "Item", "Image", "Tag"]

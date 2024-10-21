@@ -1,9 +1,6 @@
 from django.contrib import admin
-from django.utils.html import format_html
 
-from sorl.thumbnail import get_thumbnail
-
-from catalog.models import Category, Item, MainImage, Tag
+from catalog.models import Category, Item, Image, Tag
 
 
 class ImageInline(admin.TabularInline):
@@ -15,25 +12,16 @@ class ImageInline(admin.TabularInline):
 
 @admin.register(Item)
 class ItemAdmin(admin.ModelAdmin):
-    list_display = (Item.name.field.name, Item.is_published.field.name)
+    list_display = (Item.name.field.name, Item.is_published.field.name, Item.img_tmb)
     list_editable = (Item.is_published.field.name,)
     list_display_links = (Item.name.field.name,)
     filter_horizontal = (Item.tags.field.name,)
     inlines = [ImageInline]
 
-    def thumbnail(self, obj):
-        if obj.main_image:
-            thumbnail_url = get_thumbnail(obj.main_image, "300x300").url
-            return format_html(
-                '<img src="{}" width="30" height="30" />',
-                thumbnail_url,
-            )
-        return "No Image"
-
-    thumbnail.allow_tags = True
-    thumbnail.short_description = "Thumbnail"
-
 
 admin.site.register(Tag)
 admin.site.register(Category)
-admin.site.register(MainImage)
+admin.site.register(Image)
+
+
+__all__ = ["ImageInline", "ItemAdmin"]

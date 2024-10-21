@@ -24,3 +24,6 @@ class ReverseRussianWordsMiddlewareTest(TestCase):
             self.assertEqual("Я чайник", response.content.decode())
         response = client.get("/coffee/")
         self.assertEqual("Я чайник", response.content.decode())
+
+
+__all__ = ["ReverseRussianWordsMiddlewareTest"]

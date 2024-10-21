@@ -74,3 +74,6 @@ class CategoryAndTags(DefaultModel):
                     f"таким именем уже существует.",
                 },
             )
+
+
+__all__ = ["DefaultModel", "CategoryAndTags"]

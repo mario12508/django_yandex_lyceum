@@ -20,7 +20,7 @@ DEBUG = load_bool_env("DJANGO_DEBUG", False)
 
 ALLOWED_HOSTS = os.getenv(
     "DJANGO_ALLOWED_HOSTS",
-    default="127.0.0.1," "localhost",
+    default="127.0.0.1,localhost",
 ).split(",")
 
 ALLOW_REVERSE = load_bool_env("DJANGO_ALLOW_REVERSE", True)
@@ -143,3 +143,29 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 MEDIA_ROOT = BASE_DIR / "media"
 MEDIA_URL = "media/"
+
+
+__all__ = [
+    "BASE_DIR",
+    "SECRET_KEY",
+    "DEBUG",
+    "ALLOWED_HOSTS",
+    "ALLOW_REVERSE",
+    "REQUEST_COUNTER",
+    "INSTALLED_APPS",
+    "MIDDLEWARE",
+    "ROOT_URLCONF",
+    "TEMPLATES",
+    "WSGI_APPLICATION",
+    "DATABASES",
+    "AUTH_PASSWORD_VALIDATORS",
+    "LANGUAGE_CODE",
+    "TIME_ZONE",
+    "USE_I18N",
+    "USE_TZ",
+    "STATIC_URL",
+    "STATICFILES_DIRS",
+    "DEFAULT_AUTO_FIELD",
+    "MEDIA_ROOT",
+    "MEDIA_URL",
+]

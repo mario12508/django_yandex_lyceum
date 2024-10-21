@@ -16,3 +16,6 @@ class ValidateMustContain:
                 f"Обязательно нужно использовать одно из следующих слов: "
                 f"{', '.join(self.words)}",
             )
+
+
+__all__ = ["ValidateMustContain"]

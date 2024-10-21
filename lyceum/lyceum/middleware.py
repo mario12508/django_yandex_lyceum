@@ -26,3 +26,6 @@ class ReverseRussianWordsMiddleware:
     @staticmethod
     def reverse_russia_words(text):
         return re.sub(r"[А-яёЁ]+", lambda x: x.group()[::-1], text)
+
+
+__all__ = ["ReverseRussianWordsMiddleware"]
