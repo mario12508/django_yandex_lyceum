@@ -12,8 +12,9 @@ class ValidateMustContain:
 
     def __call__(self, value):
         clean_value = strip_tags(value)
-        values = [re.sub(r"^\W+|\W+$", "", i) for i in
-                  clean_value.lower().split()]
+        values = [
+            re.sub(r"^\W+|\W+$", "", i) for i in clean_value.lower().split()
+        ]
         if not set(self.words) & set(values):
             raise ValidationError(
                 f"Обязательно нужно использовать одно из следующих слов: "

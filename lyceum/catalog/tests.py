@@ -239,14 +239,19 @@ class ItemModelTests(TestCase):
     @classmethod
     def setUp(cls):
         super().setUpClass()
-        cls.category = catalog.models.Category.objects.create(name="Категория",
-                                                              slug="категория")
+        cls.category = catalog.models.Category.objects.create(
+            name="Категория",
+            slug="категория",
+        )
         cls.tag = catalog.models.Tag.objects.create(name="Тег", slug="тег")
 
     def test_rich_text_field_widget(self):
         form = catalog.models.ItemAdminForm()
-        self.assertIn('class="django-ckeditor-widget"', str(form['text']),
-                      "CKEditor is not applied.")
+        self.assertIn(
+            'class="django-ckeditor-widget"',
+            str(form["text"]),
+            "CKEditor is not applied.",
+        )
 
     def test_item_creation_valid_text(self):
         item = catalog.models.Item(
@@ -297,14 +302,16 @@ class ItemModelTests(TestCase):
 
     def test_item_verbose_name(self):
         item = catalog.models.Item()
-        self.assertEqual(item._meta.get_field('text').verbose_name,
-                         "описание товара")
+        self.assertEqual(
+            item._meta.get_field("text").verbose_name,
+            "описание товара",
+        )
 
     def test_item_help_text(self):
         item = catalog.models.Item()
         self.assertEqual(
-            item._meta.get_field('text').help_text,
-            "Обязательно нужно использовать слова роскошно или превосходно"
+            item._meta.get_field("text").help_text,
+            "Обязательно нужно использовать слова роскошно или превосходно",
         )
 
     def test_item_text_field_with_punctuation(self):
@@ -321,7 +328,7 @@ class ItemModelTests(TestCase):
             text="Это превосходно   !",
             category=self.category,
         )
-        item.full_clean()  # Should not raise ValidationError
+        item.full_clean()
 
     def test_item_text_field_with_leading_trailing_spaces(self):
         item = catalog.models.Item(
