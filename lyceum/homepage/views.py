@@ -2,11 +2,13 @@ from http import HTTPStatus
 
 from django.http import HttpResponse
 from django.shortcuts import render
+from django.utils import timezone
 
 
 def home(request):
     templates = "homepage/main.html"
-    context = {}
+    current_year = timezone.now().year
+    context = {"current_year": current_year}
     return render(request, templates, context)
 
 

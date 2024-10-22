@@ -26,6 +26,10 @@ REQUEST_COUNTER = 0
 
 # Application definition
 
+LOCALE_PATHS = [
+    BASE_DIR / "locale",
+]
+
 INSTALLED_APPS = [
     "core.apps.CoreConfig",
     "homepage.apps.HomepageConfig",

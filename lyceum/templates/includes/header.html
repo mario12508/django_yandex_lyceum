@@ -1,4 +1,5 @@
 {% load static %}
+{% load i18n %}
 <header>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
@@ -11,17 +12,16 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link {% if request.resolver_match.view_name == 'homepage:main' %}active{% endif %}" href="{% url 'homepage:main' %}">На главную</a>
+                        <a class="nav-link {% if request.resolver_match.view_name == 'homepage:main' %}active{% endif %}" href="{% url 'homepage:main' %}">{% trans "Home" %}</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {% if request.resolver_match.view_name == 'about:about' %}active{% endif %}" href="{% url 'about:about' %}">О проекте</a>
+                        <a class="nav-link {% if request.resolver_match.view_name == 'about:about' %}active{% endif %}" href="{% url 'about:about' %}">{% trans "About" %}</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {% if request.resolver_match.view_name == 'catalog:item_list' %}active{% endif %}" href="{% url 'catalog:item_list' %}">Список товаров</a>
+                        <a class="nav-link {% if request.resolver_match.view_name == 'catalog:item_list' %}active{% endif %}" href="{% url 'catalog:item_list' %}">{% trans "Catalog" %}</a>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
 </header>
-

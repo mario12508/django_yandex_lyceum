@@ -1,5 +1,17 @@
 <footer class="footer mt-auto py-3 bg-light">
     <div class="container">
-        <span class="text-muted">© 2024 Мой сайт. Все права защищены.</span>
+        <span class="text-muted" id="current-year">© {{ current_year }} Мой сайт. Все права защищены.</span>
     </div>
 </footer>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var currentYearElement = document.getElementById('current-year');
+        var serverYear = new Date(currentYearElement.innerText).getFullYear();
+        var localDate = new Date();
+
+        // Проверяем разницу во времени
+        if (Math.abs(localDate - new Date(serverYear, 0, 1)) < 86400000) {
+            currentYearElement.innerText = localDate.getFullYear();
+        }
+    });
+</script>

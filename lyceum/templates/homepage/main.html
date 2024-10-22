@@ -1,12 +1,13 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load i18n %}
 
 {% block title %}Главная страница{% endblock %}
 
 {% block content %}
     <div class="jumbotron">
-        <h1>Добро пожаловать на наш сайт!</h1>
-        <p>На главной странице можно найти краткую информацию о нашем проекте.</p>
+        <h1>{% trans "Welcome to our website!" %}</h1>
+        <p>{% trans "On the main page you can find brief information about our project." %}</p>
         <a class="btn btn-primary" href="{% url 'catalog:item_list' %}" role="button">Посмотреть товары</a>
     </div>
     <div class="row">
