@@ -8,8 +8,6 @@
         var currentYearElement = document.getElementById('current-year');
         var serverYear = new Date(currentYearElement.innerText).getFullYear();
         var localDate = new Date();
-
-        // Проверяем разницу во времени
         if (Math.abs(localDate - new Date(serverYear, 0, 1)) < 86400000) {
             currentYearElement.innerText = localDate.getFullYear();
         }
