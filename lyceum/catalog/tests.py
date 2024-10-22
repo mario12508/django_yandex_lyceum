@@ -14,7 +14,6 @@ class CatalogURLTests(TestCase):
 
     def test_catalog_detail(self):
         client = Client()
-        # Assuming an item with ID 1 exists or is created before this test.
         url = reverse("catalog:item_detail", args=[1])
         response = client.get(url)
         self.assertEqual(response.status_code, 200)
