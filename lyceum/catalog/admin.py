@@ -1,17 +1,18 @@
 from django.contrib import admin
 
-from catalog.models import Category, Image, Item, Tag
+from catalog.models import Category, Image, Item, ItemAdminForm, Tag
 
 
 class ImageInline(admin.TabularInline):
     model = Item.images.through
     extra = 1
-    verbose_name = "Image"
-    verbose_name_plural = "Images"
+    verbose_name = "Дополнительное изображение"
+    verbose_name_plural = "Дополнительные изображения"
 
 
 @admin.register(Item)
 class ItemAdmin(admin.ModelAdmin):
+    form = ItemAdminForm
     list_display = (
         Item.name.field.name,
         Item.is_published.field.name,

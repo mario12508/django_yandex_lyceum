@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "sorl.thumbnail",
     "django_cleanup.apps.CleanupConfig",
+    "ckeditor",
+    "ckeditor_uploader",
 ]
 
 MIDDLEWARE = [
@@ -143,6 +145,8 @@ MEDIA_URL = "media/"
 
 THUMBNAIL_BACKEND = "sorl.thumbnail.base.ThumbnailBackend"
 
+CKEDITOR_UPLOAD_PATH = "uploads/"
+
 
 __all__ = [
     "BASE_DIR",
@@ -168,4 +172,5 @@ __all__ = [
     "MEDIA_ROOT",
     "MEDIA_URL",
     "THUMBNAIL_BACKEND",
+    "CKEDITOR_UPLOAD_PATH",
 ]

@@ -1,3 +1,6 @@
+from ckeditor.fields import RichTextField
+from ckeditor.widgets import CKEditorWidget
+from django import forms
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils.safestring import mark_safe
@@ -8,14 +11,14 @@ from core.models import CategoryAndTags, DefaultModel
 
 
 class Image(models.Model):
-    image = ImageField(upload_to="items/gallery/")
+    image = ImageField(upload_to="items/gallery/", verbose_name="Изображение")
 
     class Meta:
         verbose_name = "изображение"
         verbose_name_plural = "изображения"
 
     def __str__(self):
-        return f"Image {self.id}"
+        return f"Изображение {self.id}"
 
 
 class Category(CategoryAndTags):
@@ -44,9 +47,9 @@ class Tag(CategoryAndTags):
 
 
 class Item(DefaultModel):
-    text = models.TextField(
+    text = RichTextField(
         validators=[ValidateMustContain("превосходно", "роскошно")],
-        verbose_name="текст",
+        verbose_name="описание товара",
         help_text="Обязательно нужно использовать слова "
         "роскошно или превосходно",
     )
@@ -97,4 +100,12 @@ class Item(DefaultModel):
         return self.name
 
 
-__all__ = ["Category", "Item", "Image", "Tag"]
+class ItemAdminForm(forms.ModelForm):
+    text = forms.CharField(widget=CKEditorWidget(), label="Описание товара")
+
+    class Meta:
+        model = Item
+        fields = "__all__"
+
+
+__all__ = ["Category", "Item", "ItemAdminForm", "Image", "Tag"]
