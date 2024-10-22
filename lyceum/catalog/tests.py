@@ -248,9 +248,9 @@ class ItemModelTests(TestCase):
     def test_rich_text_field_widget(self):
         form = catalog.models.ItemAdminForm()
         self.assertIn(
-            'class="django-ckeditor-widget"',
+            'class="django_ckeditor_5"',
             str(form["text"]),
-            "CKEditor is not applied.",
+            "CKEditor 5 is not applied.",
         )
 
     def test_item_creation_valid_text(self):
@@ -259,7 +259,7 @@ class ItemModelTests(TestCase):
             text="Этот товар просто превосходно!",
             category=self.category,
         )
-        item.full_clean()  # Should not raise ValidationError
+        item.full_clean()
         item.save()
 
         self.assertEqual(catalog.models.Item.objects.count(), 1)
@@ -347,4 +347,4 @@ class ItemModelTests(TestCase):
         item.full_clean()
 
 
-__all__ = ["CatalogItemTests", "CatalogURLTests"]
+__all__ = ["CatalogItemTests", "CatalogURLTests", "ItemModelTests"]

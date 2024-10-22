@@ -1,9 +1,9 @@
-from ckeditor.fields import RichTextField
-from ckeditor.widgets import CKEditorWidget
 from django import forms
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils.safestring import mark_safe
+from django_ckeditor_5.fields import CKEditor5Field
+from django_ckeditor_5.widgets import CKEditor5Widget
 from sorl.thumbnail import get_thumbnail, ImageField
 
 from catalog.validators import ValidateMustContain
@@ -47,7 +47,7 @@ class Tag(CategoryAndTags):
 
 
 class Item(DefaultModel):
-    text = RichTextField(
+    text = CKEditor5Field(
         validators=[ValidateMustContain("превосходно", "роскошно")],
         verbose_name="описание товара",
         help_text="Обязательно нужно использовать слова "
@@ -101,7 +101,10 @@ class Item(DefaultModel):
 
 
 class ItemAdminForm(forms.ModelForm):
-    text = forms.CharField(widget=CKEditorWidget(), label="Описание товара")
+    text = forms.CharField(
+        widget=CKEditor5Widget(config_name="extends"),
+        label="Описание товара",
+    )
 
     class Meta:
         model = Item
