@@ -1,5 +1,6 @@
 from django.core.exceptions import ValidationError
 from django.test import Client, TestCase
+from django.urls import reverse
 
 import catalog.models
 
@@ -7,23 +8,28 @@ import catalog.models
 class CatalogURLTests(TestCase):
     def test_catalog_list(self):
         client = Client()
-        response = client.get("/catalog/")
+        url = reverse("catalog:item_list")
+        response = client.get(url)
         self.assertEqual(response.status_code, 200)
 
     def test_catalog_detail(self):
         client = Client()
-        response = client.get("/catalog/1/")
+        # Assuming an item with ID 1 exists or is created before this test.
+        url = reverse("catalog:item_detail", args=[1])
+        response = client.get(url)
         self.assertEqual(response.status_code, 200)
 
     def test_number_view(self):
         client = Client()
-        response = client.get("/catalog/re/123/")
+        url = reverse("catalog:number_view", args=[123])
+        response = client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content.decode(), "123")
 
     def test_converter_number_view(self):
         client = Client()
-        response = client.get("/catalog/converter/456/")
+        url = reverse("catalog:converter_view", args=[456])
+        response = client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content.decode(), "456")
 
