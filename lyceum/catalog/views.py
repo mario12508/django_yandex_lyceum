@@ -1,19 +1,16 @@
 from django.http import HttpResponse
 from django.shortcuts import render
-from django.utils import timezone
 
 
 def item_list(request):
     templates = "catalog/item_list.html"
-    current_year = timezone.now().year
-    context = {"current_year": current_year}
+    context = {}
     return render(request, templates, context)
 
 
 def item_detail(request, pk):
     templates = "catalog/item.html"
-    current_year = timezone.now().year
-    context = {"pk": pk, "current_year": current_year}
+    context = {"pk": pk}
     return render(request, templates, context)
 
 
