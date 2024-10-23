@@ -6,11 +6,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Мой сайт{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/castom.css' %}">
     <link rel="icon" href="{% static 'img/fav.ico' %}" type="image" >
 </head>
 <body>
 
     {% include 'includes/header.html' %}
+    <form action="{% url 'set_language' %}" method="post">
+        {% csrf_token %}
+        <input name="next" type="hidden" value="{{ redirect_to }}">
+        <select name="language">
+            <option value="en">English</option>
+            <option value="ru">Русский</option>
+        </select>
+        <input type="submit" value="Change">
+    </form>
     <main role="main" class="container">
         {% block content %}{% endblock %}
     </main>

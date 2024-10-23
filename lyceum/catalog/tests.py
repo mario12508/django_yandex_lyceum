@@ -2,6 +2,7 @@ from django.core.exceptions import ValidationError
 from django.test import Client, TestCase
 from django.urls import reverse
 
+from catalog.admin import ItemAdminForm
 import catalog.models
 
 
@@ -246,7 +247,7 @@ class ItemModelTests(TestCase):
         cls.tag = catalog.models.Tag.objects.create(name="Тег", slug="тег")
 
     def test_rich_text_field_widget(self):
-        form = catalog.models.ItemAdminForm()
+        form = ItemAdminForm()
         self.assertIn(
             'class="django_ckeditor_5"',
             str(form["text"]),

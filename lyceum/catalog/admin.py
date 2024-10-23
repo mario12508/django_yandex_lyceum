@@ -1,6 +1,19 @@
+from django import forms
 from django.contrib import admin
+from django_ckeditor_5.widgets import CKEditor5Widget
 
-from catalog.models import Category, Image, Item, ItemAdminForm, Tag
+from catalog.models import Category, Image, Item, Tag
+
+
+class ItemAdminForm(forms.ModelForm):
+    text = forms.CharField(
+        widget=CKEditor5Widget(config_name="extends"),
+        label="Описание товара",
+    )
+
+    class Meta:
+        model = Item
+        fields = "__all__"
 
 
 class ImageInline(admin.TabularInline):
@@ -29,4 +42,4 @@ admin.site.register(Category)
 admin.site.register(Image)
 
 
-__all__ = ["ImageInline", "ItemAdmin"]
+__all__ = ["ImageInline", "ItemAdmin", "ItemAdminForm"]
