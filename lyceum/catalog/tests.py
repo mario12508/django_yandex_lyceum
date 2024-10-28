@@ -332,10 +332,11 @@ class CatalogViewsTests(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.category = catalog.models.Category.objects.create(
-            name="Электроника")
+            name="Электроника",
+        )
         cls.tag1 = catalog.models.Tag.objects.create(name="Свежее")
         cls.image = catalog.models.Image.objects.create(
-            image="items/gallery/test_image.jpg"
+            image="items/gallery/Акция.png",
         )
 
         # Создание тестового товара
@@ -345,20 +346,18 @@ class CatalogViewsTests(TestCase):
             category=cls.category,
             is_published=True,
             is_on_main=True,
-            main_image="items/gallery/test_image.jpg",
+            main_image="items/gallery/Акция.png",
         )
         cls.item.tags.set([cls.tag1])
         cls.item.images.set([cls.image])
 
     def test_item_list_context(self):
-        response = self.client.get(reverse('catalog:item_list'))
+        response = self.client.get(reverse("catalog:item_list"))
         self.assertEqual(response.status_code, 200)
         self.assertIn("items", response.context)
 
         items = response.context["items"]
-        expected_items = {
-            item.name: item for item in items
-        }
+        expected_items = {item.name: item for item in items}
 
         for item_name, item in expected_items.items():
             self.assertTrue(item.is_published)
@@ -368,7 +367,8 @@ class CatalogViewsTests(TestCase):
 
     def test_item_detail_context(self):
         response = self.client.get(
-            reverse('catalog:item_detail', kwargs={'pk': self.item.pk}))
+            reverse("catalog:item_detail", kwargs={"pk": self.item.pk}),
+        )
         self.assertEqual(response.status_code, 200)
         self.assertIn("item", response.context)
 
