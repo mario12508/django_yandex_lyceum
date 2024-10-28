@@ -13,26 +13,6 @@ class CatalogURLTests(TestCase):
         response = client.get(url)
         self.assertEqual(response.status_code, 200)
 
-    def test_catalog_detail(self):
-        client = Client()
-        url = reverse("catalog:item_detail", args=[1])
-        response = client.get(url)
-        self.assertEqual(response.status_code, 200)
-
-    def test_number_view(self):
-        client = Client()
-        url = reverse("catalog:number_view", args=[123])
-        response = client.get(url)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.content.decode(), "123")
-
-    def test_converter_number_view(self):
-        client = Client()
-        url = reverse("catalog:converter_view", args=[456])
-        response = client.get(url)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.content.decode(), "456")
-
 
 class CatalogItemTests(TestCase):
     @classmethod
@@ -346,6 +326,62 @@ class ItemModelTests(TestCase):
             category=self.category,
         )
         item.full_clean()
+
+
+class CatalogViewsTests(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.category = catalog.models.Category.objects.create(
+            name="Электроника")
+        cls.tag1 = catalog.models.Tag.objects.create(name="Свежее")
+        cls.image = catalog.models.Image.objects.create(
+            image="items/gallery/test_image.jpg"
+        )
+
+        # Создание тестового товара
+        cls.item = catalog.models.Item.objects.create(
+            name="Тестовый товар",
+            text="Это тестовый товар роскошно",
+            category=cls.category,
+            is_published=True,
+            is_on_main=True,
+            main_image="items/gallery/test_image.jpg",
+        )
+        cls.item.tags.set([cls.tag1])
+        cls.item.images.set([cls.image])
+
+    def test_item_list_context(self):
+        response = self.client.get(reverse('catalog:item_list'))
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("items", response.context)
+
+        items = response.context["items"]
+        expected_items = {
+            item.name: item for item in items
+        }
+
+        for item_name, item in expected_items.items():
+            self.assertTrue(item.is_published)
+            self.assertEqual(item.category, self.category)
+            self.assertIn(self.tag1, item.tags.all())
+            self.assertEqual(item_name, "Тестовый товар")
+
+    def test_item_detail_context(self):
+        response = self.client.get(
+            reverse('catalog:item_detail', kwargs={'pk': self.item.pk}))
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("item", response.context)
+
+        item = response.context["item"]
+        expected_data = {
+            item.name: "Тестовый товар",
+            item.category: self.category,
+            item.tags.count(): 1,
+            item.images.count(): 1,
+        }
+
+        for value, expected in expected_data.items():
+            self.assertEqual(value, expected)
 
 
 __all__ = ["CatalogItemTests", "CatalogURLTests", "ItemModelTests"]

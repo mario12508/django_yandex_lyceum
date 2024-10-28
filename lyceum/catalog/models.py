@@ -72,6 +72,12 @@ class Item(DefaultModel):
         blank=True,
         verbose_name="дополнительные изображения",
     )
+    is_on_main = models.BooleanField(
+        default=False,
+        verbose_name="Показывать на главной странице",
+        help_text="Определяет, отображается ли данный товар на "
+        "главной странице.",
+    )
 
     @property
     def get_image_300x300(self):
