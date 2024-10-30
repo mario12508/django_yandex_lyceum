@@ -1,34 +1,13 @@
 [
   {
-    "model": "catalog.image",
-    "pk": 1,
-    "fields": {
-      "image": "items/gallery/Акция.png"
-    }
-  },
-  {
-    "model": "catalog.image",
-    "pk": 2,
-    "fields": {
-      "image": "items/gallery/Выгодно.png"
-    }
-  },
-  {
-    "model": "catalog.image",
-    "pk": 3,
-    "fields": {
-      "image": "items/gallery/Новинка.png"
-    }
-  },
-  {
     "model": "catalog.category",
     "pk": 1,
     "fields": {
       "name": "Электроника",
       "is_published": true,
       "slug": "electronics",
-      "normalized_name": "элektpohиka",
-      "weight": 100
+      "weight": 100,
+      "normalized_name": "элektpohиka"
     }
   },
   {
@@ -38,8 +17,8 @@
       "name": "Одежда",
       "is_published": true,
       "slug": "cloth",
-      "normalized_name": "oдeждa",
-      "weight": 100
+      "weight": 100,
+      "normalized_name": "oдeждa"
     }
   },
   {
@@ -49,8 +28,8 @@
       "name": "Мебель",
       "is_published": true,
       "slug": "Furniture",
-      "normalized_name": "meбeль",
-      "weight": 100
+      "weight": 100,
+      "normalized_name": "meбeль"
     }
   },
   {
@@ -109,19 +88,12 @@
     "fields": {
       "name": "Планшет",
       "is_published": true,
-      "text": "<p>Роскошно созданный планшет</p>",
+      "text": "Роскошно созданный планшет",
       "category": 1,
-      "main_image": "items/main/Планшет.png",
-      "is_on_main": true,
       "tags": [
         1,
         2,
         5
-      ],
-      "images": [
-        1,
-        2,
-        3
       ]
     }
   },
@@ -131,20 +103,14 @@
     "fields": {
       "name": "IPhone",
       "is_published": true,
-      "text": "<p>Абсолютный оригинал, превосходно созданный</p>",
+      "text": "Абсолютный оригинал, превосходно созданный",
       "category": 1,
-      "main_image": "items/main/IPhone.png",
-      "is_on_main": false,
       "tags": [
         1,
         2,
         3,
         4,
         5
-      ],
-      "images": [
-        1,
-        2
       ]
     }
   },
@@ -154,15 +120,10 @@
     "fields": {
       "name": "Кошелёк",
       "is_published": true,
-      "text": "<p>В нем роскошно сами появляются деньги</p>",
+      "text": "В нем роскошно сами появляются деньги",
       "category": 2,
-      "main_image": "items/main/Кошелёк.png",
-      "is_on_main": false,
       "tags": [
         1,
-        2
-      ],
-      "images": [
         2
       ]
     }
@@ -173,16 +134,11 @@
     "fields": {
       "name": "Диван",
       "is_published": true,
-      "text": "<p>Превосходно созданный диван</p>",
+      "text": "Превосходно созданный диван",
       "category": 3,
-      "main_image": "items/main/Диван.png",
-      "is_on_main": true,
       "tags": [
         1,
         2
-      ],
-      "images": [
-        3
       ]
     }
   },
@@ -192,16 +148,11 @@
     "fields": {
       "name": "Компьютер",
       "is_published": true,
-      "text": "<p>Лучший превосходно созданный компьютер</p>",
+      "text": "Лучший превосходно созданный компьютер",
       "category": 3,
-      "main_image": "items/main/Компьютер.png",
-      "is_on_main": true,
       "tags": [
         1,
         5
-      ],
-      "images": [
-        1
       ]
     }
   }

@@ -2,21 +2,10 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils.safestring import mark_safe
 from django_ckeditor_5.fields import CKEditor5Field
-from sorl.thumbnail import get_thumbnail, ImageField
+from sorl.thumbnail import get_thumbnail
 
 from catalog.validators import ValidateMustContain
 from core.models import CategoryAndTags, DefaultModel
-
-
-class Image(models.Model):
-    image = ImageField(upload_to="items/gallery/", verbose_name="Изображение")
-
-    class Meta:
-        verbose_name = "изображение"
-        verbose_name_plural = "изображения"
-
-    def __str__(self):
-        return f"Изображение {self.id}"
 
 
 class Category(CategoryAndTags):
@@ -44,59 +33,83 @@ class Tag(CategoryAndTags):
         return self.name
 
 
+class ItemManager(models.Manager):
+    def published(self):
+        return (
+            self.get_queryset()
+            .filter(
+                is_published=True,
+                category__is_published=True,
+            )
+            .prefetch_related(
+                models.Prefetch(
+                    "tags",
+                    queryset=Tag.objects.filter(
+                        is_published=True,
+                    ).only(
+                        "name",
+                    ),
+                ),
+            )
+            .only("id", "name", "text", "category", "tags")
+            .order_by(
+                "category__name",
+                "name",
+            )
+        )
+
+    def on_main(self):
+        return (
+            self.get_queryset()
+            .select_related("category")
+            .filter(
+                is_published=True,
+                is_on_main=True,
+                category__is_published=True,
+            )
+            .prefetch_related(
+                models.Prefetch(
+                    "tags",
+                    queryset=Tag.objects.filter(
+                        is_published=True,
+                    ),
+                ),
+            )
+            .only("id", "name", "text", "category", "tags")
+            .order_by(
+                "name",
+            )
+        )
+
+
 class Item(DefaultModel):
+    objects = ItemManager()
+
     text = CKEditor5Field(
-        validators=[ValidateMustContain("превосходно", "роскошно")],
         verbose_name="описание товара",
-        help_text="Обязательно нужно использовать слова "
-        "роскошно или превосходно",
+        validators=[
+            ValidateMustContain("превосходно", "роскошно"),
+        ],
+        help_text="Обязательно нужно использовать слова роскошно "
+        "или превосходно",
+    )
+    is_on_main = models.BooleanField(
+        default=False,
+        verbose_name="главные",
     )
     category = models.ForeignKey(
         Category,
         on_delete=models.CASCADE,
         verbose_name="категория",
-        help_text="Выберите категорию для этого товара.",
         related_name="catalog_items",
     )
-    tags = models.ManyToManyField(Tag, verbose_name="теги")
-    main_image = ImageField(
-        upload_to="items/main/",
-        blank=True,
-        null=True,
-        help_text="Основная крупная картинка товара, связь 1:1",
-        verbose_name="главное изображение",
+    tags = models.ManyToManyField(
+        Tag,
+        verbose_name="теги",
     )
-    images = models.ManyToManyField(
-        "Image",
-        related_name="items",
-        blank=True,
-        verbose_name="дополнительные изображения",
-    )
-    is_on_main = models.BooleanField(
-        default=False,
-        verbose_name="Показывать на главной странице",
-        help_text="Определяет, отображается ли данный товар на "
-        "главной странице.",
-    )
-
-    @property
-    def get_image_300x300(self):
-        return get_thumbnail(
-            self.main_image,
-            "300x300",
-            crop="center",
-            quality=51,
-        )
-
-    def img_tmb(self):
-        if self.main_image:
-            return mark_safe(f'<img src="{self.get_image_300x300.url}"/>')
-        return "Нет картинки"
-
-    img_tmb.allow_tags = True
-    img_tmb.short_description = "миниатюра"
 
     class Meta:
+        ordering = ("name",)
         verbose_name = "товар"
         verbose_name_plural = "товары"
 
@@ -104,4 +117,81 @@ class Item(DefaultModel):
         return self.name
 
 
-__all__ = ["Category", "Item", "Image", "Tag"]
+class MainImage(models.Model):
+    image = models.ImageField(
+        upload_to="uploads/catalog/",
+        verbose_name="галерея",
+        null=True,
+        blank=True,
+    )
+
+    item = models.OneToOneField(
+        Item,
+        related_name="main_image",
+        on_delete=models.CASCADE,
+    )
+
+    @property
+    def get_img(self):
+        return get_thumbnail(
+            self.main_image.image,
+            "300x300",
+            crop="center",
+            quality=51,
+        )
+
+    def img_tmb(self):
+        if self.main_image:
+            return mark_safe(
+                f"<img src='{self.main_image.image.url}'>",
+            )
+        return "нет изображения"
+
+    img_tmb.short_description = "превью"
+    img_tmb.allow_tags = True
+
+    class Meta:
+        verbose_name = "главное изображение"
+        verbose_name_plural = "главное изображение"
+
+
+class Gallery(models.Model):
+    images = models.ImageField(
+        verbose_name="галерея",
+        upload_to="uploads/catalog/",
+        null=True,
+        blank=True,
+    )
+    item = models.ForeignKey(
+        Item,
+        related_name="images",
+        related_query_name="image",
+        on_delete=models.CASCADE,
+    )
+
+    def get_image_300x300(self):
+        return get_thumbnail(
+            self.gallery.images,
+            "300x300",
+            crop="center",
+            quality=51,
+        )
+
+    def img_tmb(self):
+        if self.gallery:
+            return mark_safe(
+                "<img src='{}' width='50' height='50'>".format(
+                    self.gallery.images.url,
+                ),
+            )
+        return "нет изображения"
+
+    img_tmb.short_description = "превью"
+    img_tmb.allow_tags = True
+
+    class Meta:
+        verbose_name = "изображение в галерее"
+        verbose_name_plural = "изображения в галерее"
+
+
+__all__ = ["Category", "Item", "Gallery", "Tag"]

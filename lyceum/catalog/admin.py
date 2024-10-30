@@ -2,7 +2,7 @@ from django import forms
 from django.contrib import admin
 from django_ckeditor_5.widgets import CKEditor5Widget
 
-from catalog.models import Category, Image, Item, Tag
+from catalog.models import Category, Gallery, Item, MainImage, Tag
 
 
 class ItemAdminForm(forms.ModelForm):
@@ -17,10 +17,17 @@ class ItemAdminForm(forms.ModelForm):
 
 
 class ImageInline(admin.TabularInline):
-    model = Item.images.through
+    model = Gallery
     extra = 1
     verbose_name = "Дополнительное изображение"
     verbose_name_plural = "Дополнительные изображения"
+
+
+class MainImageInline(admin.StackedInline):
+    model = Item.main_image.related.related_model
+    extra = 0
+    verbose_name = "Главное изображение"
+    verbose_name_plural = "Главное изображение"
 
 
 @admin.register(Item)
@@ -29,17 +36,17 @@ class ItemAdmin(admin.ModelAdmin):
     list_display = (
         Item.name.field.name,
         Item.is_published.field.name,
-        Item.img_tmb,
+        MainImage.img_tmb,
     )
     list_editable = (Item.is_published.field.name,)
     list_display_links = (Item.name.field.name,)
     filter_horizontal = (Item.tags.field.name,)
-    inlines = [ImageInline]
+    inlines = [MainImageInline, ImageInline]
 
 
 admin.site.register(Tag)
 admin.site.register(Category)
-admin.site.register(Image)
+admin.site.register(Gallery)
 
 
 __all__ = ["ImageInline", "ItemAdmin", "ItemAdminForm"]

@@ -333,10 +333,11 @@ class CatalogViewsTests(TestCase):
     def setUpTestData(cls):
         cls.category = catalog.models.Category.objects.create(
             name="Электроника",
+            is_published=True,
         )
-        cls.tag1 = catalog.models.Tag.objects.create(name="Свежее")
-        cls.image = catalog.models.Image.objects.create(
-            image="items/gallery/Акция.png",
+        cls.tag1 = catalog.models.Tag.objects.create(
+            name="Свежее",
+            is_published=True,
         )
 
         # Создание тестового товара
@@ -346,10 +347,22 @@ class CatalogViewsTests(TestCase):
             category=cls.category,
             is_published=True,
             is_on_main=True,
-            main_image="items/gallery/Акция.png",
         )
+
+        # Создание главного изображения
+        cls.main_image = catalog.models.MainImage.objects.create(
+            image="items/gallery/Акция.png",
+            item=cls.item,
+        )
+
+        # Создание изображения в галерее
+        cls.gallery_image = catalog.models.Gallery.objects.create(
+            images="items/gallery/Дополнительно.png",
+            item=cls.item,
+        )
+
+        # Установка тегов для товара
         cls.item.tags.set([cls.tag1])
-        cls.item.images.set([cls.image])
 
     def test_item_list_context(self):
         response = self.client.get(reverse("catalog:item_list"))
@@ -377,11 +390,18 @@ class CatalogViewsTests(TestCase):
             item.name: "Тестовый товар",
             item.category: self.category,
             item.tags.count(): 1,
+            item.main_image.image.url: self.main_image.image.url,
             item.images.count(): 1,
         }
 
+        # Проверка значений
         for value, expected in expected_data.items():
             self.assertEqual(value, expected)
+
+        self.assertEqual(
+            item.images.first().images.url,
+            self.gallery_image.images.url,
+        )
 
 
 __all__ = ["CatalogItemTests", "CatalogURLTests", "ItemModelTests"]

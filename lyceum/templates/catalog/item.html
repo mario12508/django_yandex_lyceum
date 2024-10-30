@@ -9,8 +9,8 @@
 
     <!-- Основное изображение товара -->
     <div class="main-image">
-        {% if item.main_image %}
-            <img src="{{ item.get_image_300x300.url }}" alt="{{ item.name }}" class="img-fluid">
+        {% if item.main_image and item.main_image.image %}
+            <img src="{{ item.main_image.image.url }}" alt="{{ item.name }}" class="img-fluid" width="300" height="300">
         {% else %}
             <p>{% trans "Нет основного изображения" %}</p>
         {% endif %}
@@ -32,9 +32,9 @@
     <!-- Дополнительные изображения товара -->
     <h3>{% trans "Дополнительные изображения" %}</h3>
     <div class="row">
-        {% for image in item.images.all %}
+        {% for gallery in item.images.all %}
             <div class="col-4 mb-3">
-                <img src="{{ image.image.url }}" class="img-fluid" alt="Дополнительное изображение">
+                <img src="{{ gallery.images.url }}" class="img-fluid" alt="Дополнительное изображение">
             </div>
         {% empty %}
             <p>{% trans "Нет дополнительных изображений" %}</p>

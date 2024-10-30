@@ -300,6 +300,12 @@ CKEDITOR_5_CONFIGS = {
     },
 }
 
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+    },
+}
+
 CKEDITOR_5_FILE_UPLOAD_PERMISSION = "staff"
 
 
