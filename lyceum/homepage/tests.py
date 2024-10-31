@@ -23,10 +23,12 @@ class HomepageViewsTests(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.category = catalog.models.Category.objects.create(
-            name="Электроника", is_published=True
+            name="Электроника",
+            is_published=True,
         )
         cls.tag = catalog.models.Tag.objects.create(
-            name="Популярное", is_published=True
+            name="Популярное",
+            is_published=True,
         )
 
         for i in range(3):
