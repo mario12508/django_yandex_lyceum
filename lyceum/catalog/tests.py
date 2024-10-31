@@ -364,42 +364,45 @@ class CatalogViewsTests(TestCase):
         # Установка тегов для товара
         cls.item.tags.set([cls.tag1])
 
-    def test_item_list_context(self):
+    def test_item_list_status_and_context(self):
         response = self.client.get(reverse("catalog:item_list"))
         self.assertEqual(response.status_code, 200)
         self.assertIn("items", response.context)
 
-        items = response.context["items"]
-        expected_items = {item.name: item for item in items}
+    def test_item_list_count(self):
+        response = self.client.get(reverse("catalog:item_list"))
+        items = list(response.context["items"])
+        self.assertEqual(len(items), 1)
 
-        for item_name, item in expected_items.items():
-            self.assertTrue(item.is_published)
-            self.assertEqual(item.category, self.category)
-            self.assertIn(self.tag1, item.tags.all())
-            self.assertEqual(item_name, "Тестовый товар")
+    def test_item_list_content(self):
+        response = self.client.get(reverse("catalog:item_list"))
+        items = list(response.context["items"])
 
-    def test_item_detail_context(self):
+        for item in items:
+            with self.subTest(item=item):
+                self.assertTrue(item.is_published)
+                self.assertEqual(item.category, self.category)
+                tags = list(item.tags.all())
+                self.assertIn(self.tag1, tags)
+
+    def test_item_detail_status_and_context(self):
         response = self.client.get(
             reverse("catalog:item_detail", kwargs={"pk": self.item.pk}),
         )
         self.assertEqual(response.status_code, 200)
         self.assertIn("item", response.context)
 
+    def test_item_detail_content(self):
+        response = self.client.get(
+            reverse("catalog:item_detail", kwargs={"pk": self.item.pk}),
+        )
         item = response.context["item"]
-        expected_data = {
-            item.name: "Тестовый товар",
-            item.category: self.category,
-            item.tags.count(): 1,
-            item.main_image.image.url: self.main_image.image.url,
-            item.images.count(): 1,
-        }
+
+        self.assertEqual(item.name, "Тестовый товар")
+        self.assertEqual(item.category, self.category)
+        self.assertEqual(item.main_image.image.url, self.main_image.image.url)
         self.assertEqual(len(list(item.tags.all())), 1)
         self.assertEqual(len(list(item.images.all())), 1)
-
-        # Проверка значений
-        for value, expected in expected_data.items():
-            self.assertEqual(value, expected)
-
         self.assertEqual(
             item.images.first().images.url,
             self.gallery_image.images.url,

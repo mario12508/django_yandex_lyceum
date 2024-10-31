@@ -22,6 +22,7 @@ class StaticURLTests(TestCase):
 class HomepageViewsTests(TestCase):
     @classmethod
     def setUpTestData(cls):
+        # Создаем тестовую категорию и тег
         cls.category = catalog.models.Category.objects.create(
             name="Электроника",
             is_published=True,
@@ -31,6 +32,7 @@ class HomepageViewsTests(TestCase):
             is_published=True,
         )
 
+        # Создаем три тестовых товара
         for i in range(3):
             item = catalog.models.Item.objects.create(
                 name=f"Товар {i + 1}",
@@ -41,20 +43,35 @@ class HomepageViewsTests(TestCase):
             )
             item.tags.set([cls.tag])
 
-    def test_home_context(self):
+    def test_home_status_code_and_context(self):
         response = self.client.get(reverse("homepage:main"))
         self.assertEqual(response.status_code, 200)
         self.assertIn("main_items", response.context)
 
-        main_items = response.context["main_items"]
-
+    def test_main_items_count_in_context(self):
+        response = self.client.get(reverse("homepage:main"))
+        main_items = list(response.context["main_items"])
         self.assertEqual(len(main_items), 3)
 
+    def test_main_items_type_and_content(self):
+        response = self.client.get(reverse("homepage:main"))
+        main_items = list(response.context["main_items"])
+
         for item in main_items:
-            self.assertTrue(item.is_published)
-            self.assertTrue(item.is_on_main)
-            self.assertEqual(item.category, self.category)
-            self.assertIn(self.tag, item.tags.all())
+            with self.subTest(item=item):
+                self.assertIsInstance(item, catalog.models.Item)
+                self.assertTrue(item.is_published)
+                self.assertTrue(item.is_on_main)
+
+    def test_main_items_category_and_tags(self):
+        response = self.client.get(reverse("homepage:main"))
+        main_items = list(response.context["main_items"])
+
+        for item in main_items:
+            with self.subTest(item=item):
+                self.assertEqual(item.category, self.category)
+                tags = list(item.tags.all())
+                self.assertIn(self.tag, tags)
 
 
 __all__ = ["StaticURLTests"]
