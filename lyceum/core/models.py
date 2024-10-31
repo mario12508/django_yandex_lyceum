@@ -55,6 +55,7 @@ class CategoryAndTags(DefaultModel):
         max_length=150,
         unique=True,
         editable=False,
+        null=True,
         verbose_name="нормализованное имя",
     )
 
