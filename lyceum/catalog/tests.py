@@ -1,5 +1,7 @@
 from django.core.exceptions import ValidationError
+from django.db import connection
 from django.test import Client, TestCase
+from django.test.utils import CaptureQueriesContext
 from django.urls import reverse
 
 from catalog.admin import ItemAdminForm
@@ -372,25 +374,33 @@ class CatalogViewsTests(TestCase):
     def test_item_list_category_structure(self):
         response = self.client.get(reverse("catalog:item_list"))
         items_by_category = response.context["items_by_category"]
-        self.assertIsInstance(items_by_category, dict)
-        self.assertIn(self.category, items_by_category)
-        self.assertNotIn(self.other_category, items_by_category)
+        self.assertIsInstance(items_by_category, list)
+
+        # Проверка структуры GroupedResult
+        self.assertGreater(len(items_by_category), 0)
+        categories = [group.grouper for group in items_by_category]
+        self.assertIn(self.category, categories)
+        self.assertNotIn(self.other_category, categories)
 
         # Проверка содержания
-        items = items_by_category[self.category]
-        self.assertEqual(len(items), 1)
-        self.assertEqual(items[0].name, "Тестовый товар")
-        self.assertEqual(items[0].category, self.category)
+        for group in items_by_category:
+            if group.grouper == self.category:
+                items = group.list
+                self.assertEqual(len(items), 1)
+                self.assertEqual(items[0].name, "Тестовый товар")
+                self.assertEqual(items[0].category, self.category)
 
     def test_item_list_content_tags(self):
         response = self.client.get(reverse("catalog:item_list"))
         items_by_category = response.context["items_by_category"]
 
-        items = items_by_category[self.category]
-        for item in items:
-            with self.subTest(item=item):
-                tags = list(item.tags.all())
-                self.assertIn(self.tag1, tags)
+        for group in items_by_category:
+            if group.grouper == self.category:
+                items = group.list
+                for item in items:
+                    with self.subTest(item=item):
+                        tags = list(item.tags.all())
+                        self.assertIn(self.tag1, tags)
 
     def test_item_list_context_type(self):
         response = self.client.get(reverse("catalog:item_list"))
@@ -399,14 +409,15 @@ class CatalogViewsTests(TestCase):
         # Проверка типов категорий и товаров
         self.assertTrue(
             all(
-                isinstance(category, catalog.models.Category)
-                for category in items_by_category.keys()
+                isinstance(group.grouper, catalog.models.Category)
+                for group in items_by_category
             ),
         )
-        for items in items_by_category.values():
-            self.assertTrue(
-                all(isinstance(item, catalog.models.Item) for item in items),
-            )
+        for group in items_by_category:
+            for items in group.list:
+                self.assertTrue(
+                    isinstance(items, catalog.models.Item),
+                )
 
     def test_item_detail_status_and_context(self):
         response = self.client.get(
@@ -436,6 +447,26 @@ class CatalogViewsTests(TestCase):
             reverse("catalog:item_detail", kwargs={"pk": self.item.pk}),
         )
         self.assertIsInstance(response.context["item"], catalog.models.Item)
+
+    def test_item_list_prefetch_related_tags(self):
+        with CaptureQueriesContext(connection) as context:
+            response = self.client.get(reverse("catalog:item_list"))
+            self.assertEqual(response.status_code, 200)
+            self.assertNotIn(
+                "SELECT ... FROM catalog_tag ...",
+                [query["sql"] for query in context.captured_queries],
+                "Related tags were not prefetched as expected.",
+            )
+
+    def test_item_list_prefetch_related_categories(self):
+        with CaptureQueriesContext(connection) as context:
+            response = self.client.get(reverse("catalog:item_list"))
+            self.assertEqual(response.status_code, 200)
+            self.assertNotIn(
+                "SELECT ... FROM catalog_category ...",
+                [query["sql"] for query in context.captured_queries],
+                "Related categories were not prefetched as expected.",
+            )
 
 
 __all__ = ["CatalogItemTests", "CatalogURLTests", "ItemModelTests"]

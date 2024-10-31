@@ -8,16 +8,10 @@ from catalog.models import Item
 
 def home(request):
     templates = "homepage/main.html"
-    items_by_category = {}
-
-    for item in Item.objects.on_main():
-        category = item.category
-        if category not in items_by_category:
-            items_by_category[category] = []
-        items_by_category[category].append(item)
+    items = Item.objects.on_main()
 
     context = {
-        "items_by_category": items_by_category,
+        "items": items,
     }
     return render(request, templates, context)
 

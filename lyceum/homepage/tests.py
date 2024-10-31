@@ -55,15 +55,24 @@ class HomepageViewsTests(TestCase):
         response = self.client.get(reverse("homepage:main"))
         items_by_category = response.context["items_by_category"]
 
-        self.assertIsInstance(items_by_category, dict)
-        self.assertIn(self.category, items_by_category)
-        self.assertNotIn(self.other_category, items_by_category)
+        self.assertIsInstance(items_by_category, list)
+        self.assertEqual(
+            len(items_by_category),
+            1,
+        )
+        self.assertEqual(items_by_category[0].grouper, self.category)
+        self.assertNotIn(
+            self.other_category,
+            [group.grouper for group in items_by_category],
+        )
 
     def test_items_by_category_content(self):
         response = self.client.get(reverse("homepage:main"))
         items_by_category = response.context["items_by_category"]
 
-        items = items_by_category[self.category]
+        items = items_by_category[
+            0
+        ].list  # Получаем список товаров из первой (и единственной) группы
         self.assertEqual(len(items), 3)
 
         for item in items:
@@ -81,14 +90,13 @@ class HomepageViewsTests(TestCase):
         # Проверка типа категорий и товаров
         self.assertTrue(
             all(
-                isinstance(category, catalog.models.Category)
-                for category in items_by_category.keys()
+                isinstance(group.grouper, catalog.models.Category)
+                for group in items_by_category
             ),
         )
-        for items in items_by_category.values():
-            self.assertTrue(
-                all(isinstance(item, catalog.models.Item) for item in items),
-            )
+        for group in items_by_category:
+            for item in group.list:
+                self.assertTrue(isinstance(item, catalog.models.Item))
 
 
 __all__ = ["StaticURLTests"]
