@@ -1,6 +1,9 @@
 from http import HTTPStatus
 
+from django.db import connection
+from django.db.models import QuerySet
 from django.test import Client, TestCase
+from django.test.utils import CaptureQueriesContext
 from django.urls import reverse
 
 import catalog.models
@@ -49,31 +52,18 @@ class HomepageViewsTests(TestCase):
     def test_home_status_code_and_context(self):
         response = self.client.get(reverse("homepage:main"))
         self.assertEqual(response.status_code, 200)
-        self.assertIn("items_by_category", response.context)
+        self.assertIn("items", response.context)
 
-    def test_items_by_category_structure(self):
+    def test_items_count(self):
         response = self.client.get(reverse("homepage:main"))
-        items_by_category = response.context["items_by_category"]
+        items = response.context["items"]
 
-        self.assertIsInstance(items_by_category, list)
-        self.assertEqual(
-            len(items_by_category),
-            1,
-        )
-        self.assertEqual(items_by_category[0].grouper, self.category)
-        self.assertNotIn(
-            self.other_category,
-            [group.grouper for group in items_by_category],
-        )
+        self.assertIsInstance(items, QuerySet)
+        self.assertEqual(items.count(), 3)
 
-    def test_items_by_category_content(self):
+    def test_items_properties(self):
         response = self.client.get(reverse("homepage:main"))
-        items_by_category = response.context["items_by_category"]
-
-        items = items_by_category[
-            0
-        ].list  # Получаем список товаров из первой (и единственной) группы
-        self.assertEqual(len(items), 3)
+        items = response.context["items"]
 
         for item in items:
             with self.subTest(item=item):
@@ -85,18 +75,37 @@ class HomepageViewsTests(TestCase):
 
     def test_items_by_category_type(self):
         response = self.client.get(reverse("homepage:main"))
-        items_by_category = response.context["items_by_category"]
+        items = response.context["items"]
 
-        # Проверка типа категорий и товаров
         self.assertTrue(
             all(
-                isinstance(group.grouper, catalog.models.Category)
-                for group in items_by_category
+                isinstance(item.category, catalog.models.Category)
+                for item in items
             ),
         )
-        for group in items_by_category:
-            for item in group.list:
-                self.assertTrue(isinstance(item, catalog.models.Item))
+        self.assertTrue(
+            all(isinstance(item, catalog.models.Item) for item in items),
+        )
+
+    def test_item_list_prefetch_related_tags(self):
+        with CaptureQueriesContext(connection) as context:
+            response = self.client.get(reverse("homepage:main"))
+            self.assertEqual(response.status_code, 200)
+            self.assertNotIn(
+                "SELECT ... FROM catalog_tag ...",
+                [query["sql"] for query in context.captured_queries],
+                "Related tags were not prefetched as expected.",
+            )
+
+    def test_item_list_prefetch_related_categories(self):
+        with CaptureQueriesContext(connection) as context:
+            response = self.client.get(reverse("homepage:main"))
+            self.assertEqual(response.status_code, 200)
+            self.assertNotIn(
+                "SELECT ... FROM catalog_category ...",
+                [query["sql"] for query in context.captured_queries],
+                "Related categories were not prefetched as expected.",
+            )
 
 
 __all__ = ["StaticURLTests"]

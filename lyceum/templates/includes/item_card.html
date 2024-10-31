@@ -1,18 +1,21 @@
-{% regroup items by category as items_by_category %}
-{% for group in items_by_category %}
-    <h2>{{ group.grouper.name }}</h2>
-    <ul>
-        {% for item in group.list %}
-            <div class="item-card">
-                <h3>{{ item.name }}</h3>
-                {{ item.text|truncatewords_html:10|safe }}
+{% for item in items %}
+    {% ifchanged item.category %}
+        <h2>{{ item.category.name }}</h2>
+        <ul>
+    {% endifchanged %}
 
-                <ul>
-                    {% for tag in item.tags.all %}
-                        <span class="tag">{{ tag.name }}</span>
-                    {% endfor %}
-                </ul>
-            </div>
-        {% endfor %}
-    </ul>
+    <div class="item-card">
+        <h3>{{ item.name }}</h3>
+        {{ item.text|truncatewords_html:10|safe }}
+
+        <ul>
+            {% for tag in item.tags.all %}
+                <span class="tag">{{ tag.name }}</span>
+            {% endfor %}
+        </ul>
+    </div>
+
+    {% ifchanged item.category %}
+        </ul>
+    {% endifchanged %}
 {% endfor %}

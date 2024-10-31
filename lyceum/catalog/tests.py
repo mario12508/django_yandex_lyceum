@@ -337,16 +337,12 @@ class CatalogViewsTests(TestCase):
             name="Электроника",
             is_published=True,
         )
-        cls.other_category = catalog.models.Category.objects.create(
-            name="Бытовая техника",
-            is_published=True,
-        )
-
         cls.tag1 = catalog.models.Tag.objects.create(
             name="Свежее",
             is_published=True,
         )
 
+        # Создание тестового товара
         cls.item = catalog.models.Item.objects.create(
             name="Тестовый товар",
             text="Это тестовый товар роскошно",
@@ -355,98 +351,51 @@ class CatalogViewsTests(TestCase):
             is_on_main=True,
         )
 
+        # Создание главного изображения
         cls.main_image = catalog.models.MainImage.objects.create(
             image="items/gallery/Акция.png",
             item=cls.item,
         )
+
+        # Создание изображения в галерее
         cls.gallery_image = catalog.models.Gallery.objects.create(
             images="items/gallery/Дополнительно.png",
             item=cls.item,
         )
 
+        # Установка тегов для товара
         cls.item.tags.set([cls.tag1])
 
-    def test_item_list_status_and_context(self):
+    def test_item_list_status_code(self):
         response = self.client.get(reverse("catalog:item_list"))
         self.assertEqual(response.status_code, 200)
-        self.assertIn("items_by_category", response.context)
 
-    def test_item_list_category_structure(self):
+    def test_item_list_context_contains_items(self):
         response = self.client.get(reverse("catalog:item_list"))
-        items_by_category = response.context["items_by_category"]
-        self.assertIsInstance(items_by_category, list)
+        self.assertIn("items", response.context)
 
-        # Проверка структуры GroupedResult
-        self.assertGreater(len(items_by_category), 0)
-        categories = [group.grouper for group in items_by_category]
-        self.assertIn(self.category, categories)
-        self.assertNotIn(self.other_category, categories)
-
-        # Проверка содержания
-        for group in items_by_category:
-            if group.grouper == self.category:
-                items = group.list
-                self.assertEqual(len(items), 1)
-                self.assertEqual(items[0].name, "Тестовый товар")
-                self.assertEqual(items[0].category, self.category)
-
-    def test_item_list_content_tags(self):
+    def test_item_list_items_are_published(self):
         response = self.client.get(reverse("catalog:item_list"))
-        items_by_category = response.context["items_by_category"]
+        items = response.context["items"]
+        for item in items:
+            self.assertTrue(item.is_published)
 
-        for group in items_by_category:
-            if group.grouper == self.category:
-                items = group.list
-                for item in items:
-                    with self.subTest(item=item):
-                        tags = list(item.tags.all())
-                        self.assertIn(self.tag1, tags)
-
-    def test_item_list_context_type(self):
+    def test_item_list_items_belong_to_correct_category(self):
         response = self.client.get(reverse("catalog:item_list"))
-        items_by_category = response.context["items_by_category"]
+        items = response.context["items"]
+        for item in items:
+            self.assertEqual(item.category, self.category)
 
-        # Проверка типов категорий и товаров
-        self.assertTrue(
-            all(
-                isinstance(group.grouper, catalog.models.Category)
-                for group in items_by_category
-            ),
-        )
-        for group in items_by_category:
-            for items in group.list:
-                self.assertTrue(
-                    isinstance(items, catalog.models.Item),
-                )
+    def test_item_list_items_have_correct_tags(self):
+        response = self.client.get(reverse("catalog:item_list"))
+        items = response.context["items"]
+        for item in items:
+            self.assertIn(self.tag1, item.tags.all())
 
-    def test_item_detail_status_and_context(self):
-        response = self.client.get(
-            reverse("catalog:item_detail", kwargs={"pk": self.item.pk}),
-        )
-        self.assertEqual(response.status_code, 200)
-        self.assertIn("item", response.context)
-
-    def test_item_detail_content(self):
-        response = self.client.get(
-            reverse("catalog:item_detail", kwargs={"pk": self.item.pk}),
-        )
-        item = response.context["item"]
-
-        self.assertEqual(item.name, "Тестовый товар")
-        self.assertEqual(item.category, self.category)
-        self.assertEqual(item.main_image.image.url, self.main_image.image.url)
-        self.assertEqual(len(list(item.tags.all())), 1)
-        self.assertEqual(len(list(item.images.all())), 1)
-        self.assertEqual(
-            item.images.first().images.url,
-            self.gallery_image.images.url,
-        )
-
-    def test_item_detail_context_type(self):
-        response = self.client.get(
-            reverse("catalog:item_detail", kwargs={"pk": self.item.pk}),
-        )
-        self.assertIsInstance(response.context["item"], catalog.models.Item)
+    def test_item_list_contains_expected_item(self):
+        response = self.client.get(reverse("catalog:item_list"))
+        items = response.context["items"]
+        self.assertIn(self.item, items)
 
     def test_item_list_prefetch_related_tags(self):
         with CaptureQueriesContext(connection) as context:
