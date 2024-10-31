@@ -95,7 +95,7 @@ class Item(DefaultModel):
     )
     is_on_main = models.BooleanField(
         default=False,
-        verbose_name="главные",
+        verbose_name="Отображение на главной стнарице",
     )
     category = models.ForeignKey(
         Category,

@@ -5,13 +5,18 @@ from catalog.models import Item
 
 
 def item_list(request):
-    templates = "catalog/item_list.html"
-    items = Item.objects.published()
+    items_by_category = {}
+
+    for item in Item.objects.published():
+        category = item.category
+        if category not in items_by_category:
+            items_by_category[category] = []
+        items_by_category[category].append(item)
 
     context = {
-        "items": items,
+        "items_by_category": items_by_category,
     }
-    return render(request, templates, context)
+    return render(request, "catalog/item_list.html", context)
 
 
 def item_detail(request, pk):

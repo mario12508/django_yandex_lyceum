@@ -22,17 +22,20 @@ class StaticURLTests(TestCase):
 class HomepageViewsTests(TestCase):
     @classmethod
     def setUpTestData(cls):
-        # Создаем тестовую категорию и тег
         cls.category = catalog.models.Category.objects.create(
             name="Электроника",
             is_published=True,
         )
+        cls.other_category = catalog.models.Category.objects.create(
+            name="Бытовая техника",
+            is_published=True,
+        )
+
         cls.tag = catalog.models.Tag.objects.create(
             name="Популярное",
             is_published=True,
         )
 
-        # Создаем три тестовых товара
         for i in range(3):
             item = catalog.models.Item.objects.create(
                 name=f"Товар {i + 1}",
@@ -46,32 +49,46 @@ class HomepageViewsTests(TestCase):
     def test_home_status_code_and_context(self):
         response = self.client.get(reverse("homepage:main"))
         self.assertEqual(response.status_code, 200)
-        self.assertIn("main_items", response.context)
+        self.assertIn("items_by_category", response.context)
 
-    def test_main_items_count_in_context(self):
+    def test_items_by_category_structure(self):
         response = self.client.get(reverse("homepage:main"))
-        main_items = list(response.context["main_items"])
-        self.assertEqual(len(main_items), 3)
+        items_by_category = response.context["items_by_category"]
 
-    def test_main_items_type_and_content(self):
+        self.assertIsInstance(items_by_category, dict)
+        self.assertIn(self.category, items_by_category)
+        self.assertNotIn(self.other_category, items_by_category)
+
+    def test_items_by_category_content(self):
         response = self.client.get(reverse("homepage:main"))
-        main_items = list(response.context["main_items"])
+        items_by_category = response.context["items_by_category"]
 
-        for item in main_items:
+        items = items_by_category[self.category]
+        self.assertEqual(len(items), 3)
+
+        for item in items:
             with self.subTest(item=item):
-                self.assertIsInstance(item, catalog.models.Item)
                 self.assertTrue(item.is_published)
                 self.assertTrue(item.is_on_main)
-
-    def test_main_items_category_and_tags(self):
-        response = self.client.get(reverse("homepage:main"))
-        main_items = list(response.context["main_items"])
-
-        for item in main_items:
-            with self.subTest(item=item):
                 self.assertEqual(item.category, self.category)
                 tags = list(item.tags.all())
                 self.assertIn(self.tag, tags)
+
+    def test_items_by_category_type(self):
+        response = self.client.get(reverse("homepage:main"))
+        items_by_category = response.context["items_by_category"]
+
+        # Проверка типа категорий и товаров
+        self.assertTrue(
+            all(
+                isinstance(category, catalog.models.Category)
+                for category in items_by_category.keys()
+            ),
+        )
+        for items in items_by_category.values():
+            self.assertTrue(
+                all(isinstance(item, catalog.models.Item) for item in items),
+            )
 
 
 __all__ = ["StaticURLTests"]

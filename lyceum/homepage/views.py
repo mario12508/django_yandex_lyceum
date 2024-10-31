@@ -8,14 +8,17 @@ from catalog.models import Item
 
 def home(request):
     templates = "homepage/main.html"
-    main_items = (
-        Item.objects.filter(is_on_main=True, is_published=True)
-        .select_related("category")
-        .prefetch_related("tags")
-        .only("name", "text", "category__name", "tags__name")
-        .order_by("name")
-    )
-    context = {"main_items": main_items}
+    items_by_category = {}
+
+    for item in Item.objects.on_main():
+        category = item.category
+        if category not in items_by_category:
+            items_by_category[category] = []
+        items_by_category[category].append(item)
+
+    context = {
+        "items_by_category": items_by_category,
+    }
     return render(request, templates, context)
 
 

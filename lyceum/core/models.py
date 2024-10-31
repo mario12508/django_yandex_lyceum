@@ -50,6 +50,7 @@ class CategoryAndTags(DefaultModel):
         verbose_name="слаг",
         help_text="Используйте только буквы, цифры, "
         "'-', '_'. Не должно быть пустым.",
+        null=True,
     )
     normalized_name = models.CharField(
         max_length=150,

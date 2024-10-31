@@ -10,7 +10,5 @@
         <p>{% trans "Main text" %}</p>
         <a class="btn btn-primary" href="{% url 'catalog:item_list' %}" role="button">Посмотреть товары</a>
     </div>
-    {% for item in main_items %}
-        {% include "includes/item_card.html" %}
-    {% endfor %}
+    {% include "includes/item_card.html" %}
 {% endblock %}

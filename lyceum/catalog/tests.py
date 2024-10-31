@@ -1,5 +1,4 @@
 from django.core.exceptions import ValidationError
-from django.db.models import QuerySet
 from django.test import Client, TestCase
 from django.urls import reverse
 
@@ -336,12 +335,16 @@ class CatalogViewsTests(TestCase):
             name="Электроника",
             is_published=True,
         )
+        cls.other_category = catalog.models.Category.objects.create(
+            name="Бытовая техника",
+            is_published=True,
+        )
+
         cls.tag1 = catalog.models.Tag.objects.create(
             name="Свежее",
             is_published=True,
         )
 
-        # Создание тестового товара
         cls.item = catalog.models.Item.objects.create(
             name="Тестовый товар",
             text="Это тестовый товар роскошно",
@@ -350,51 +353,60 @@ class CatalogViewsTests(TestCase):
             is_on_main=True,
         )
 
-        # Создание главного изображения
         cls.main_image = catalog.models.MainImage.objects.create(
             image="items/gallery/Акция.png",
             item=cls.item,
         )
-
-        # Создание изображения в галерее
         cls.gallery_image = catalog.models.Gallery.objects.create(
             images="items/gallery/Дополнительно.png",
             item=cls.item,
         )
 
-        # Установка тегов для товара
         cls.item.tags.set([cls.tag1])
 
     def test_item_list_status_and_context(self):
         response = self.client.get(reverse("catalog:item_list"))
         self.assertEqual(response.status_code, 200)
-        self.assertIn("items", response.context)
+        self.assertIn("items_by_category", response.context)
 
-    def test_item_list_count(self):
+    def test_item_list_category_structure(self):
         response = self.client.get(reverse("catalog:item_list"))
-        items = list(response.context["items"])
+        items_by_category = response.context["items_by_category"]
+        self.assertIsInstance(items_by_category, dict)
+        self.assertIn(self.category, items_by_category)
+        self.assertNotIn(self.other_category, items_by_category)
+
+        # Проверка содержания
+        items = items_by_category[self.category]
         self.assertEqual(len(items), 1)
+        self.assertEqual(items[0].name, "Тестовый товар")
+        self.assertEqual(items[0].category, self.category)
 
-    def test_item_list_content(self):
+    def test_item_list_content_tags(self):
         response = self.client.get(reverse("catalog:item_list"))
-        items = list(response.context["items"])
+        items_by_category = response.context["items_by_category"]
 
+        items = items_by_category[self.category]
         for item in items:
             with self.subTest(item=item):
-                self.assertTrue(item.is_published)
-                self.assertEqual(item.category, self.category)
                 tags = list(item.tags.all())
                 self.assertIn(self.tag1, tags)
 
     def test_item_list_context_type(self):
         response = self.client.get(reverse("catalog:item_list"))
-        self.assertIsInstance(response.context["items"], QuerySet)
+        items_by_category = response.context["items_by_category"]
+
+        # Проверка типов категорий и товаров
         self.assertTrue(
             all(
-                isinstance(item, catalog.models.Item)
-                for item in response.context["items"]
+                isinstance(category, catalog.models.Category)
+                for category in items_by_category.keys()
             ),
         )
+        for items in items_by_category.values():
+            self.assertTrue(
+                all(isinstance(item, catalog.models.Item) for item in items),
+            )
 
     def test_item_detail_status_and_context(self):
         response = self.client.get(
