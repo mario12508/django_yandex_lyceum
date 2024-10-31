@@ -1,4 +1,5 @@
 from django.core.exceptions import ValidationError
+from django.db.models import QuerySet
 from django.test import Client, TestCase
 from django.urls import reverse
 
@@ -385,6 +386,16 @@ class CatalogViewsTests(TestCase):
                 tags = list(item.tags.all())
                 self.assertIn(self.tag1, tags)
 
+    def test_item_list_context_type(self):
+        response = self.client.get(reverse("catalog:item_list"))
+        self.assertIsInstance(response.context["items"], QuerySet)
+        self.assertTrue(
+            all(
+                isinstance(item, catalog.models.Item)
+                for item in response.context["items"]
+            ),
+        )
+
     def test_item_detail_status_and_context(self):
         response = self.client.get(
             reverse("catalog:item_detail", kwargs={"pk": self.item.pk}),
@@ -407,6 +418,12 @@ class CatalogViewsTests(TestCase):
             item.images.first().images.url,
             self.gallery_image.images.url,
         )
+
+    def test_item_detail_context_type(self):
+        response = self.client.get(
+            reverse("catalog:item_detail", kwargs={"pk": self.item.pk}),
+        )
+        self.assertIsInstance(response.context["item"], catalog.models.Item)
 
 
 __all__ = ["CatalogItemTests", "CatalogURLTests", "ItemModelTests"]
