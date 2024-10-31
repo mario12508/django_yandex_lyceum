@@ -5,5 +5,7 @@
 
 {% block content %}
     <h1>Список товаров</h1>
-    {% include "includes/item_card.html" %}
+    {% for item in items %}
+        {% include "includes/item_card.html" %}
+    {% endfor %}
 {% endblock %}

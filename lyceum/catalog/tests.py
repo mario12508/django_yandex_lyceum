@@ -1,5 +1,6 @@
 from django.core.exceptions import ValidationError
 from django.db import connection
+from django.db.models import QuerySet
 from django.test import Client, TestCase
 from django.test.utils import CaptureQueriesContext
 from django.urls import reverse
@@ -416,6 +417,30 @@ class CatalogViewsTests(TestCase):
                 [query["sql"] for query in context.captured_queries],
                 "Related categories were not prefetched as expected.",
             )
+
+    def test_prefetched_and_context(self):
+        url = reverse("catalog:item_list")
+        response = Client().get(url)
+        self.assertIn("name", response.context["items"][0].__dict__)
+        self.assertNotIn("is_on_main", response.context["items"][0].__dict__)
+        self.assertIn(
+            "tags",
+            response.context["items"][0].__dict__["_prefetched_objects_cache"],
+        )
+
+    def test_item_list_count(self):
+        response = self.client.get(reverse("catalog:item_list"))
+        self.assertEqual(len(response.context["items"]), 1)
+
+    def test_item_list_context_type(self):
+        response = self.client.get(reverse("catalog:item_list"))
+        self.assertIsInstance(response.context["items"], QuerySet)
+        self.assertTrue(
+            all(
+                isinstance(item, catalog.models.Item)
+                for item in response.context["items"]
+            ),
+        )
 
 
 __all__ = ["CatalogItemTests", "CatalogURLTests", "ItemModelTests"]
