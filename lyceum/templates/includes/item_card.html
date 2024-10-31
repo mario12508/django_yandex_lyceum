@@ -1,6 +1,6 @@
 <div class="item-card">
     <h2>{{ item.name }}</h2>
     <p>Категория: {{ item.category.name }}</p>
-    <p>Описание: {{ item.text|truncatewords:10|safe }}</p>
+    <p>Описание: {{ item.text|truncatewords_html:10|safe }}</p>
     <p>Теги: {% for tag in item.tags.all %} {{ tag.name }} {% if not forloop.last %},{% endif %} {% endfor %}</p>
 </div>
