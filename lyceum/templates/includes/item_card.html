@@ -1,8 +1,3 @@
-{% ifchanged item.category %}
-    <h2>{{ item.category.name }}</h2>
-    <ul>
-{% endifchanged %}
-
 <div class="item-card">
     <h3>{{ item.name }}</h3>
     {{ item.text|truncatewords_html:10|safe }}
@@ -13,7 +8,3 @@
         {% endfor %}
     </ul>
 </div>
-
-{% ifchanged item.category %}
-    </ul>
-{% endifchanged %}

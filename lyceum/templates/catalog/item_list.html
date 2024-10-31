@@ -6,6 +6,9 @@
 {% block content %}
     <h1>Список товаров</h1>
     {% for item in items %}
+        {% ifchanged item.category.name %}
+            <h3>{{ item.category.name }}</h3>
+        {% endifchanged %}
         {% include "includes/item_card.html" %}
     {% endfor %}
 {% endblock %}
