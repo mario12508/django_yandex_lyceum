@@ -20,6 +20,11 @@
                     <li class="nav-item">
                         <a class="nav-link {% if request.resolver_match.view_name == 'catalog:item_list' %}active{% endif %}" href="{% url 'catalog:item_list' %}">{% trans "Catalog" %}</a>
                     </li>
+                    {% if user.is_superuser %}
+                    <li class="nav-item">
+                        <a class="nav-link " href="/admin/">Админ панель</a>
+                    </li>
+                    {% endif %}
                 </ul>
             </div>
         </div>

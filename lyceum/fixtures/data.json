@@ -6,8 +6,8 @@
       "name": "Электроника",
       "is_published": true,
       "slug": "electronics",
-      "weight": 100,
-      "normalized_name": "элektpohиka"
+      "normalized_name": "элektpohиka",
+      "weight": 100
     }
   },
   {
@@ -17,8 +17,8 @@
       "name": "Одежда",
       "is_published": true,
       "slug": "cloth",
-      "weight": 100,
-      "normalized_name": "oдeждa"
+      "normalized_name": "oдeждa",
+      "weight": 100
     }
   },
   {
@@ -28,8 +28,8 @@
       "name": "Мебель",
       "is_published": true,
       "slug": "Furniture",
-      "weight": 100,
-      "normalized_name": "meбeль"
+      "normalized_name": "meбeль",
+      "weight": 100
     }
   },
   {
@@ -89,7 +89,10 @@
       "name": "Планшет",
       "is_published": true,
       "text": "Роскошно созданный планшет",
+      "is_on_main": false,
       "category": 1,
+      "created_at": "2024-10-31T21:20:56.560Z",
+      "updated_at": "2024-10-31T21:20:56.566Z",
       "tags": [
         1,
         2,
@@ -104,7 +107,10 @@
       "name": "IPhone",
       "is_published": true,
       "text": "Абсолютный оригинал, превосходно созданный",
+      "is_on_main": false,
       "category": 1,
+      "created_at": "2024-10-31T21:20:56.560Z",
+      "updated_at": "2024-10-31T21:20:56.566Z",
       "tags": [
         1,
         2,
@@ -121,7 +127,10 @@
       "name": "Кошелёк",
       "is_published": true,
       "text": "В нем роскошно сами появляются деньги",
+      "is_on_main": false,
       "category": 2,
+      "created_at": "2024-10-31T21:20:56.560Z",
+      "updated_at": "2024-10-31T21:20:56.566Z",
       "tags": [
         1,
         2
@@ -135,7 +144,10 @@
       "name": "Диван",
       "is_published": true,
       "text": "Превосходно созданный диван",
+      "is_on_main": false,
       "category": 3,
+      "created_at": "2024-10-31T21:20:56.560Z",
+      "updated_at": "2024-10-31T21:20:56.566Z",
       "tags": [
         1,
         2
@@ -149,7 +161,10 @@
       "name": "Компьютер",
       "is_published": true,
       "text": "Лучший превосходно созданный компьютер",
+      "is_on_main": false,
       "category": 3,
+      "created_at": "2024-10-31T21:20:56.560Z",
+      "updated_at": "2024-10-31T21:20:56.566Z",
       "tags": [
         1,
         5

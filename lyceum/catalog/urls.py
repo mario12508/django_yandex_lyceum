@@ -19,4 +19,7 @@ urlpatterns = [
         views.number_view,
         name="number_view",
     ),
+    path("new/", views.new_items, name="catalog_new"),
+    path("friday/", views.friday_items, name="catalog_friday"),
+    path("unverified/", views.unverified_items, name="catalog_unverified"),
 ]
