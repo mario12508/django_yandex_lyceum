@@ -393,6 +393,8 @@ class CatalogViewsTests(TestCase):
             item.main_image.image.url: self.main_image.image.url,
             item.images.count(): 1,
         }
+        self.assertEqual(len(list(item.tags.all())), 1)
+        self.assertEqual(len(list(item.images.all())), 1)
 
         # Проверка значений
         for value, expected in expected_data.items():
