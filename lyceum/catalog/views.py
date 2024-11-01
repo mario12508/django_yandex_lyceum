@@ -3,9 +3,9 @@ import datetime
 from django.db import models
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render
+from django.utils import timezone
 
 from catalog.models import Item
-from django.utils import timezone
 
 
 def item_list(request):
@@ -23,7 +23,10 @@ def item_detail(request, pk):
         Item.objects.published(),
         pk=pk,
     )
-    context = {"pk": pk, "item": item}
+
+    context = {
+        "item": item,
+    }
     return render(request, template, context)
 
 
