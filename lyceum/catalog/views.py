@@ -53,8 +53,11 @@ def new_items(request):
 
 def friday_items(request):
     template_name = "catalog/item_list.html"
-    items = Item.objects.published()
-    items = items.filter(updated_at__week_day=6).order_by("updated_at")[:5]
+    items = (
+        Item.objects.published()
+        .filter(updated_at__week_day=5)
+        .order_by("updated_at")[:5]
+    )
 
     content = {
         "items": items,

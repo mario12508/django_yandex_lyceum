@@ -11,7 +11,7 @@
     <div class="main-image">
         {% if item.main_image and item.main_image.image %}
             <img src="{{ item.main_image.image.url }}" alt="{{ item.name }}" class="img-fluid" width="300" height="300">
-            <a href="{% url 'download_image' item.main_image.image.url|slice:'7:' %}" class="btn btn-secondary">Скачать изображение</a>
+            <a href="{% url 'download:download_image' item.main_image.image.url|slice:'7:' %}" class="btn btn-secondary">Скачать изображение</a>
         {% else %}
             <p>{% trans "Нет основного изображения" %}</p>
         {% endif %}
@@ -36,7 +36,7 @@
         {% for gallery in item.images.all %}
             <div class="col-4 mb-3">
                 <img src="{{ gallery.images.url }}" class="img-fluid" alt="Дополнительное изображение" width="300" height="300">
-                <a href="{% url 'download_image' gallery.images.url|slice:'7:' %}" class="btn btn-secondary">Скачать изображение</a>
+                <a href="{% url 'download:download_image' gallery.images.url|slice:'7:' %}" class="btn btn-secondary">Скачать изображение</a>
             </div>
         {% empty %}
             <p>{% trans "Нет дополнительных изображений" %}</p>

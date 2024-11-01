@@ -32,10 +32,10 @@ LOCALE_PATHS = [
 ]
 
 INSTALLED_APPS = [
+    "download.apps.DownloadConfig",
     "core.apps.CoreConfig",
     "homepage.apps.HomepageConfig",
     "catalog.apps.CatalogConfig",
-    "download.apps.DownloadConfig",
     "about.apps.AboutConfig",
     "django.contrib.admin",
     "django.contrib.auth",

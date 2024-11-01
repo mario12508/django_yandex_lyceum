@@ -1,9 +1,12 @@
+from datetime import timedelta
+
 from django.core.exceptions import ValidationError
 from django.db import connection
 from django.db.models import QuerySet
 from django.test import Client, TestCase
 from django.test.utils import CaptureQueriesContext
 from django.urls import reverse
+from django.utils import timezone
 
 from catalog.admin import ItemAdminForm
 import catalog.models
@@ -351,6 +354,35 @@ class CatalogViewsTests(TestCase):
             is_published=True,
             is_on_main=True,
         )
+        cls.friday_item = catalog.models.Item.objects.create(
+            name="Friday Item",
+            category=cls.category,
+            is_published=True,
+            updated_at=timezone.now()
+            - timedelta(
+                days=timezone.now().weekday() + 2,
+            ),  # Последняя пятница
+        )
+        cls.friday_item.tags.add(cls.tag1)
+
+        cls.new_item = catalog.models.Item.objects.create(
+            name="New Item",
+            category=cls.category,
+            is_published=True,
+            created_at=timezone.now() - timedelta(days=3),
+            # В течение последней недели
+        )
+        cls.new_item.tags.add(cls.tag1)
+
+        cls.unverified_item = catalog.models.Item.objects.create(
+            name="Unverified Item",
+            category=cls.category,
+            is_published=True,
+            created_at=timezone.now() - timedelta(days=30),
+            updated_at=timezone.now() - timedelta(days=30),
+            # Не изменялся с создания
+        )
+        cls.unverified_item.tags.add(cls.tag1)
 
         # Создание главного изображения
         cls.main_image = catalog.models.MainImage.objects.create(
@@ -430,7 +462,7 @@ class CatalogViewsTests(TestCase):
 
     def test_item_list_count(self):
         response = self.client.get(reverse("catalog:item_list"))
-        self.assertEqual(len(response.context["items"]), 1)
+        self.assertEqual(len(response.context["items"]), 4)
 
     def test_item_list_context_type(self):
         response = self.client.get(reverse("catalog:item_list"))
@@ -441,6 +473,32 @@ class CatalogViewsTests(TestCase):
                 for item in response.context["items"]
             ),
         )
+
+    def test_friday_endpoint_status(self):
+        response = self.client.get(reverse("catalog:catalog_friday"))
+        self.assertEqual(response.status_code, 200)
+
+    def test_friday_endpoint_context_items(self):
+        response = self.client.get(reverse("catalog:catalog_friday"))
+        self.assertIsInstance(response.context["items"], QuerySet)
+
+    # Тесты для 'Новинки'
+    def test_new_endpoint_status(self):
+        response = self.client.get(reverse("catalog:catalog_new"))
+        self.assertEqual(response.status_code, 200)
+
+    def test_new_endpoint_context_items(self):
+        response = self.client.get(reverse("catalog:catalog_new"))
+        self.assertIsInstance(response.context["items"], QuerySet)
+
+    # Тесты для 'Непроверенное'
+    def test_unverified_endpoint_status(self):
+        response = self.client.get(reverse("catalog:catalog_unverified"))
+        self.assertEqual(response.status_code, 200)
+
+    def test_unverified_endpoint_context_items(self):
+        response = self.client.get(reverse("catalog:catalog_unverified"))
+        self.assertIsInstance(response.context["items"], QuerySet)
 
 
 __all__ = ["CatalogItemTests", "CatalogURLTests", "ItemModelTests"]

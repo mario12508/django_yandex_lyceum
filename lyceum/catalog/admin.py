@@ -42,6 +42,7 @@ class ItemAdmin(admin.ModelAdmin):
     list_display_links = (Item.name.field.name,)
     filter_horizontal = (Item.tags.field.name,)
     inlines = [MainImageInline, ImageInline]
+    readonly_fields = ("created_at", "updated_at")
 
 
 admin.site.register(Tag)
