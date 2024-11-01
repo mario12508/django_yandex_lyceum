@@ -13,6 +13,7 @@ def item_list(request):
 
     context = {
         "items": items,
+        "title": "Список товаров",
     }
     return render(request, "catalog/item_list.html", context)
 
