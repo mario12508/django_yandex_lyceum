@@ -23,9 +23,10 @@ python -m venv venv
 
 ### Шаг 2: Установка зависимостей
 
-Создаем файл `requirements.txt` и устанавливаем зависимости:
+Создаем папку `requirements`, создаем там файлы `test.txt`, `dev.txt` и `prod.txt` 
+и устанавливаем зависимости:
 ```commandline
-pip install -r requirements.txt
+pip install -r requirements/test.txt
 ```
 
 ### Шаг 3: Настройка переменных окружения
@@ -62,6 +63,53 @@ python manage.py runserver
 Откройте проект в браузере по адресу:
 ```
 http://127.0.0.1:8000/
+```
+
+### Шаг 6: создание миграций и фикстур
+Если вы внесли изменения в модели, то сначала создайте миграции:
+```commandline
+python manage.py makemigrations
+```
+затем сделайте миграцию:
+```commandline
+python manage.py migrate
+```
+после чего вы можете загрузить данные для БД из фикстур:
+```commandline
+python manage.py loaddata fixtures/data.json
+```
+для созданий фикстур используйте:
+```commandline
+python -Xutf8 manage.py dumpdata catalog -o fixtures/data.json
+```
+
+### Шаг 7: тестирование проекта:
+Если вы хотите протестировать ваш проект введите следующую команду
+```commandline
+python manage.py test
+```
+но перед этим пропишите тесты в файлах `tests.py` в приложениях
+
+### Шаг 8: создание директории статистических файлов
+В своём проекте рядом с `templates` создайте `static_dev`, куда 
+вы можете загрузить изображения, css, js и прочие статические файлы.
+
+После этого в файле `settings.py` создайте переменную:
+```commandline
+STATIC_URL = "static/"
+```
+и
+```commandline
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+    "/var/www/static/",
+]
+```
+а в самих `.html` файлах пишите, например:
+```commandline
+{% load static %}
+...
+<img src="{% static 'my_app/example.jpg' %}" alt="My image">
 ```
 
 # Развёртывание проекта с учётом локализации

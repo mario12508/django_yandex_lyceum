@@ -5,15 +5,17 @@
 {% block title %}Главная страница{% endblock %}
 
 {% block content %}
-    <div class="jumbotron">
-        <h1>{% trans "Welcome" %}</h1>
-        <p>{% trans "Main text" %}</p>
-        <a class="btn btn-primary" href="{% url 'catalog:item_list' %}" role="button">Посмотреть товары</a>
-    </div>
-    {% for item in items %}
-        {% ifchanged item.category.name %}
-            <h3>{{ item.category.name }}</h3>
-        {% endifchanged %}
-        {% include "includes/item_card.html" %}
-    {% endfor %}
+
+<div class="jumbotron">
+    <h1>{% trans "Добро пожаловать на наш сайт!" %}</h1>
+    <p>{% trans "На главной странице можно найти краткую информацию о нашем проекте. " %}</p>
+    <a class="btn btn-primary" href="{% url 'catalog:item_list' %}" role="button">Посмотреть товары</a>
+</div>
+{% for item in items %}
+    {% ifchanged item.category.name %}
+        <h3>{{ item.category.name }}</h3>
+    {% endifchanged %}
+    {% include "includes/item_card.html" %}
+{% endfor %}
+
 {% endblock %}

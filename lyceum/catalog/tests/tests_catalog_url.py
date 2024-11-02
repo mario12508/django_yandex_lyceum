@@ -4,12 +4,12 @@ from django.test import Client, TestCase
 from django.urls import reverse
 
 
-class AboutURLTests(TestCase):
-    def test_about(self):
+class CatalogURLTests(TestCase):
+    def test_catalog_list(self):
         client = Client()
-        url = reverse("about:about")
+        url = reverse("catalog:item_list")
         response = client.get(url)
         self.assertEqual(response.status_code, HTTPStatus.OK)
 
 
-__all__ = ["AboutURLTests"]
+__all__ = ["CatalogURLTests"]

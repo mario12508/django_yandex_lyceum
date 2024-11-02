@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-22 18:04+0300\n"
+"POT-Creation-Date: 2024-11-02 18:02+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,25 +19,45 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || "
 "(n%100>=11 && n%100<=14)? 2 : 3);\n"
-#: .\templates\homepage\main.html:9
-msgid "Welcome"
-msgstr "Добро пожаловать на наш сайт!"
+#: .\templates\catalog\item.html:16
+msgid "Нет основного изображения"
+msgstr "Нет основного изображения"
+
+#: .\templates\catalog\item.html:22
+msgid "Категория"
+msgstr "Категория"
+
+#: .\templates\catalog\item.html:24
+msgid "Теги"
+msgstr "Теги"
+
+#: .\templates\catalog\item.html:30
+msgid "Дополнительные изображения"
+msgstr "Дополнительные изображения"
+
+#: .\templates\catalog\item.html:38
+msgid "Нет дополнительных изображений"
+msgstr "Нет дополнительных изображений"
 
 #: .\templates\homepage\main.html:10
-msgid "Main text"
-msgstr "На главной странице можно найти краткую информацию о нашем проекте."
+msgid "Добро пожаловать на наш сайт!"
+msgstr "Добро пожаловать на наш сайт!"
+
+#: .\templates\homepage\main.html:11
+msgid "На главной странице можно найти краткую информацию о нашем проекте. "
+msgstr "На главной странице можно найти краткую информацию о нашем проекте. "
 
 #: .\templates\includes\header.html:15
-msgid "Home"
+msgid "Главная"
 msgstr "Главная"
 
 #: .\templates\includes\header.html:18
-msgid "About"
+msgid "О проекте"
 msgstr "О проекте"
 
 #: .\templates\includes\header.html:21
-msgid "Catalog"
-msgstr "Список товаров"
+msgid "Каталог товаров"
+msgstr "Каталог товаров"
 
 msgid "Английский"
 msgstr "English"

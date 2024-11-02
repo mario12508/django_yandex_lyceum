@@ -8,7 +8,6 @@
 <div class="container">
     <h1>{{ item.name }}</h1>
 
-    <!-- Основное изображение товара -->
     <div class="main-image">
         {% if item.main_image and item.main_image.image %}
             <img src="{{ item.main_image.image.url }}" alt="{{ item.name }}" class="img-fluid" width="300" height="300">
@@ -18,20 +17,16 @@
         {% endif %}
     </div>
 
-    <!-- Описание товара -->
     <p>{{ item.text|safe }}</p>
 
-    <!-- Категория товара -->
     <p><strong>{% trans "Категория" %}:</strong> {{ item.category.name }}</p>
 
-    <!-- Теги товара -->
     <p><strong>{% trans "Теги" %}:</strong>
         {% for tag in item.tags.all %}
             {{ tag.name }}{% if not forloop.last %}, {% endif %}
         {% endfor %}
     </p>
 
-    <!-- Дополнительные изображения товара -->
     <h3>{% trans "Дополнительные изображения" %}</h3>
     <div class="row">
         {% for gallery in item.images.all %}
@@ -44,4 +39,5 @@
         {% endfor %}
     </div>
 </div>
+
 {% endblock %}

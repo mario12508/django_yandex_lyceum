@@ -1,17 +1,7 @@
 <footer class="footer mt-auto py-3 bg-light">
     <div class="container">
-        <span class="text-muted" id="current-year">© {% now 'Y' %} Мой сайт. Все права защищены.</span>
+        <span class="text-muted" id="current-year" data-server-time="{% now 'Y-m-d H:i' %}">
+            © {% now 'Y' %} Мой сайт. Все права защищены.
+        </span>
     </div>
 </footer>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var currentYearElement = document.getElementById('current-year');
-        var serverYear = new Date(currentYearElement.innerText).getFullYear();
-        var localDate = new Date();
-        const MILLISECONDS_IN_ONE_DAY = 24 * 60 * 60 * 1000; // Количество миллисекунд в одном дне
-
-        if (Math.abs(localDate - new Date(serverYear, 0, 1)) < MILLISECONDS_IN_ONE_DAY) {
-            currentYearElement.innerText = localDate.getFullYear();
-        }
-    });
-</script>

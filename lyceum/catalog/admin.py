@@ -37,6 +37,7 @@ class ItemAdmin(admin.ModelAdmin):
         Item.name.field.name,
         Item.is_published.field.name,
         MainImage.img_tmb,
+        Gallery.img_tmb,
     )
     list_editable = (Item.is_published.field.name,)
     list_display_links = (Item.name.field.name,)

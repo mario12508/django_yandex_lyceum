@@ -21,7 +21,7 @@ class Category(CategoryAndTags):
         verbose_name_plural = "категории"
 
     def __str__(self):
-        return self.name
+        return self.name.split()[0]
 
 
 class Tag(CategoryAndTags):
@@ -30,7 +30,7 @@ class Tag(CategoryAndTags):
         verbose_name_plural = "теги"
 
     def __str__(self):
-        return self.name
+        return self.name.split()[0]
 
 
 class ItemManager(models.Manager):
@@ -110,13 +110,22 @@ class Item(DefaultModel):
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)
 
+    @property
+    def get_img(self):
+        return get_thumbnail(
+            self.main_image.image,
+            "300x300",
+            crop="center",
+            quality=51,
+        )
+
     class Meta:
         ordering = ("name",)
         verbose_name = "товар"
         verbose_name_plural = "товары"
 
     def __str__(self):
-        return self.name
+        return self.name.split()[0]
 
 
 class MainImage(models.Model):
@@ -144,9 +153,8 @@ class MainImage(models.Model):
 
     def img_tmb(self):
         if self.main_image:
-            return mark_safe(
-                f"<img src='{self.main_image.image.url}'>",
-            )
+            thumbnail_url = self.get_img.url
+            return mark_safe(f"<img src='{thumbnail_url}' alt='Миниатюра'>")
         return "нет изображения"
 
     img_tmb.short_description = "превью"
@@ -182,9 +190,8 @@ class Gallery(models.Model):
     def img_tmb(self):
         if self.gallery:
             return mark_safe(
-                "<img src='{}' width='50' height='50'>".format(
-                    self.gallery.images.url,
-                ),
+                f"<img src='{self.gallery.images.url}' "
+                f"width='50' height='50'>",
             )
         return "нет изображения"
 

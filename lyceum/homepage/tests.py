@@ -13,7 +13,7 @@ class StaticURLTests(TestCase):
     def test_catalog_endpoint(self):
         url = reverse("homepage:main")
         response = Client().get(url)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
 
     def test_coffee_view(self):
         url = reverse("homepage:coffee_view")
@@ -24,7 +24,7 @@ class StaticURLTests(TestCase):
 
 class HomepageViewsTests(TestCase):
     @classmethod
-    def setUpTestData(cls):
+    def setUp(cls):
         cls.category = catalog.models.Category.objects.create(
             name="Электроника",
             is_published=True,
@@ -51,7 +51,7 @@ class HomepageViewsTests(TestCase):
 
     def test_home_status_code_and_context(self):
         response = self.client.get(reverse("homepage:main"))
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
         self.assertIn("items", response.context)
 
     def test_items_count(self):
@@ -90,7 +90,7 @@ class HomepageViewsTests(TestCase):
     def test_item_list_prefetch_related_tags(self):
         with CaptureQueriesContext(connection) as context:
             response = self.client.get(reverse("homepage:main"))
-            self.assertEqual(response.status_code, 200)
+            self.assertEqual(response.status_code, HTTPStatus.OK)
             self.assertNotIn(
                 "SELECT ... FROM catalog_tag ...",
                 [query["sql"] for query in context.captured_queries],
@@ -100,7 +100,7 @@ class HomepageViewsTests(TestCase):
     def test_item_list_prefetch_related_categories(self):
         with CaptureQueriesContext(connection) as context:
             response = self.client.get(reverse("homepage:main"))
-            self.assertEqual(response.status_code, 200)
+            self.assertEqual(response.status_code, HTTPStatus.OK)
             self.assertNotIn(
                 "SELECT ... FROM catalog_category ...",
                 [query["sql"] for query in context.captured_queries],
