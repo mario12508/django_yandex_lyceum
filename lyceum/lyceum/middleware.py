@@ -36,4 +36,4 @@ class ReverseRussianWordsMiddleware:
         return re.sub(r"\\*[А-Яа-яёЁcуPHe]*", lambda x: x.group()[::-1], text)
 
 
-__all__ = ["ReverseRussianWordsMiddleware"]
+__all__ = [ReverseRussianWordsMiddleware]
