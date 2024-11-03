@@ -1,5 +1,5 @@
-from django.db import models
 from django.conf import settings
+from django.db import models
 
 
 class Feedback(models.Model):
@@ -25,7 +25,7 @@ class Feedback(models.Model):
     status = models.CharField(
         verbose_name="Статус сообщения",
         help_text="может быть трёх видов: "
-                  "«получено», «в обработке» и «ответ дан»",
+        "«получено», «в обработке» и «ответ дан»",
         max_length=11,
         choices=(
             ("new", "получено"),

@@ -33,3 +33,6 @@ class StatusLogAdmin(admin.ModelAdmin):
         StatusLog.status_from.field.name,
         StatusLog.status_to.field.name,
     )
+
+
+__all__ = ["FeedbackAdmin", "StatusLogAdmin"]
