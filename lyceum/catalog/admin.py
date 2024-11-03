@@ -16,18 +16,22 @@ class ItemAdminForm(forms.ModelForm):
         fields = "__all__"
 
 
-class ImageInline(admin.TabularInline):
+@admin.register(Tag)
+class TagAdmin(admin.ModelAdmin):
+    exclude = (Tag.normalized_name.field.name,)
+
+
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
+    exclude = (Category.normalized_name.field.name,)
+
+
+class MainImageInline(admin.TabularInline):
+    model = MainImage
+
+
+class GalleryInline(admin.TabularInline):
     model = Gallery
-    extra = 1
-    verbose_name = "Дополнительное изображение"
-    verbose_name_plural = "Дополнительные изображения"
-
-
-class MainImageInline(admin.StackedInline):
-    model = Item.main_image.related.related_model
-    extra = 0
-    verbose_name = "Главное изображение"
-    verbose_name_plural = "Главное изображение"
 
 
 @admin.register(Item)
@@ -37,18 +41,12 @@ class ItemAdmin(admin.ModelAdmin):
         Item.name.field.name,
         Item.is_published.field.name,
         MainImage.img_tmb,
-        Gallery.img_tmb,
     )
     list_editable = (Item.is_published.field.name,)
     list_display_links = (Item.name.field.name,)
     filter_horizontal = (Item.tags.field.name,)
-    inlines = [MainImageInline, ImageInline]
+    inlines = [MainImageInline, GalleryInline]
     readonly_fields = ("created_at", "updated_at")
 
 
-admin.site.register(Tag)
-admin.site.register(Category)
-admin.site.register(Gallery)
-
-
-__all__ = ["ImageInline", "ItemAdmin", "ItemAdminForm"]
+__all__ = ["GalleryInline", "ItemAdmin", "ItemAdminForm"]

@@ -21,7 +21,7 @@ class Category(CategoryAndTags):
         verbose_name_plural = "категории"
 
     def __str__(self):
-        return self.name.split()[0]
+        return self.name[:15]
 
 
 class Tag(CategoryAndTags):
@@ -30,7 +30,7 @@ class Tag(CategoryAndTags):
         verbose_name_plural = "теги"
 
     def __str__(self):
-        return self.name.split()[0]
+        return self.name[:15]
 
 
 class ItemManager(models.Manager):
@@ -113,7 +113,7 @@ class Item(DefaultModel):
         verbose_name_plural = "товары"
 
     def __str__(self):
-        return self.name.split()[0]
+        return self.name[:15]
 
 
 class MainImage(models.Model):
@@ -129,15 +129,6 @@ class MainImage(models.Model):
         related_name="main_image",
         on_delete=models.CASCADE,
     )
-
-    @property
-    def get_img(self):
-        return get_thumbnail(
-            self.main_image.image,
-            "300x300",
-            crop="center",
-            quality=51,
-        )
 
     def img_tmb(self):
         if self.main_image:
@@ -168,10 +159,10 @@ class Gallery(models.Model):
         on_delete=models.CASCADE,
     )
 
-    def get_image_300x300(self):
+    def get_image_nx300(self):
         return get_thumbnail(
             self.gallery.images,
-            "300x300",
+            "x300",
             crop="center",
             quality=51,
         )
@@ -179,8 +170,7 @@ class Gallery(models.Model):
     def img_tmb(self):
         if self.gallery:
             return mark_safe(
-                f"<img src='{self.gallery.images.url}' "
-                f"width='50' height='50'>",
+                f"<img src='{self.gallery.images.url}'" f" alt='Миниатюра'>",
             )
 
         return "нет изображения"

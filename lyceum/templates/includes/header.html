@@ -18,7 +18,7 @@
                         <a class="nav-link {% if request.resolver_match.view_name == 'about:about' %}active{% endif %}" href="{% url 'about:about' %}">{% trans "О проекте" %}</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {% if request.resolver_match.view_name == 'catalog:item_list' %}active{% endif %}" href="{% url 'catalog:item_list' %}">{% trans "Каталог товаров" %}</a>
+                        <a class="nav-link {% if request.resolver_match.view_name == 'catalog:item_list' %}active{% endif %}" href="{% url 'catalog:item_list' %}">{% trans "Список товаров" %}</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {% if request.resolver_match.view_name == 'feedback:feedback' %}active{% endif %}" href="{% url 'feedback:feedback' %}">{% trans "Обратная связь" %}</a>
