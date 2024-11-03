@@ -1,6 +1,6 @@
 from http import HTTPStatus
 
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse
 from django.shortcuts import render
 
 from catalog.models import Item
