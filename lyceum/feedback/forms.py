@@ -28,6 +28,7 @@ class FeedbackForm(forms.ModelForm):
             "адрес электронной почты",
         }
         exclude = [
+            Feedback.name.field.name,
             Feedback.created_on.field.name,
         ]
         widgets = {
