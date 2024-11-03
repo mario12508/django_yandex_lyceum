@@ -16,7 +16,7 @@ def feedback(request):
         send_mail(
             "Обратная связь",
             text,
-            settings.DJANGO_MAIL,
+            settings.EMAIL_HOST,
             [mail],
             fail_silently=False,
         )
@@ -24,7 +24,6 @@ def feedback(request):
 
         return redirect("feedback:feedback")
 
-    print("Не валидно")
     context = {"form": feedback_form}
 
     return render(request, template, context)

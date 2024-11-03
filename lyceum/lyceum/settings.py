@@ -159,6 +159,8 @@ THUMBNAIL_BACKEND = "sorl.thumbnail.base.ThumbnailBackend"
 
 EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
 EMAIL_FILE_PATH = BASE_DIR / "send_mail/"
+DEFAULT_FROM_EMAIL = "user@users.com"
+EMAIL_HOST = DJANGO_MAIL
 
 CKEDITOR_UPLOAD_PATH = "uploads/"
 
