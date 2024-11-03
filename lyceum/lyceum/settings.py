@@ -21,7 +21,7 @@ DEBUG = load_bool_env("DJANGO_DEBUG", False)
 
 ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "*").split(",")
 
-ALLOW_REVERSE = load_bool_env("DJANGO_ALLOW_REVERSE", False)
+ALLOW_REVERSE = load_bool_env("DJANGO_ALLOW_REVERSE", True)
 
 DJANGO_MAIL = os.getenv("DJANGO_MAIL", default="example@example.com")
 
