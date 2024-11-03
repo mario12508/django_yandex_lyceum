@@ -13,13 +13,17 @@ def feedback(request):
         feedback_form.save()
         text = feedback_form.cleaned_data["text"]
         mail = feedback_form.cleaned_data["mail"]
-        send_mail(
+        result = send_mail(
             "Обратная связь",
             text,
             settings.DJANGO_MAIL,
             [mail],
+            fail_silently=False,
         )
-        messages.success(request, "Форма успешно заполнена")
+        if result:
+            messages.success(request, "Форма успешно заполнена")
+        else:
+            messages.error(request, "Не удалось отправить письмо.")
 
         return redirect("feedback:feedback")
 
