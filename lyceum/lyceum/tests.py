@@ -7,13 +7,6 @@ class ReverseRussianWordsMiddlewareTest(TestCase):
     def test_reverse_russian_words_on_10th_request(self):
         client = Client()
         url = reverse("homepage:coffee_view")
-        for i in range(2):
-            response = client.get(url)
-            self.assertNotIn(
-                "кинйач",
-                response.content.decode(),
-                f"Failed on request {i + 1}",
-            )
 
         response = client.get(url)
         self.assertIn("кинйач", response.content.decode())

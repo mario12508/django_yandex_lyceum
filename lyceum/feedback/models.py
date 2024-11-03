@@ -7,6 +7,8 @@ class Feedback(models.Model):
         verbose_name="Имя пользователя",
         help_text="Максимальная длина 100 символов",
         max_length=100,
+        blank=True,
+        null=True,
     )
     text = models.CharField(
         verbose_name="Текст сообщения",

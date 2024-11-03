@@ -122,5 +122,37 @@ class FeedbackFormTests(TestCase):
         self.assertEqual(len(mail.outbox), 1)
         self.assertIn("Тестовое сообщение", mail.outbox[0].body)
 
+    def test_create_feedback(self):
+        item_count = feedback.models.Feedback.objects.count()
+        form_data = {
+            "name": "Тест",
+            "text": "Тест",
+            "mail": "123@l.com",
+        }
+
+        response = Client().post(
+            reverse("feedback:feedback"),
+            data=form_data,
+            follow=True,
+        )
+
+        self.assertRedirects(
+            response,
+            reverse("feedback:feedback"),
+        )
+
+        self.assertEqual(
+            feedback.models.Feedback.objects.count(),
+            item_count + 1,
+        )
+
+        self.assertTrue(
+            feedback.models.Feedback.objects.filter(
+                name="Тест",
+                text="Тест",
+                mail="123@l.com",
+            ).exists(),
+        )
+
 
 __all__ = ()
