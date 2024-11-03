@@ -29,11 +29,12 @@ class ReverseRussianWordsMiddleware:
         content = response.content.decode("utf-8")
         reverse_content = self.reverse_russia_words(content)
         response.content = reverse_content.encode("utf-8")
+
         return response
 
     @staticmethod
     def reverse_russia_words(text):
-        return re.sub(r"\\*[А-Яа-яёЁcуPHe]*", lambda x: x.group()[::-1], text)
+        return re.sub(r"\b[а-яА-ЯёЁ]+\b", lambda x: x.group()[::-1], text)
 
 
 __all__ = [ReverseRussianWordsMiddleware]
