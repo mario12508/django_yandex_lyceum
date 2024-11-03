@@ -9,7 +9,7 @@ from feedback.forms import FeedbackForm
 def feedback(request):
     template = "feedback/feedback.html"
     feedback_form = FeedbackForm(request.POST or None)
-    if feedback_form.is_valid():
+    if feedback_form.is_valid() and request.method == "POST":
         feedback_form.save()
         text = feedback_form.cleaned_data["text"]
         mail = feedback_form.cleaned_data["mail"]
@@ -21,7 +21,12 @@ def feedback(request):
             fail_silently=False,
         )
         messages.success(request, "Форма успешно заполнена")
+
         return redirect("feedback:feedback")
-    context = {"feedback_form": feedback_form}
+
+    context = {"form": feedback_form}
 
     return render(request, template, context)
+
+
+__all__ = ["feedback"]

@@ -17,22 +17,10 @@
             {% endfor %}
         {% endif %}
 
-        <form method="post" class="needs-validation" novalidate>
+        <form method="post" class="needs-validation">
             {% csrf_token %}
             <div class="mb-3">
-                {{ feedback_form.name.label_tag }}
-                {{ feedback_form.name }}
-                <div class="form-text">{{ feedback_form.name.help_text }}</div>
-            </div>
-            <div class="mb-3">
-                {{ feedback_form.mail.label_tag }}
-                {{ feedback_form.mail }}
-                <div class="form-text">{{ feedback_form.mail.help_text }}</div>
-            </div>
-            <div class="mb-3">
-                {{ feedback_form.text.label_tag }}
-                {{ feedback_form.text }}
-                <div class="form-text">{{ feedback_form.text.help_text }}</div>
+                {{ form.as_p }}
             </div>
             <div class="d-grid">
                 <button type="submit" class="btn btn-primary btn-lg mt-3">

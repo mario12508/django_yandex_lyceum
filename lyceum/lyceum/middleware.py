@@ -12,6 +12,7 @@ class ReverseRussianWordsMiddleware:
         response = self.get_response(request)
         if not settings.ALLOW_REVERSE:
             return response
+
         if (
             settings.REQUEST_COUNTER % 10 == 1
             and settings.REQUEST_COUNTER != 1
@@ -25,7 +26,7 @@ class ReverseRussianWordsMiddleware:
 
     @staticmethod
     def reverse_russia_words(text):
-        return re.sub(r"[А-яёЁ]+", lambda x: x.group()[::-1], text)
+        return re.sub(r"\\*[А-Яа-яёЁcуPHe]*", lambda x: x.group()[::-1], text)
 
 
 __all__ = ["ReverseRussianWordsMiddleware"]

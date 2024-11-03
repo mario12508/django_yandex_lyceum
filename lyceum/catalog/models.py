@@ -143,6 +143,7 @@ class MainImage(models.Model):
         if self.main_image:
             thumbnail_url = self.get_img.url
             return mark_safe(f"<img src='{thumbnail_url}' alt='Миниатюра'>")
+
         return "нет изображения"
 
     img_tmb.short_description = "превью"
@@ -181,6 +182,7 @@ class Gallery(models.Model):
                 f"<img src='{self.gallery.images.url}' "
                 f"width='50' height='50'>",
             )
+
         return "нет изображения"
 
     img_tmb.short_description = "превью"

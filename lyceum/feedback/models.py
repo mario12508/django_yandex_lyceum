@@ -28,3 +28,6 @@ class Feedback(models.Model):
 
     def __str__(self):
         return f"Обратная связь с {self.mail}"
+
+
+__all__ = ["Feedback"]

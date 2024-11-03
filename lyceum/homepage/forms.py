@@ -8,3 +8,6 @@ class EchoForm(forms.Form):
         max_length=500,
         help_text="Максимум 500 символов",
     )
+
+
+__all__ = ["EchoForm"]

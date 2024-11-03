@@ -34,7 +34,9 @@ def echo_submit(request):
         return HttpResponse(
             echo_text,
             content_type="text/plain; charset=utf-8",
+            status=HTTPStatus.METHOD_NOT_ALLOWED,
         )
+
     return HttpResponse(
         "Необходимо отправить текст для обратного вызова",
         status=HTTPStatus.BAD_REQUEST,

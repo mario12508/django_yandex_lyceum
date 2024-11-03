@@ -9,6 +9,8 @@ __pycache__/
 # Игнорировать папку media
 media/
 
+send_mail/
+
 # Distribution / packaging
 .Python
 build/
