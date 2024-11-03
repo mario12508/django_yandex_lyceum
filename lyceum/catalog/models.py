@@ -35,31 +35,22 @@ class Tag(CategoryAndTags):
 
 class ItemManager(models.Manager):
     def published(self):
+        queryset = self.get_queryset().filter(
+            is_published=True,
+            category__is_published=True,
+        )
+        tags_prefetch = models.Prefetch(
+            "tags",
+            queryset=Tag.objects.filter(is_published=True).only("name"),
+        )
         return (
-            self.get_queryset()
-            .filter(
-                is_published=True,
-                category__is_published=True,
-            )
-            .prefetch_related(
-                models.Prefetch(
-                    "tags",
-                    queryset=Tag.objects.filter(
-                        is_published=True,
-                    ).only(
-                        "name",
-                    ),
-                ),
-            )
+            queryset.prefetch_related(tags_prefetch)
             .only("id", "name", "text", "category", "tags")
-            .order_by(
-                "category__name",
-                "name",
-            )
+            .order_by("category__name", "name")
         )
 
     def on_main(self):
-        return (
+        queryset = (
             self.get_queryset()
             .select_related("category")
             .filter(
@@ -67,18 +58,15 @@ class ItemManager(models.Manager):
                 is_on_main=True,
                 category__is_published=True,
             )
-            .prefetch_related(
-                models.Prefetch(
-                    "tags",
-                    queryset=Tag.objects.filter(
-                        is_published=True,
-                    ),
-                ),
-            )
+        )
+        tags_prefetch = models.Prefetch(
+            "tags",
+            queryset=Tag.objects.filter(is_published=True),
+        )
+        return (
+            queryset.prefetch_related(tags_prefetch)
             .only("id", "name", "text", "category", "tags")
-            .order_by(
-                "name",
-            )
+            .order_by("name")
         )
 
 

@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}Обратная связь{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5 d-flex justify-content-center">
+    <div class="card shadow-lg p-4 w-50">
+        <h2 class="text-center mb-4 text-primary">Свяжитесь с нами</h2>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    <i class="bi bi-info-circle-fill"></i> {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Закрыть"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="post" class="needs-validation" novalidate>
+            {% csrf_token %}
+            <div class="mb-3">
+                {{ feedback_form.name.label_tag }}
+                {{ feedback_form.name }}
+                <div class="form-text">{{ feedback_form.name.help_text }}</div>
+            </div>
+            <div class="mb-3">
+                {{ feedback_form.mail.label_tag }}
+                {{ feedback_form.mail }}
+                <div class="form-text">{{ feedback_form.mail.help_text }}</div>
+            </div>
+            <div class="mb-3">
+                {{ feedback_form.text.label_tag }}
+                {{ feedback_form.text }}
+                <div class="form-text">{{ feedback_form.text.help_text }}</div>
+            </div>
+            <div class="d-grid">
+                <button type="submit" class="btn btn-primary btn-lg mt-3">
+                    <i class="bi bi-envelope-fill"></i> Отправить сообщение
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

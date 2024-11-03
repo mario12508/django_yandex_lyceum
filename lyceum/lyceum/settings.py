@@ -23,6 +23,8 @@ ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "*").split(",")
 
 ALLOW_REVERSE = load_bool_env("DJANGO_ALLOW_REVERSE", False)
 
+DJANGO_MAIL = os.getenv("DJANGO_MAIL", default="example@example.com")
+
 REQUEST_COUNTER = 0
 
 # Application definition
@@ -32,6 +34,7 @@ LOCALE_PATHS = [
 ]
 
 INSTALLED_APPS = [
+    "feedback.apps.FeedbackConfig",
     "download.apps.DownloadConfig",
     "core.apps.CoreConfig",
     "homepage.apps.HomepageConfig",
@@ -155,6 +158,9 @@ MEDIA_ROOT = BASE_DIR / "media"
 MEDIA_URL = "media/"
 
 THUMBNAIL_BACKEND = "sorl.thumbnail.base.ThumbnailBackend"
+
+EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
+EMAIL_FILE_PATH = BASE_DIR / "send_mail/"
 
 CKEDITOR_UPLOAD_PATH = "uploads/"
 

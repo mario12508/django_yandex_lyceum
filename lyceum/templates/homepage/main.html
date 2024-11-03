@@ -9,7 +9,8 @@
 <div class="jumbotron">
     <h1>{% trans "Добро пожаловать на наш сайт!" %}</h1>
     <p>{% trans "На главной странице можно найти краткую информацию о нашем проекте. " %}</p>
-    <a class="btn btn-primary" href="{% url 'catalog:item_list' %}" role="button">Посмотреть товары</a>
+    <a class="btn btn-primary" href="{% url 'catalog:item_list' %}" role="button">Посмотреть товары<br></a>
+    <a class="btn btn-primary" href="{% url 'feedback:feedback' %}">Обратная связь</a>
 </div>
 {% for item in items %}
     {% ifchanged item.category.name %}

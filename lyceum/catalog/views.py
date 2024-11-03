@@ -40,13 +40,13 @@ def new_items(request):
     end_date = timezone.now()
     start_date = end_date - datetime.timedelta(weeks=1)
 
-    items = Item.objects.published()
-    items = items.filter(created_at__range=[start_date, end_date]).order_by(
-        "?",
-    )[:5]
+    items_queryset = Item.objects.published()
+    recent_items = items_queryset.filter(
+        created_at__range=[start_date, end_date],
+    ).order_by("?")[:5]
 
     content = {
-        "items": items,
+        "items": recent_items,
         "title": "Новинки",
     }
     return render(request, template_name, content)
@@ -54,14 +54,14 @@ def new_items(request):
 
 def friday_items(request):
     template_name = "catalog/item_list.html"
-    items = (
-        Item.objects.published()
-        .filter(updated_at__week_day=5)
-        .order_by("updated_at")[:5]
-    )
+
+    items_queryset = Item.objects.published()
+    friday_items_list = items_queryset.filter(
+        updated_at__week_day=5,
+    ).order_by("updated_at")[:5]
 
     content = {
-        "items": items,
+        "items": friday_items_list,
         "title": "Пятница",
     }
     return render(request, template_name, content)
