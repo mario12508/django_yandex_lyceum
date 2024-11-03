@@ -28,6 +28,7 @@ def feedback(request):
         messages.success(request, "Форма успешно заполнена")
 
         return redirect("feedback:feedback")
+
     print("Не валидно")
     context = {"form": feedback_form}
 

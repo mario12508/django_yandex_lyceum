@@ -110,14 +110,17 @@ class FeedbackFormTests(TestCase):
         self.assertTrue(response.context["form"].has_error("mail"))
 
     def test_feedback_sends_email(self):
-        response = self.client.post('/feedback/', data={
-            'name': 'Тест',
-            'mail': 'test@example.com',
-            'text': 'Тестовое сообщение'
-        })
+        self.client.post(
+            "/feedback/",
+            data={
+                "name": "Тест",
+                "mail": "test@example.com",
+                "text": "Тестовое сообщение",
+            },
+        )
 
         self.assertEqual(len(mail.outbox), 1)
-        self.assertIn('Тестовое сообщение', mail.outbox[0].body)
+        self.assertIn("Тестовое сообщение", mail.outbox[0].body)
 
 
 __all__ = ()
