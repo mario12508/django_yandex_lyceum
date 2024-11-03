@@ -1,4 +1,3 @@
-import django
 from django.conf import settings
 from django.contrib import messages
 from django.core.mail import send_mail
@@ -14,9 +13,6 @@ def feedback(request):
         feedback_form.save()
         text = feedback_form.cleaned_data["text"]
         mail = feedback_form.cleaned_data["mail"]
-        print(mail)
-        print(text)
-        mail_count = len(django.core.mail.outbox)
         send_mail(
             "Обратная связь",
             text,
@@ -24,7 +20,6 @@ def feedback(request):
             [mail],
             fail_silently=False,
         )
-        print(django.core.mail, mail_count, len(django.core.mail.outbox))
         messages.success(request, "Форма успешно заполнена")
 
         return redirect("feedback:feedback")
