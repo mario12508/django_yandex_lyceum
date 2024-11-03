@@ -21,8 +21,8 @@ def echo(request):
     template = "homepage/echo.html"
     echo_form = EchoForm(request.POST or None)
     if request.method == "POST":
-        return HttpResponseRedirect(
-            "homepage:echo_submit",
+        return HttpResponse(
+            "Страница не найдена",
             status=HTTPStatus.METHOD_NOT_ALLOWED,
         )
 
@@ -36,7 +36,6 @@ def echo_submit(request):
         echo_text = request.POST.get("text")
         return HttpResponse(
             echo_text,
-            content_type="text/plain; charset=utf-8",
             status=HTTPStatus.OK,
         )
 
