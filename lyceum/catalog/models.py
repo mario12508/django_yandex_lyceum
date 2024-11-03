@@ -170,7 +170,9 @@ class Gallery(models.Model):
     def img_tmb(self):
         if self.gallery:
             return mark_safe(
-                f"<img src='{self.gallery.images.url}'" f" alt='Миниатюра'>",
+                "<img src='{}' width='50' height='50'>".format(
+                    self.gallery.images.url,
+                ),
             )
 
         return "нет изображения"

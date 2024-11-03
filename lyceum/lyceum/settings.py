@@ -25,8 +25,6 @@ ALLOW_REVERSE = load_bool_env("DJANGO_ALLOW_REVERSE", False)
 
 DJANGO_MAIL = os.getenv("DJANGO_MAIL", default="example@example.com")
 
-REQUEST_COUNTER = 0
-
 # Application definition
 
 LOCALE_PATHS = [
@@ -322,7 +320,6 @@ __all__ = [
     "DEBUG",
     "ALLOWED_HOSTS",
     "ALLOW_REVERSE",
-    "REQUEST_COUNTER",
     "INSTALLED_APPS",
     "MIDDLEWARE",
     "ROOT_URLCONF",

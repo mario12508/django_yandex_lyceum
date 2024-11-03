@@ -3,11 +3,11 @@ from django.urls import reverse
 
 
 class ReverseRussianWordsMiddlewareTest(TestCase):
-    @override_settings(ALLOW_REVERSE=True, REQUEST_COUNTER=1)
+    @override_settings(ALLOW_REVERSE=True)
     def test_reverse_russian_words_on_10th_request(self):
         client = Client()
         url = reverse("homepage:coffee_view")
-        for i in range(9):
+        for i in range(3):
             response = client.get(url)
             self.assertNotIn(
                 "кинйач",
@@ -18,7 +18,15 @@ class ReverseRussianWordsMiddlewareTest(TestCase):
         response = client.get(url)
         self.assertIn("кинйач", response.content.decode())
 
-    @override_settings(ALLOW_REVERSE=False, REQUEST_COUNTER=1)
+        for i in range(6):
+            response = client.get(url)
+            self.assertNotIn(
+                "кинйач",
+                response.content.decode(),
+                f"Failed on request {i + 1}",
+            )
+
+    @override_settings(ALLOW_REVERSE=False)
     def back_test_reverse_russian_words_on_10th_request(self):
         client = Client()
         url = reverse("homepage:coffee_view")

@@ -17,7 +17,7 @@ def feedback(request):
             "Обратная связь",
             text,
             settings.DJANGO_MAIL,
-            [mail],
+            set(mail),
             fail_silently=False,
         )
         messages.success(request, "Форма успешно заполнена")

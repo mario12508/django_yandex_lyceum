@@ -1,7 +1,7 @@
 from http import HTTPStatus
 
-from django.http import HttpResponse
-from django.shortcuts import redirect, render
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render
 
 from catalog.models import Item
 from homepage.forms import EchoForm
@@ -21,7 +21,10 @@ def echo(request):
     template = "homepage/echo.html"
     echo_form = EchoForm(request.POST or None)
     if request.method == "POST":
-        return redirect("homepage:echo_submit")
+        return HttpResponseRedirect(
+            "homepage:echo_submit",
+            status=HTTPStatus.METHOD_NOT_ALLOWED,
+        )
 
     context = {"echo_form": echo_form}
 
@@ -34,12 +37,12 @@ def echo_submit(request):
         return HttpResponse(
             echo_text,
             content_type="text/plain; charset=utf-8",
-            status=HTTPStatus.METHOD_NOT_ALLOWED,
+            status=HTTPStatus.OK,
         )
 
     return HttpResponse(
         "Необходимо отправить текст для обратного вызова",
-        status=HTTPStatus.BAD_REQUEST,
+        status=HTTPStatus.METHOD_NOT_ALLOWED,
     )
 
 
