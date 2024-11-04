@@ -4,10 +4,6 @@ from django.conf import settings
 from django.db import models
 
 
-def get_upload_path(instance, filename):
-    return f"uploads/{instance.feedback.id}/{uuid.uuid4()}-{filename}"
-
-
 class Feedback(models.Model):
     text = models.CharField(
         verbose_name="Текст сообщения",
@@ -39,9 +35,8 @@ class Feedback(models.Model):
     def __str__(self):
         return f"Обратная связь {self.id}"
 
-    @staticmethod
-    def get_upload_path(instance, filename):
-        return f"uploads/{instance.feedback.id}/{filename}"
+    def get_upload_path(self, filename):
+        return f"uploads/{self.feedback.id}/{uuid.uuid4()}-{filename}"
 
 
 class UserProfile(models.Model):
@@ -80,7 +75,7 @@ class FeedbackFile(models.Model):
         verbose_name="Обратная связь",
     )
     file = models.FileField(
-        upload_to=get_upload_path,
+        upload_to=Feedback.get_upload_path,
         null=True,
         blank=True,
         verbose_name="Файл обратной связи",
