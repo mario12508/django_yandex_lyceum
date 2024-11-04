@@ -31,12 +31,11 @@ class Feedback(models.Model):
         verbose_name_plural = "Обратные связи"
 
     def __str__(self):
-        return f"Обратная связь {self.id}"
+        return f"{self.id}"
 
     @staticmethod
     def get_upload_path(instance, filename):
-        feedback_id = instance.feedback.id
-        return f"uploads/{feedback_id}/{filename}"
+        return f"uploads/{instance.feedback}/{filename}"
 
 
 class UserProfile(models.Model):
