@@ -33,9 +33,8 @@ class Feedback(models.Model):
     def __str__(self):
         return f"Обратная связь {self.id}"
 
-    @staticmethod
-    def get_upload_path(instance, filename):
-        return f"uploads/{instance.feedback.id}/{filename}"
+    def get_upload_path(self, filename):
+        return f"uploads/{self.feedback.id}/{filename}"
 
 
 class UserProfile(models.Model):
