@@ -9,21 +9,25 @@ from feedback.models import FeedbackFile
 
 def feedback(request):
     template = "feedback/feedback.html"
-    author = UserProfileForm(request.POST or None)
-    content = FeedbackForm(request.POST or None)
-    files = FeedbackFileForm(request.POST, request.FILES)
-    if author.is_valid() and content.is_valid() and request.method == "POST":
-        feedback_item = content.save()
-        author_feedback = author.save()
-        author_feedback.author = feedback_item
-        author_feedback.save()
+    author_form = UserProfileForm(request.POST or None)
+    content_form = FeedbackForm(request.POST or None)
+    files_form = FeedbackFileForm(request.POST, request.FILES)
+    if (
+        author_form.is_valid()
+        and content_form.is_valid()
+        and request.method == "POST"
+    ):
+        feedback_item = content_form.save()
+        author_profile = author_form.save(commit=False)
+        author_profile.author = feedback_item
+        author_profile.save()
 
-        files = request.FILES.getlist("file")
-        for f in files:
+        files_form = request.FILES.getlist("file")
+        for f in files_form:
             FeedbackFile.objects.create(feedback=feedback_item, file=f)
 
-        text = content.cleaned_data["text"]
-        mail = author.cleaned_data["mail"]
+        text = content_form.cleaned_data["text"]
+        mail = author_form.cleaned_data["mail"]
         send_mail(
             "Обратная связь",
             text,
@@ -36,9 +40,9 @@ def feedback(request):
         return redirect("feedback:feedback")
 
     context = {
-        "author": author,
-        "content": content,
-        "files": files,
+        "author_form": author_form,
+        "content_form": content_form,
+        "files_form": files_form,
     }
 
     return render(request, template, context)

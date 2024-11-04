@@ -158,5 +158,33 @@ class FeedbackFormTests(TestCase):
             uploaded_file.file.name,
         )
 
+    def test_feedback_form_labels_and_help_texts(self):
+        form = feedback.forms.FeedbackForm()
+        self.assertEqual(form.fields["text"].label, "Текст обращения")
+        self.assertEqual(
+            form.fields["text"].help_text,
+            "Максимум 500 символов",
+        )
+
+    def test_user_profile_form_labels_and_help_texts(self):
+        form = feedback.forms.UserProfileForm()
+        self.assertEqual(form.fields["name"].label, "Имя")
+        self.assertEqual(form.fields["mail"].label, "Почта")
+        self.assertEqual(
+            form.fields["name"].help_text,
+            "Максимум 100 символов",
+        )
+        self.assertEqual(
+            form.fields["mail"].help_text,
+            "Введите корректный адрес электронной почты",
+        )
+
+    def test_feedback_file_form_multiple_upload(self):
+        form = feedback.forms.FeedbackFileForm()
+        self.assertTrue(
+            form.fields["file"].widget.attrs.get("multiple"),
+            "multiple file upload should be enabled",
+        )
+
 
 __all__ = ["FeedbackFormTests"]

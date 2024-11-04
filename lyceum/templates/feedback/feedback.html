@@ -20,13 +20,13 @@
         <form method="post" class="needs-validation" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="mb-3">
-                {{ author.as_p }}
+                {{ author_form.as_p }}
             </div>
             <div class="mb-3">
-                {{ content.as_p }}
+                {{ content_form.as_p }}
             </div>
             <div class="mb-3">
-                {{ files.as_p }}
+                {{ files_form.as_p }}
             </div>
             <div class="d-grid">
                 <button type="submit" class="btn btn-primary btn-lg mt-3">

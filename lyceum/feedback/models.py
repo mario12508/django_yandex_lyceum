@@ -2,10 +2,6 @@ from django.conf import settings
 from django.db import models
 
 
-def upload_to(instance, filename):
-    return f"uploads/{instance.feedback.id}/{filename}"
-
-
 class Feedback(models.Model):
     text = models.CharField(
         verbose_name="Текст сообщения",
@@ -41,7 +37,7 @@ class Feedback(models.Model):
 class UserProfile(models.Model):
     author = models.OneToOneField(
         Feedback,
-        on_delete=models.PROTECT,
+        on_delete=models.CASCADE,
         verbose_name="Профиль пользователя",
         related_name="feedbacks",
         null=True,
@@ -67,9 +63,12 @@ class UserProfile(models.Model):
 
 
 class FeedbackFile(models.Model):
+    def upload_to(self, filename):
+        return f"uploads/{self.feedback.id}/{filename}"
+
     feedback = models.ForeignKey(
         Feedback,
-        on_delete=models.CASCADE,
+        on_delete=models.RESTRICT,
         related_name="files",
         verbose_name="Обратная связь",
     )
