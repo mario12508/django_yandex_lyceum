@@ -73,30 +73,41 @@ class StaticURLTests(TestCase):
 @override_settings(MEDIA_ROOT=tempfile.mkdtemp())
 class FeedbackFormTests(TestCase):
 
-    def test_unable_create_feedback(self):
-        item_count = feedback.models.Feedback.objects.count()
-        form_data = {
-            "name": "Тест",
-            "text": "Тест",
-            "mail": "notmail",
-        }
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.form_author = feedback.forms.UserProfileForm()
+        cls.form_content = feedback.forms.FeedbackForm()
 
-        Client().post(
+    def test_feedback_show_correct_context(self):
+        response = Client().get(
             reverse("feedback:feedback"),
-            data=form_data,
-            follow=True,
         )
-        self.assertEqual(
-            feedback.models.Feedback.objects.count(),
-            item_count,
-        )
+        self.assertIn("form", response.context)
 
-    def test_create_feedback(self):
-        item_count = feedback.models.Feedback.objects.count()
+    def test_text_label(self):
+        name_label = FeedbackFormTests.form_content.fields["text"].label
+        self.assertIsNotNone(name_label)
+
+    def test_mail_label(self):
+        mail_label = FeedbackFormTests.form_author.fields["mail"].label
+        self.assertIsNotNone(mail_label)
+
+    def test_help_text_label(self):
+        text_help_text = (
+            FeedbackFormTests.form_content.fields["text"].help_text,
+        )
+        self.assertIsNotNone(text_help_text)
+
+    def test_help_mail_label(self):
+        mail_help_text = FeedbackFormTests.form_author.fields["mail"].help_text
+        self.assertIsNotNone(mail_help_text)
+
+    def test_unable_create_feedback(self):
         form_data = {
             "name": "Тест",
             "text": "Тест",
-            "mail": "123@l.com",
+            "mail": "notmai",
         }
 
         response = Client().post(
@@ -104,16 +115,7 @@ class FeedbackFormTests(TestCase):
             data=form_data,
             follow=True,
         )
-
-        self.assertRedirects(
-            response,
-            reverse("feedback:feedback"),
-        )
-
-        self.assertEqual(
-            feedback.models.Feedback.objects.count(),
-            item_count + 1,
-        )
+        self.assertTrue(response.context["author_form"].has_error("mail"))
 
     def test_create_feedback_with_file_upload(self):
         feedback_count = feedback.models.Feedback.objects.count()
