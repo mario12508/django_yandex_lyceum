@@ -1,12 +1,12 @@
 from django.contrib import admin
 
-from feedback.models import Feedback, StatusLog
+from feedback.models import Feedback, FeedbackFile, StatusLog, UserProfile
 
 
 @admin.register(Feedback)
 class FeedbackAdmin(admin.ModelAdmin):
     list_display = (
-        Feedback.name.field.name,
+        Feedback.user_profile.field.name,
         Feedback.status.field.name,
     )
     readonly_fields = (Feedback.created_on.field.name,)
@@ -23,6 +23,22 @@ class FeedbackAdmin(admin.ModelAdmin):
             ).save()
 
         super().save_model(request, obj, form, change)
+
+
+@admin.register(UserProfile)
+class UserProfileAdmin(admin.ModelAdmin):
+    list_display = (
+        UserProfile.name.field.name,
+        UserProfile.mail.field.name,
+    )
+
+
+@admin.register(FeedbackFile)
+class FeedbackFileAdmin(admin.ModelAdmin):
+    list_display = (
+        FeedbackFile.feedback.field.name,
+        FeedbackFile.file.field.name,
+    )
 
 
 @admin.register(StatusLog)

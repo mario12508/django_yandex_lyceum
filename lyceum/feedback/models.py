@@ -2,12 +2,37 @@ from django.conf import settings
 from django.db import models
 
 
-class Feedback(models.Model):
+def upload_to_feedback_file(instance, filename):
+    return f"uploads/{instance.feedback.id}/{filename}"
+
+
+class UserProfile(models.Model):
     name = models.CharField(
         verbose_name="Имя пользователя",
         help_text="Максимальная длина 100 символов",
         max_length=100,
         blank=True,
+        null=True,
+    )
+    mail = models.EmailField(
+        verbose_name="Адрес электронной почты",
+        help_text="Введите корректный адрес электронной почты",
+    )
+
+    class Meta:
+        verbose_name = "Профиль пользователя"
+        verbose_name_plural = "Профили пользователей"
+
+    def __str__(self):
+        return f"Профиль пользователя {self.name} ({self.mail})"
+
+
+class Feedback(models.Model):
+    user_profile = models.ForeignKey(
+        UserProfile,
+        on_delete=models.CASCADE,
+        verbose_name="Профиль пользователя",
+        related_name="feedbacks",
         null=True,
     )
     text = models.CharField(
@@ -19,10 +44,6 @@ class Feedback(models.Model):
         auto_now_add=True,
         null=True,
         verbose_name="дата и время создания",
-    )
-    mail = models.EmailField(
-        verbose_name="Адрес электронной почты",
-        help_text="Введите корректный адрес электронной почты",
     )
     status = models.CharField(
         verbose_name="Статус сообщения",
@@ -42,7 +63,29 @@ class Feedback(models.Model):
         verbose_name_plural = "Обратные связи"
 
     def __str__(self):
-        return f"Обратная связь с {self.mail}"
+        return f"Обратная связь с {self.user_profile.name}"
+
+
+class FeedbackFile(models.Model):
+    feedback = models.ForeignKey(
+        Feedback,
+        on_delete=models.CASCADE,
+        related_name="files",
+        verbose_name="Обратная связь",
+    )
+    file = models.FileField(
+        upload_to=upload_to_feedback_file,
+        null=True,
+        blank=True,
+        verbose_name="Файл обратной связи",
+    )
+
+    class Meta:
+        verbose_name = "Файл обратной связи"
+        verbose_name_plural = "Файлы обратных связей"
+
+    def __str__(self):
+        return f"{self.feedback}"
 
 
 class StatusLog(models.Model):
