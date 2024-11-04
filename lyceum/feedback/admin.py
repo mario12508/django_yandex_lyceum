@@ -5,6 +5,7 @@ from feedback.models import Feedback, FeedbackFile, StatusLog, UserProfile
 
 class UserProfileInline(admin.TabularInline):
     model = UserProfile
+    can_delete = False
     list_display = (
         UserProfile.name.field.name,
         UserProfile.mail.field.name,
