@@ -2,39 +2,11 @@ from django.conf import settings
 from django.db import models
 
 
-def upload_to_feedback_file(instance, filename):
+def upload_to(instance, filename):
     return f"uploads/{instance.feedback.id}/{filename}"
 
 
-class UserProfile(models.Model):
-    name = models.CharField(
-        verbose_name="Имя пользователя",
-        help_text="Максимальная длина 100 символов",
-        max_length=100,
-        blank=True,
-        null=True,
-    )
-    mail = models.EmailField(
-        verbose_name="Адрес электронной почты",
-        help_text="Введите корректный адрес электронной почты",
-    )
-
-    class Meta:
-        verbose_name = "Профиль пользователя"
-        verbose_name_plural = "Профили пользователей"
-
-    def __str__(self):
-        return f"Профиль пользователя {self.name} ({self.mail})"
-
-
 class Feedback(models.Model):
-    user_profile = models.ForeignKey(
-        UserProfile,
-        on_delete=models.CASCADE,
-        verbose_name="Профиль пользователя",
-        related_name="feedbacks",
-        null=True,
-    )
     text = models.CharField(
         verbose_name="Текст сообщения",
         help_text="Максимальная длина 500 символов",
@@ -63,7 +35,35 @@ class Feedback(models.Model):
         verbose_name_plural = "Обратные связи"
 
     def __str__(self):
-        return f"Обратная связь с {self.user_profile.name}"
+        return f"Обратная связь {self.id}"
+
+
+class UserProfile(models.Model):
+    author = models.OneToOneField(
+        Feedback,
+        on_delete=models.PROTECT,
+        verbose_name="Профиль пользователя",
+        related_name="feedbacks",
+        null=True,
+    )
+    name = models.CharField(
+        verbose_name="Имя пользователя",
+        help_text="Максимальная длина 100 символов",
+        max_length=100,
+        blank=True,
+        null=True,
+    )
+    mail = models.EmailField(
+        verbose_name="Адрес электронной почты",
+        help_text="Введите корректный адрес электронной почты",
+    )
+
+    class Meta:
+        verbose_name = "Профиль пользователя"
+        verbose_name_plural = "Профили пользователей"
+
+    def __str__(self):
+        return f"Профиль пользователя {self.name} ({self.mail})"
 
 
 class FeedbackFile(models.Model):
@@ -74,7 +74,7 @@ class FeedbackFile(models.Model):
         verbose_name="Обратная связь",
     )
     file = models.FileField(
-        upload_to=upload_to_feedback_file,
+        upload_to=upload_to,
         null=True,
         blank=True,
         verbose_name="Файл обратной связи",

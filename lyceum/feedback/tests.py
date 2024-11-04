@@ -1,12 +1,77 @@
+import tempfile
+
 from django.core.files.uploadedfile import SimpleUploadedFile
-import django.test
-import django.urls
+from django.test import Client, override_settings, TestCase
+from django.urls import reverse
 
 import feedback.forms
 import feedback.models
 
 
-class FeedbackFormTests(django.test.TestCase):
+class StaticURLTests(TestCase):
+    def test_form_in_feedback(self):
+        url = reverse("feedback:feedback")
+        response = Client().get(url)
+        self.assertIn("form", response.context)
+
+    def test_feedback_assert_redirect(self):
+        url = reverse("feedback:feedback")
+        form_data = {
+            "name": "Масрель",
+            "text": "Test text",
+            "mail": "example_user@example.com",
+        }
+        response = Client().post(url, data=form_data, follow=True)
+        self.assertRedirects(response, reverse("feedback:feedback"))
+
+    def test_feedback_field_in_form(self):
+        url = reverse("feedback:feedback")
+        response = Client().get(url)
+        self.assertContains(response, "helptext")
+        self.assertContains(response, "label")
+
+    def test_unable_create_feedback(self):
+        item_count = feedback.models.Feedback.objects.count()
+        form_data = {
+            "name": "Тест",
+            "text": "Тест",
+            "mail": "not_email",
+        }
+
+        Client().post(
+            reverse("feedback:feedback"),
+            data=form_data,
+            follow=True,
+        )
+
+        self.assertEqual(
+            feedback.models.Feedback.objects.count(),
+            item_count,
+        )
+
+    def test_create_feedback(self):
+        item_count = feedback.models.Feedback.objects.count()
+        form_data = {
+            "name": "Тест",
+            "text": "Тест",
+            "mail": "123@l.com",
+        }
+
+        response = Client().post(
+            reverse("feedback:feedback"),
+            data=form_data,
+            follow=True,
+        )
+
+        self.assertFalse(response.context["form"].is_valid())
+        self.assertEqual(
+            feedback.models.Feedback.objects.count(),
+            item_count + 1,
+        )
+
+
+@override_settings(MEDIA_ROOT=tempfile.mkdtemp())
+class FeedbackFormTests(TestCase):
 
     def test_unable_create_feedback(self):
         item_count = feedback.models.Feedback.objects.count()
@@ -16,8 +81,8 @@ class FeedbackFormTests(django.test.TestCase):
             "mail": "notmail",
         }
 
-        django.test.Client().post(
-            django.urls.reverse("feedback:feedback"),
+        Client().post(
+            reverse("feedback:feedback"),
             data=form_data,
             follow=True,
         )
@@ -34,15 +99,15 @@ class FeedbackFormTests(django.test.TestCase):
             "mail": "123@l.com",
         }
 
-        response = django.test.Client().post(
-            django.urls.reverse("feedback:feedback"),
+        response = Client().post(
+            reverse("feedback:feedback"),
             data=form_data,
             follow=True,
         )
 
         self.assertRedirects(
             response,
-            django.urls.reverse("feedback:feedback"),
+            reverse("feedback:feedback"),
         )
 
         self.assertEqual(
@@ -64,8 +129,8 @@ class FeedbackFormTests(django.test.TestCase):
             b"File content",
             content_type="text/plain",
         )
-        response = django.test.Client().post(
-            django.urls.reverse("feedback:feedback"),
+        response = Client().post(
+            reverse("feedback:feedback"),
             data={
                 **form_data,
                 "file": [test_file],
@@ -75,7 +140,7 @@ class FeedbackFormTests(django.test.TestCase):
 
         self.assertRedirects(
             response,
-            django.urls.reverse("feedback:feedback"),
+            reverse("feedback:feedback"),
         )
 
         self.assertEqual(

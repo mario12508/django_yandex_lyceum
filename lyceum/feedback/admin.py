@@ -3,14 +3,30 @@ from django.contrib import admin
 from feedback.models import Feedback, FeedbackFile, StatusLog, UserProfile
 
 
+class UserProfileInline(admin.TabularInline):
+    model = UserProfile
+    list_display = (
+        UserProfile.name.field.name,
+        UserProfile.mail.field.name,
+    )
+
+
+class FilesInline(admin.TabularInline):
+    model = FeedbackFile
+
+
 @admin.register(Feedback)
 class FeedbackAdmin(admin.ModelAdmin):
     list_display = (
-        Feedback.user_profile.field.name,
+        Feedback.created_on.field.name,
         Feedback.status.field.name,
     )
     readonly_fields = (Feedback.created_on.field.name,)
     list_editable = (Feedback.status.field.name,)
+    inlines = (
+        UserProfileInline,
+        FilesInline,
+    )
 
     def save_model(self, request, obj, form, change):
         field = Feedback.status.field.name
@@ -23,22 +39,6 @@ class FeedbackAdmin(admin.ModelAdmin):
             ).save()
 
         super().save_model(request, obj, form, change)
-
-
-@admin.register(UserProfile)
-class UserProfileAdmin(admin.ModelAdmin):
-    list_display = (
-        UserProfile.name.field.name,
-        UserProfile.mail.field.name,
-    )
-
-
-@admin.register(FeedbackFile)
-class FeedbackFileAdmin(admin.ModelAdmin):
-    list_display = (
-        FeedbackFile.feedback.field.name,
-        FeedbackFile.file.field.name,
-    )
 
 
 @admin.register(StatusLog)
