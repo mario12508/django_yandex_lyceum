@@ -11,7 +11,7 @@ def feedback(request):
     template = "feedback/feedback.html"
     author_form = UserProfileForm(request.POST or None)
     content_form = FeedbackForm(request.POST or None)
-    files_form = FeedbackFileForm(request.POST, request.FILES)
+    files_form = FeedbackFileForm(request.POST or None)
     if (
         author_form.is_valid()
         and content_form.is_valid()
