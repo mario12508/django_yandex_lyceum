@@ -1,5 +1,3 @@
-import uuid
-
 from django.conf import settings
 from django.db import models
 
@@ -35,8 +33,10 @@ class Feedback(models.Model):
     def __str__(self):
         return f"Обратная связь {self.id}"
 
-    def get_upload_path(self, filename):
-        return f"uploads/{self.feedback.id}/{uuid.uuid4()}-{filename}"
+    @staticmethod
+    def get_upload_path(instance, filename):
+        feedback_id = instance.feedback.id
+        return f"uploads/{feedback_id}/{filename}"
 
 
 class UserProfile(models.Model):
