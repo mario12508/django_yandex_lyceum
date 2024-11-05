@@ -1,5 +1,11 @@
+import os
+
 from django.conf import settings
 from django.db import models
+
+
+def feedback_upload_to(instance, filename):
+    return os.path.join(f'uploads/{instance.feedback.id}', filename)
 
 
 class Feedback(models.Model):
@@ -32,10 +38,6 @@ class Feedback(models.Model):
 
     def __str__(self):
         return f"{self.id}"
-
-    @staticmethod
-    def get_upload_path(instance, filename):
-        return f"uploads/FEEDBACK_{instance.feedback.id}/{filename}"
 
 
 class UserProfile(models.Model):
@@ -74,7 +76,7 @@ class FeedbackFile(models.Model):
         verbose_name="Обратная связь",
     )
     file = models.FileField(
-        upload_to=Feedback.get_upload_path,
+        upload_to=feedback_upload_to,
         null=True,
         blank=True,
         verbose_name="Файл обратной связи",
