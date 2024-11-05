@@ -63,6 +63,9 @@ class UserProfile(models.Model):
 
 
 class FeedbackFile(models.Model):
+    def get_upload_path(self, filename):
+        return f"uploads/{self.feedback_id}/{filename}"
+
     feedback = models.ForeignKey(
         Feedback,
         on_delete=models.CASCADE,
@@ -70,22 +73,11 @@ class FeedbackFile(models.Model):
         verbose_name="Обратная связь",
     )
     file = models.FileField(
-        upload_to="uploads/temp",
+        upload_to=get_upload_path,
         null=True,
         blank=True,
         verbose_name="Файл обратной связи",
     )
-
-    @staticmethod
-    def get_upload_path(instance):
-        return f"uploads/{instance.feedback_id}/"
-
-    def save(self, *args, **kwargs):
-        if not self.feedback_id:
-            super().save(*args, **kwargs)
-
-        self.file.field.upload_to = self.get_upload_path(self)
-        super().save(*args, **kwargs)
 
     class Meta:
         verbose_name = "Файл обратной связи"
