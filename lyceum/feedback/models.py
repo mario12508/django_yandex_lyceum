@@ -1,11 +1,11 @@
-import os
+from pathlib import Path
 
 from django.conf import settings
 from django.db import models
 
 
 def feedback_upload_to(instance, filename):
-    return os.path.join(f'uploads/{instance.feedback.id}', filename)
+    return Path("uploads") / str(instance.feedback.id) / filename
 
 
 class Feedback(models.Model):
