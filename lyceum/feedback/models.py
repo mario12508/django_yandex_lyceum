@@ -2,10 +2,6 @@ from django.conf import settings
 from django.db import models
 
 
-def get_upload_path(instance, filename):
-    return f"uploads/{instance.feedback_id}/{filename}"
-
-
 class Feedback(models.Model):
     text = models.CharField(
         verbose_name="Текст сообщения",
@@ -74,11 +70,21 @@ class FeedbackFile(models.Model):
         verbose_name="Обратная связь",
     )
     file = models.FileField(
-        upload_to=get_upload_path,
+        upload_to="uploads/temp",
         null=True,
         blank=True,
         verbose_name="Файл обратной связи",
     )
+
+    @staticmethod
+    def get_upload_path(instance, filename):
+        return f"uploads/{instance.feedback_id}/{filename}"
+
+    def save(self, *args, **kwargs):
+        if not self.feedback_id:
+            super().save(*args, **kwargs)
+        self.file.field.upload_to = self.get_upload_path(self, self.file.name)
+        super().save(*args, **kwargs)
 
     class Meta:
         verbose_name = "Файл обратной связи"
