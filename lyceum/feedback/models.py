@@ -83,6 +83,7 @@ class FeedbackFile(models.Model):
     def save(self, *args, **kwargs):
         if not self.feedback_id:
             super().save(*args, **kwargs)
+
         self.file.field.upload_to = self.get_upload_path(self, self.file.name)
         super().save(*args, **kwargs)
 
