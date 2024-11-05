@@ -77,14 +77,14 @@ class FeedbackFile(models.Model):
     )
 
     @staticmethod
-    def get_upload_path(instance, filename):
-        return f"uploads/{instance.feedback_id}/{filename}"
+    def get_upload_path(instance):
+        return f"uploads/{instance.feedback_id}/"
 
     def save(self, *args, **kwargs):
         if not self.feedback_id:
             super().save(*args, **kwargs)
 
-        self.file.field.upload_to = self.get_upload_path(self, self.file.name)
+        self.file.field.upload_to = self.get_upload_path(self)
         super().save(*args, **kwargs)
 
     class Meta:
