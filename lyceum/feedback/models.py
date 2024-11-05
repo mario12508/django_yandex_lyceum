@@ -1,11 +1,11 @@
-from pathlib import Path
+import os
 
 from django.conf import settings
 from django.db import models
 
 
-def feedback_upload_to(instance, filename):
-    return Path("uploads") / str(instance.feedback.id) / filename
+def get_upload_path(instance, filename):
+    return f"uploads/{instance.feedback_id}/{filename}"
 
 
 class Feedback(models.Model):
@@ -76,7 +76,7 @@ class FeedbackFile(models.Model):
         verbose_name="Обратная связь",
     )
     file = models.FileField(
-        upload_to=feedback_upload_to,
+        upload_to=get_upload_path,
         null=True,
         blank=True,
         verbose_name="Файл обратной связи",
