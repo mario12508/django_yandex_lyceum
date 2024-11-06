@@ -76,7 +76,7 @@ class FeedbackFormTests(TestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.form_author = feedback.forms.UserProfileForm()
+        cls.form_author = feedback.forms.FeedbackUserProfileForm()
         cls.form_content = feedback.forms.FeedbackForm()
 
     def test_feedback_show_correct_context(self):
@@ -169,7 +169,7 @@ class FeedbackFormTests(TestCase):
         )
 
     def test_user_profile_form_labels_and_help_texts(self):
-        form = feedback.forms.UserProfileForm()
+        form = feedback.forms.FeedbackUserProfileForm()
         self.assertEqual(form.fields["name"].label, "Имя")
         self.assertEqual(form.fields["mail"].label, "Почта")
         self.assertEqual(

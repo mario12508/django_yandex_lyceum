@@ -4,7 +4,7 @@ from django.db import models
 
 class Feedback(models.Model):
     text = models.CharField(
-        verbose_name="Текст сообщения",
+        verbose_name="текст сообщения",
         help_text="Максимальная длина 500 символов",
         max_length=500,
     )
@@ -14,7 +14,7 @@ class Feedback(models.Model):
         verbose_name="дата и время создания",
     )
     status = models.CharField(
-        verbose_name="Статус сообщения",
+        verbose_name="статус сообщения",
         help_text="может быть трёх видов: "
         "«получено», «в обработке» и «ответ дан»",
         max_length=11,
@@ -27,36 +27,36 @@ class Feedback(models.Model):
     )
 
     class Meta:
-        verbose_name = "Обратная связь"
-        verbose_name_plural = "Обратные связи"
+        verbose_name = "обратная связь"
+        verbose_name_plural = "обратные связи"
 
     def __str__(self):
         return f"{self.id}"
 
 
-class UserProfile(models.Model):
+class FeedbackUserProfile(models.Model):
     author = models.OneToOneField(
         Feedback,
         on_delete=models.SET_NULL,
-        verbose_name="Профиль пользователя",
+        verbose_name="профиль пользователя",
         related_name="feedbacks",
         null=True,
     )
     name = models.CharField(
-        verbose_name="Имя пользователя",
+        verbose_name="имя пользователя",
         help_text="Максимальная длина 100 символов",
         max_length=100,
         blank=True,
         null=True,
     )
     mail = models.EmailField(
-        verbose_name="Адрес электронной почты",
+        verbose_name="адрес электронной почты",
         help_text="Введите корректный адрес электронной почты",
     )
 
     class Meta:
-        verbose_name = "Профиль пользователя"
-        verbose_name_plural = "Профили пользователей"
+        verbose_name = "профиль пользователя"
+        verbose_name_plural = "профили пользователей"
 
     def __str__(self):
         return f"Профиль пользователя {self.name} ({self.mail})"
@@ -70,18 +70,18 @@ class FeedbackFile(models.Model):
         Feedback,
         on_delete=models.CASCADE,
         related_name="files",
-        verbose_name="Обратная связь",
+        verbose_name="обратная связь",
     )
     file = models.FileField(
         upload_to=get_upload_path,
         null=True,
         blank=True,
-        verbose_name="Файл обратной связи",
+        verbose_name="файл обратной связи",
     )
 
     class Meta:
-        verbose_name = "Файл обратной связи"
-        verbose_name_plural = "Файлы обратных связей"
+        verbose_name = "файл обратной связи"
+        verbose_name_plural = "файлы обратных связей"
 
     def __str__(self):
         return f"{self.feedback}"
@@ -92,11 +92,11 @@ class StatusLog(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
         null=True,
-        verbose_name="Пользователь",
+        verbose_name="пользователь",
     )
     feedback = models.ForeignKey(
         Feedback,
-        verbose_name="Обратная связь",
+        verbose_name="обратная связь",
         on_delete=models.SET_NULL,
         null=True,
     )
@@ -109,7 +109,7 @@ class StatusLog(models.Model):
         ),
         db_column="from",
         max_length=11,
-        verbose_name="Перешел из состояния",
+        verbose_name="перешел из состояния",
     )
     status_to = models.CharField(
         choices=(
@@ -119,7 +119,7 @@ class StatusLog(models.Model):
         ),
         db_column="to",
         max_length=11,
-        verbose_name="Перешел в состояние",
+        verbose_name="перешел в состояние",
     )
 
     class Meta:

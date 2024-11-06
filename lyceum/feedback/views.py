@@ -3,13 +3,17 @@ from django.contrib import messages
 from django.core.mail import send_mail
 from django.shortcuts import redirect, render
 
-from feedback.forms import FeedbackFileForm, FeedbackForm, UserProfileForm
+from feedback.forms import (
+    FeedbackFileForm,
+    FeedbackForm,
+    FeedbackUserProfileForm,
+)
 from feedback.models import FeedbackFile
 
 
 def feedback(request):
     template = "feedback/feedback.html"
-    author_form = UserProfileForm(request.POST or None)
+    author_form = FeedbackUserProfileForm(request.POST or None)
     content_form = FeedbackForm(request.POST or None)
     files_form = FeedbackFileForm(request.POST or None)
     if (
@@ -23,8 +27,8 @@ def feedback(request):
         author_profile.save()
 
         files_form = request.FILES.getlist("file")
-        for f in files_form:
-            FeedbackFile.objects.create(feedback=feedback_item, file=f)
+        for file in files_form:
+            FeedbackFile.objects.create(feedback=feedback_item, file=file)
 
         text = content_form.cleaned_data["text"]
         mail = author_form.cleaned_data["mail"]

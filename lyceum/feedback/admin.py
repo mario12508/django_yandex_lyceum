@@ -1,14 +1,19 @@
 from django.contrib import admin
 
-from feedback.models import Feedback, FeedbackFile, StatusLog, UserProfile
+from feedback.models import (
+    Feedback,
+    FeedbackFile,
+    FeedbackUserProfile,
+    StatusLog,
+)
 
 
 class UserProfileInline(admin.TabularInline):
-    model = UserProfile
+    model = FeedbackUserProfile
     can_delete = False
     list_display = (
-        UserProfile.name.field.name,
-        UserProfile.mail.field.name,
+        FeedbackUserProfile.name.field.name,
+        FeedbackUserProfile.mail.field.name,
     )
 
 

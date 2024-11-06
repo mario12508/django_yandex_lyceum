@@ -1,36 +1,36 @@
 from django import forms
 
-from feedback.models import Feedback, FeedbackFile, UserProfile
+from feedback.models import Feedback, FeedbackFile, FeedbackUserProfile
 
 
 class MultipleFileInput(forms.ClearableFileInput):
     allow_multiple_selected = True
 
 
-class UserProfileForm(forms.ModelForm):
+class FeedbackUserProfileForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for field in self.visible_fields():
             field.field.widget.attrs["class"] = "form-control"
 
     class Meta:
-        model = UserProfile
+        model = FeedbackUserProfile
         fields = (
-            UserProfile.name.field.name,
-            UserProfile.mail.field.name,
+            FeedbackUserProfile.name.field.name,
+            FeedbackUserProfile.mail.field.name,
         )
         labels = {
-            UserProfile.name.field.name: "Имя",
-            UserProfile.mail.field.name: "Почта",
+            FeedbackUserProfile.name.field.name: "Имя",
+            FeedbackUserProfile.mail.field.name: "Почта",
         }
         help_texts = {
-            UserProfile.name.field.name: "Максимум 100 символов",
-            UserProfile.mail.field.name: "Введите корректный "
+            FeedbackUserProfile.name.field.name: "Максимум 100 символов",
+            FeedbackUserProfile.mail.field.name: "Введите корректный "
             "адрес электронной почты",
         }
         widgets = {
-            UserProfile.name.field.name: forms.TextInput(),
-            UserProfile.mail.field.name: forms.EmailInput(),
+            FeedbackUserProfile.name.field.name: forms.TextInput(),
+            FeedbackUserProfile.mail.field.name: forms.EmailInput(),
         }
 
 
