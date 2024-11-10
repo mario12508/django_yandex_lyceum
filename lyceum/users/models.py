@@ -22,7 +22,7 @@ class Profile(models.Model):
         null=True,
         blank=True,
     )
-    coffee_count = models.IntegerField(
+    coffee_count = models.PositiveIntegerField(
         default=0,
         verbose_name="количество переходов по /coffee/",
     )
