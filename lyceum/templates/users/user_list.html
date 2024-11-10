@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Список активных пользователей{% endblock title %}
+
+{% block content %}
+
+<div class="col-md-8 offset-md-2">
+  <h2 class="text-center">Список активных пользователей</h2>
+  <ul class="list-group">
+  {% for profile in user_list %}
+      <li class="list-group-item">
+        {{ profile.user.username }}
+        {{ profile.birthday|date:"d m" }}
+        {% if profile.image %}
+          <img src="/media/{{ profile.image }}" alt="User Image" width="50px" height="50px">
+        {% endif %}
+        <a href="{% url 'users:user_detail' pk=profile.id%}">Посмотреть</a>
+      </li>
+  {% empty %}
+      <li class="list-group-item">Нет активных пользователей.</li>
+  {% endfor %}
+  </ul>
+</div>
+
+{% endblock content %}

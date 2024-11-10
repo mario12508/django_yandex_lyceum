@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Профиль пользователя</h1>
+
+<img src="{{ user.image.url }}" alt="Фото {{ user.user.username }}" width="150" height="150">
+
+<p><strong>Имя пользователя:</strong> {{ user.user.username }}</p>
+<p><strong>Email:</strong> {{ user.user.email }}</p>
+
+<p><strong>Имя:</strong> {% if user.user.first_name %}{{ user.user.first_name }}{% else %}не указано{% endif %}</p>
+<p><strong>Фамилия:</strong> {% if user.user.last_name %}{{ user.user.last_name }}{% else %}не указано{% endif %}</p>
+<p><strong>Дата рождения:</strong> {% if user.birthday %}{{ user.birthday|date:"d F" }}{% else %}не указано{% endif %}</p>
+
+<p><strong>Количество попыток выпить кофе:</strong> {{ user.coffee_count }}</p>
+
+<a href="{% url 'users:profile' %}">Редактировать профиль</a>
+
+{% endblock %}

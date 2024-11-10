@@ -1,5 +1,5 @@
 [flake8]
-application-import-names = about,catalog,core,homepage,download,feedback
+application-import-names = about,catalog,core,homepage,download,feedback,users
 exclude = .git,__pycache__,venv,*/migrations/
 import-order-style = google
 max-line-length = 79

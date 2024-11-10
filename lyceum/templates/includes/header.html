@@ -23,6 +23,15 @@
                     <li class="nav-item">
                         <a class="nav-link {% if request.resolver_match.view_name == 'feedback:feedback' %}active{% endif %}" href="{% url 'feedback:feedback' %}">{% trans "Обратная связь" %}</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link " href="{% url 'users:login' %}">Вход</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link " href="{% url 'users:logout' %}">Выход</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link " href="{% url 'users:profile' %}">Профиль</a>
+                    </li>
                     {% if user.is_superuser %}
                     <li class="nav-item">
                         <a class="nav-link " href="/admin/">Админ панель</a>
