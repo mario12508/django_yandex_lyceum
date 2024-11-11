@@ -1,9 +1,10 @@
 import unittest.mock
 
-from django.contrib.auth.models import User
 from django.core import signing
 from django.test import TestCase
 from django.urls import reverse
+
+from users.models import User
 
 
 class UserRegistrationTests(TestCase):
