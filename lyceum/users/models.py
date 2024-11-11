@@ -1,11 +1,13 @@
-from django.contrib.auth.models import (User as DjangoUser,
-                                        UserManager as DjangoUserManager)
+from django.contrib.auth.models import (
+    User as DjangoUser,
+    UserManager as DjangoUserManager,
+)
 from django.db import models
 
 
 class CustomUserManager(DjangoUserManager):
     def active(self):
-        return self.filter(is_active=True).select_related('profile')
+        return self.filter(is_active=True).select_related("profile")
 
     def by_mail(self, email):
         return self.active().filter(email=email).first()
@@ -16,8 +18,14 @@ class User(DjangoUser):
 
     class Meta:
         proxy = True
-        verbose_name = 'Пользователь'
-        verbose_name_plural = 'Пользователи'
+        verbose_name = "Пользователь"
+        verbose_name_plural = "Пользователи"
+
+    def save(self, *args, **kwargs):
+        if not self.email:
+            raise ValueError("Поле 'email' обязательно.")
+
+        super().save(*args, **kwargs)
 
 
 class Profile(models.Model):

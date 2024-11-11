@@ -2,7 +2,6 @@ from django.conf import settings
 from django.contrib import auth, messages
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import AuthenticationForm
 from django.core import signing
 from django.core.mail import send_mail
 from django.http import HttpResponseNotFound, HttpResponseRedirect
@@ -10,7 +9,12 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import render_to_string
 from django.urls import reverse
 
-from users.forms import ProfileUpdateForm, SignUpForm, UserChangeForm
+from users.forms import (
+    CustomAuthenticationForm,
+    ProfileUpdateForm,
+    SignUpForm,
+    UserChangeForm,
+)
 from users.models import Profile
 
 
@@ -131,13 +135,12 @@ def profile_view(request):
 
 def login_view(request):
     template_name = "users/login.html"
-    form = AuthenticationForm(request, data=request.POST or None)
+    form = CustomAuthenticationForm(request, data=request.POST or None)
 
     if form.is_valid() and request.method == "POST":
-        user = form.get_user()
-        login(request, user)
+        login(request, form.cleaned_data["user"])
         messages.success(request, "Вы успешно вошли в систему.")
-        return redirect("homepage:main")  # Замените на нужное представление
+        return redirect("users:profile")
 
     context = {"form": form}
     return render(request, template_name, context)
