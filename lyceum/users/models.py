@@ -31,7 +31,6 @@ class CustomUser(AbstractUser):
             raise ValidationError("Пользователь с таким email уже существует.")
 
 
-
 class User(CustomUser):
     objects = CustomUserManager()
 
