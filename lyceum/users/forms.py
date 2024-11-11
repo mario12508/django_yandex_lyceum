@@ -77,21 +77,20 @@ class CustomAuthenticationForm(AuthenticationForm):
         username = self.cleaned_data.get("username")
         password = self.cleaned_data.get("password")
 
-        # Поиск пользователя по email или username
-        user = (
-            User.objects.by_mail(username)
-            if "@" in username
-            else (User.objects.filter(username=username).first())
-        )
+        if "@" in username:
+            user = User.objects.filter(email=username).first()
+        else:
+            user = User.objects.filter(username=username).first()
 
         if user and user.check_password(password):
-            if not user.is_active:
-                raise forms.ValidationError("Аккаунт не активен.")
+            self.user_cache = user
+        else:
+            raise forms.ValidationError("Неправильные данные для входа.")
 
-            self.cleaned_data["user"] = user
-            return self.cleaned_data
+        return self.cleaned_data
 
-        raise forms.ValidationError("Неправильные данные для входа.")
+    def get_user(self):
+        return self.user_cache
 
 
 __all__ = []

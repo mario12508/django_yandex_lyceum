@@ -2,7 +2,11 @@ from django.contrib.auth.models import (
     User as DjangoUser,
     UserManager as DjangoUserManager,
 )
+from django.core.exceptions import ValidationError
 from django.db import models
+
+
+DjangoUser._meta.get_field("email")._unique = True
 
 
 class CustomUserManager(DjangoUserManager):
@@ -24,6 +28,15 @@ class User(DjangoUser):
     def save(self, *args, **kwargs):
         if not self.email:
             raise ValueError("Поле 'email' обязательно.")
+
+        # Проверка уникальности email перед сохранением
+        if (
+            User.objects.active()
+            .filter(email=self.email)
+            .exclude(pk=self.pk)
+            .exists()
+        ):
+            raise ValidationError("Пользователь с таким email уже существует.")
 
         super().save(*args, **kwargs)
 
