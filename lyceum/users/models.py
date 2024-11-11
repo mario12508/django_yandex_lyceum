@@ -14,7 +14,7 @@ class CustomUserManager(DjangoUserManager):
 
 
 class CustomUser(AbstractUser):
-    email = models.EmailField(unique=True, null=True, blank=True)
+    email = models.EmailField(unique=True)
 
     class Meta:
         unique_together = ("email",)
@@ -33,6 +33,9 @@ class User(CustomUser):
 
     def get_profile(self):
         return self.profile
+
+
+User._meta.get_field("email")._unique = True
 
 
 class Profile(models.Model):
