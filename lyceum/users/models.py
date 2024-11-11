@@ -2,6 +2,7 @@ from django.contrib.auth.models import (
     AbstractUser,
     UserManager as DjangoUserManager,
 )
+from django.core.exceptions import ValidationError
 from django.db import models
 
 
@@ -9,16 +10,26 @@ class CustomUserManager(DjangoUserManager):
     def active(self):
         return self.filter(is_active=True).select_related("profile")
 
-    def by_mail(self, mail):
-        return self.active().filter(mail=mail).first()
+    def by_mail(self, email):
+        return self.active().filter(email=email).first()
 
 
 class CustomUser(AbstractUser):
-    mail = models.EmailField(unique=True)
+    email = models.EmailField(unique=False)
 
     class Meta:
         verbose_name = "Пользователь"
         verbose_name_plural = "Пользователи"
+
+    def clean(self):
+        if (
+            CustomUser.objects.filter(email=self.email)
+            .exclude(pk=self.pk)
+            .exists()
+        ):
+            raise ValidationError(
+                "Этот email уже используется другим пользователем.",
+            )
 
     def __str__(self):
         return self.username
