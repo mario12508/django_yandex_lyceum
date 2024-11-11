@@ -1,7 +1,6 @@
 from django import forms
 from django.contrib import auth
 from django.contrib.auth.forms import AuthenticationForm
-import django.contrib.auth.models as auth_models
 
 from users.models import Profile, User
 
@@ -14,11 +13,12 @@ class SignUpForm(auth.forms.UserCreationForm):
 
     class Meta(auth.forms.UserCreationForm.Meta):
         fields = [
-            auth_models.User.email.field.name,
-            auth_models.User.username.field.name,
+            User.email.field.name,
+            User.username.field.name,
             "password1",
             "password2",
         ]
+        model = User
 
 
 class ProfileUpdateForm(forms.ModelForm):
@@ -61,13 +61,14 @@ class UserChangeForm(auth.forms.UserChangeForm):
 
     class Meta(auth.forms.UserChangeForm.Meta):
         fields = [
-            auth_models.User.first_name.field.name,
-            auth_models.User.last_name.field.name,
-            auth_models.User.email.field.name,
+            User.first_name.field.name,
+            User.last_name.field.name,
+            User.email.field.name,
         ]
         exclude = [
-            auth_models.User.password.field.name,
+            User.password.field.name,
         ]
+        model = User
 
 
 class CustomAuthenticationForm(AuthenticationForm):

@@ -1,12 +1,8 @@
 from django.contrib.auth.models import (
-    User as DjangoUser,
+    AbstractUser,
     UserManager as DjangoUserManager,
 )
-from django.core.exceptions import ValidationError
 from django.db import models
-
-
-DjangoUser._meta.get_field("email")._unique = True
 
 
 class CustomUserManager(DjangoUserManager):
@@ -17,28 +13,25 @@ class CustomUserManager(DjangoUserManager):
         return self.active().filter(email=email).first()
 
 
-class User(DjangoUser):
+class CustomUser(AbstractUser):
+    email = models.EmailField(unique=True)
+
+    class Meta:
+        verbose_name = "Пользователь"
+        verbose_name_plural = "Пользователи"
+
+    def __str__(self):
+        return self.username
+
+
+class User(CustomUser):
     objects = CustomUserManager()
 
     class Meta:
         proxy = True
-        verbose_name = "Пользователь"
-        verbose_name_plural = "Пользователи"
 
-    def save(self, *args, **kwargs):
-        if not self.email:
-            raise ValueError("Поле 'email' обязательно.")
-
-        # Проверка уникальности email перед сохранением
-        if (
-            User.objects.active()
-            .filter(email=self.email)
-            .exclude(pk=self.pk)
-            .exists()
-        ):
-            raise ValidationError("Пользователь с таким email уже существует.")
-
-        super().save(*args, **kwargs)
+    def get_profile(self):
+        return self.profile
 
 
 class Profile(models.Model):
@@ -46,7 +39,7 @@ class Profile(models.Model):
         return f"uploads/{self.id}/{filename}"
 
     user = models.OneToOneField(
-        DjangoUser,
+        User,
         on_delete=models.CASCADE,
         verbose_name="пользователь",
     )

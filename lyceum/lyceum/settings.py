@@ -30,6 +30,7 @@ DEFAULT_USER_IS_ACTIVE = os.getenv(
     default=DEBUG,
 )
 
+AUTH_USER_MODEL = "users.CustomUser"
 
 # Application definition
 
@@ -94,7 +95,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "lyceum.wsgi.application"
 
-
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
@@ -105,29 +105,27 @@ DATABASES = {
     },
 }
 
-
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation."
-        "UserAttributeSimilarityValidator",
+                "UserAttributeSimilarityValidator",
     },
     {
         "NAME": "django.contrib.auth.password_validation."
-        "MinimumLengthValidator",
+                "MinimumLengthValidator",
     },
     {
         "NAME": "django.contrib.auth.password_validation."
-        "CommonPasswordValidator",
+                "CommonPasswordValidator",
     },
     {
         "NAME": "django.contrib.auth.password_validation."
-        "NumericPasswordValidator",
+                "NumericPasswordValidator",
     },
 ]
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
@@ -144,7 +142,6 @@ TIME_ZONE = "UTC"
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
@@ -326,7 +323,6 @@ CACHES = {
 }
 
 CKEDITOR_5_FILE_UPLOAD_PERMISSION = "staff"
-
 
 __all__ = [
     "BASE_DIR",

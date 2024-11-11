@@ -21,7 +21,6 @@ class UserAdmin(BaseUserAdmin):
     readonly_fields = ("last_login", "date_joined")
 
 
-admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
 
 
