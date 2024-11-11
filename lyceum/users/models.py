@@ -9,8 +9,8 @@ class CustomUserManager(DjangoUserManager):
     def active(self):
         return self.filter(is_active=True).select_related("profile")
 
-    def by_mail(self, email):
-        return self.active().filter(email=email).first()
+    def by_mail(self, mail):
+        return self.active().filter(mail=mail).first()
 
 
 class CustomUser(AbstractUser):
