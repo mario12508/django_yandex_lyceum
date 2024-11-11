@@ -29,6 +29,7 @@ class User(CustomUser):
     objects = CustomUserManager()
 
     class Meta:
+        managed = False
         proxy = True
 
     def get_profile(self):
