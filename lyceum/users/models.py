@@ -14,7 +14,7 @@ class CustomUserManager(DjangoUserManager):
 
 
 class CustomUser(AbstractUser):
-    email = models.EmailField(unique=True)
+    mail = models.EmailField(unique=True)
 
     class Meta:
         verbose_name = "Пользователь"
