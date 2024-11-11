@@ -66,6 +66,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "lyceum.middleware.ReverseRussianWordsMiddleware",
+    'users.middleware.CustomUserMiddleware',
 ]
 
 if DEBUG is True:

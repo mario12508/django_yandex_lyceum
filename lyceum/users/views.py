@@ -1,9 +1,11 @@
 from django.conf import settings
 from django.contrib import auth, messages
+from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import AuthenticationForm
 from django.core import signing
 from django.core.mail import send_mail
-from django.http import HttpResponseNotFound
+from django.http import HttpResponseNotFound, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import render_to_string
 from django.urls import reverse
@@ -125,6 +127,26 @@ def profile_view(request):
         return redirect("users:profile")
 
     return render(request, template_name, context)
+
+
+def login_view(request):
+    template_name = "users/login.html"
+    form = AuthenticationForm(request, data=request.POST or None)
+
+    if form.is_valid() and request.method == "POST":
+        user = form.get_user()
+        login(request, user)
+        messages.success(request, "Вы успешно вошли в систему.")
+        return redirect("homepage:main")  # Замените на нужное представление
+
+    context = {"form": form}
+    return render(request, template_name, context)
+
+
+def logout_view(request):
+    logout(request)
+    messages.info(request, "Вы успешно вышли из системы.")
+    return HttpResponseRedirect(reverse("users:login"))
 
 
 __all__ = []

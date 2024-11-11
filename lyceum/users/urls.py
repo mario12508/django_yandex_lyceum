@@ -7,20 +7,8 @@ from users import views
 app_name = "users"
 
 urlpatterns = [
-    path(
-        "login/",
-        views_django.LoginView.as_view(
-            template_name="users/login.html",
-        ),
-        name="login",
-    ),
-    path(
-        "logout/",
-        views_django.LogoutView.as_view(
-            template_name="users/logout.html",
-        ),
-        name="logout",
-    ),
+    path("login/", views.login_view, name="login"),
+    path("logout/", views.logout_view, name="logout"),
     path(
         "signup/",
         views.signup_view,

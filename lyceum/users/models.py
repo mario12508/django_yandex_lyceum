@@ -1,5 +1,23 @@
-from django.contrib.auth.models import User
+from django.contrib.auth.models import (User as DjangoUser,
+                                        UserManager as DjangoUserManager)
 from django.db import models
+
+
+class CustomUserManager(DjangoUserManager):
+    def active(self):
+        return self.filter(is_active=True).select_related('profile')
+
+    def by_mail(self, email):
+        return self.active().filter(email=email).first()
+
+
+class User(DjangoUser):
+    objects = CustomUserManager()
+
+    class Meta:
+        proxy = True
+        verbose_name = 'Пользователь'
+        verbose_name_plural = 'Пользователи'
 
 
 class Profile(models.Model):
@@ -7,7 +25,7 @@ class Profile(models.Model):
         return f"uploads/{self.id}/{filename}"
 
     user = models.OneToOneField(
-        User,
+        DjangoUser,
         on_delete=models.CASCADE,
         verbose_name="пользователь",
     )

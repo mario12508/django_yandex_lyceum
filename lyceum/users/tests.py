@@ -97,4 +97,26 @@ class UserActivationTests(TestCase):
         self.assertEqual(response.status_code, 404)
 
 
+class LoginTests(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(username="testuser",
+                                             email="test@example.com",
+                                             password="password123",
+                                             is_active=True)
+
+    def test_login_with_username(self):
+        response = self.client.post(reverse("users:login"),
+                                    {"username": "testuser",
+                                     "password": "password123"})
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response.wsgi_request.user.is_authenticated)
+
+    def test_login_with_email(self):
+        response = self.client.post(reverse("users:login"),
+                                    {"username": "test@example.com",
+                                     "password": "password123"})
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response.wsgi_request.user.is_authenticated)
+
+
 __all__ = []

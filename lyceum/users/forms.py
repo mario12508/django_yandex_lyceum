@@ -1,8 +1,9 @@
 from django import forms
 from django.contrib import auth
 import django.contrib.auth.models as auth_models
+from django.contrib.auth.forms import AuthenticationForm
 
-from users.models import Profile
+from users.models import Profile, User
 
 
 class SignUpForm(auth.forms.UserCreationForm):
@@ -67,6 +68,26 @@ class UserChangeForm(auth.forms.UserChangeForm):
         exclude = [
             auth_models.User.password.field.name,
         ]
+
+
+class CustomAuthenticationForm(AuthenticationForm):
+    username = forms.CharField(label="Имя пользователя или Email")
+
+    def clean(self):
+        username = self.cleaned_data.get('username')
+        password = self.cleaned_data.get('password')
+
+        user = (
+            User.objects.by_mail(username)
+            if "@" in username else User.objects.filter(username=username).first()
+        )
+
+        if user and user.check_password(password):
+            if not user.is_active:
+                raise forms.ValidationError("Аккаунт не активен.")
+            return self.cleaned_data
+
+        raise forms.ValidationError("Неправильные данные для входа.")
 
 
 __all__ = []
