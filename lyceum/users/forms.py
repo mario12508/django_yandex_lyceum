@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib import auth
 from django.contrib.auth.forms import AuthenticationForm
+from django.core.exceptions import ValidationError
 
 from users.models import Profile, User
 
@@ -10,6 +11,19 @@ class SignUpForm(auth.forms.UserCreationForm):
         super().__init__(*args, **kwargs)
         for field in self.visible_fields():
             field.field.widget.attrs["class"] = "form-control"
+
+    def clean_email(self):
+        email = self.cleaned_data.get("email")
+        username = self.cleaned_data.get("username")
+        if (
+            email
+            and User.objects.filter(email=email)
+            .exclude(username=username)
+            .exists()
+        ):
+            raise ValidationError("Email addresses must be unique.")
+
+        return email
 
     class Meta(auth.forms.UserCreationForm.Meta):
         fields = [
