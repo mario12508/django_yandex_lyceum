@@ -1,13 +1,9 @@
 from django.contrib.auth.models import (
     AbstractUser,
-    User as DefaultUser,
     UserManager as DjangoUserManager,
 )
 from django.core.exceptions import ValidationError
 from django.db import models
-
-
-DefaultUser._meta.get_field("email")._unique = True
 
 
 class CustomUserManager(DjangoUserManager):
@@ -41,6 +37,9 @@ class User(CustomUser):
 
     def get_profile(self):
         return self.profile
+
+
+User._meta.get_field("email")._unique = True
 
 
 class Profile(models.Model):
