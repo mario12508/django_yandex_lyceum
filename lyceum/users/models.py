@@ -15,7 +15,10 @@ class CustomUserManager(DjangoUserManager):
 
 
 class CustomUser(AbstractUser):
+    email = models.EmailField(unique=True)
+
     class Meta:
+        unique_together = ("email",)
         verbose_name = "Пользователь"
         verbose_name_plural = "Пользователи"
 
