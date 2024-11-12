@@ -1,4 +1,4 @@
-import sys
+import argparse
 
 from django.contrib.auth.models import (
     AbstractUser,
@@ -9,7 +9,15 @@ from django.core.exceptions import ValidationError
 from django.db import models
 
 
-if "makemigrations" not in sys.argv and "migrate" not in sys.argv:
+def is_migration_command():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("command", nargs="?")
+    args, _ = parser.parse_known_args()
+
+    return args.command in ["makemigrations", "migrate"]
+
+
+if not is_migration_command():
     DefaultUser._meta.get_field("email")._unique = True
 
 
@@ -23,7 +31,6 @@ class CustomUserManager(DjangoUserManager):
 
 class CustomUser(AbstractUser):
     class Meta:
-        unique_together = ("email",)
         verbose_name = "Пользователь"
         verbose_name_plural = "Пользователи"
 
@@ -40,7 +47,6 @@ class User(CustomUser):
     objects = CustomUserManager()
 
     class Meta:
-        managed = False
         proxy = True
 
     def get_profile(self):
