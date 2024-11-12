@@ -18,7 +18,7 @@ class CustomUserManager(DjangoUserManager):
 
 class CustomUser(AbstractUser):
     class Meta:
-        unique_together = ('email',)
+        unique_together = ("email",)
         verbose_name = "Пользователь"
         verbose_name_plural = "Пользователи"
 
@@ -42,8 +42,8 @@ class User(CustomUser):
         return self.profile
 
 
-if 'makemigrations' not in sys.argv and 'migrate' not in sys.argv:
-    User._meta.get_field('email')._unique = True
+if "makemigrations" not in sys.argv and "migrate" not in sys.argv:
+    User._meta.get_field("email")._unique = True
 
 
 class Profile(models.Model):
