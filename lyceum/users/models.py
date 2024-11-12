@@ -1,13 +1,11 @@
+import sys
+
 from django.contrib.auth.models import (
-    User as UserDefault,
     AbstractUser,
     UserManager as DjangoUserManager,
 )
 from django.core.exceptions import ValidationError
 from django.db import models
-
-
-UserDefault._meta.get_field("email")._unique = True
 
 
 class CustomUserManager(DjangoUserManager):
@@ -20,6 +18,7 @@ class CustomUserManager(DjangoUserManager):
 
 class CustomUser(AbstractUser):
     class Meta:
+        unique_together = ('email',)
         verbose_name = "Пользователь"
         verbose_name_plural = "Пользователи"
 
@@ -41,6 +40,10 @@ class User(CustomUser):
 
     def get_profile(self):
         return self.profile
+
+
+if 'makemigrations' not in sys.argv and 'migrate' not in sys.argv:
+    User._meta.get_field('email')._unique = True
 
 
 class Profile(models.Model):
