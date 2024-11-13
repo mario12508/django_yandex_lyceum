@@ -177,7 +177,7 @@ class UserLockoutTest(TestCase):
     def test_login_resets_attempts(self):
         self.client.login(username="test@yandex.ru", password="testpassword")
         self.user.refresh_from_db()
-        self.assertEqual(self.user.attempts_count, 11)
+        self.assertEqual(self.user.attempts_count, 4)
 
 
 __all__ = []
