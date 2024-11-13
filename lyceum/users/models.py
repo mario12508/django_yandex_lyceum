@@ -48,7 +48,7 @@ class CustomUserManager(DjangoUserManager):
 
 class CustomUser(AbstractUser):
     attempts_count = models.PositiveIntegerField(
-        default=settings.MAX_AUTH_ATTEMPTS,
+        default=0,
     )
 
     class Meta:
