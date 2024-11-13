@@ -25,6 +25,7 @@ if not is_migration_command():
 
 class CustomUserManager(DjangoUserManager):
     def normalize_email(self, email):
+        email = super().normalize_email(email)
         email = email.lower()
         local_part, domain = email.split("@")
 
