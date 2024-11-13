@@ -24,6 +24,8 @@ class CustomUserManager(DjangoUserManager):
         email = email.lower()
         local_part, domain = email.split("@")
 
+        local_part = local_part.split("+")[0]
+
         if domain in ["yandex.ru", "ya.ru"]:
             domain = "yandex.ru"
             local_part = local_part.replace(".", "-")
