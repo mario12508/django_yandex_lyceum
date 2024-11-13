@@ -1,9 +1,11 @@
 import argparse
+import re
 
+from django.conf import settings
 from django.contrib.auth.models import (
     AbstractUser,
+    BaseUserManager as DjangoUserManager,
     User as DefaultUser,
-    UserManager as DjangoUserManager,
 )
 from django.core.exceptions import ValidationError
 from django.db import models
@@ -22,14 +24,35 @@ if not is_migration_command():
 
 
 class CustomUserManager(DjangoUserManager):
+    def normalize_email(self, email):
+        email = email.lower()
+        local_part, domain = email.split("@")
+
+        if domain in ["yandex.ru", "ya.ru"]:
+            domain = "yandex.ru"
+            local_part = local_part.replace(".", "-")
+        elif domain == "gmail.com":
+            local_part = local_part.replace(".", "")
+
+        local_part = re.sub(r"\+.*", "", local_part)
+        return f"{local_part}@{domain}"
+
+    def get_queryset(self):
+        return super().get_queryset().select_related("profile")
+
     def active(self):
         return self.filter(is_active=True).select_related("profile")
 
     def by_mail(self, email):
-        return self.active().filter(email=email).first()
+        normalized_email = self.normalize_email(email)
+        return self.active().filter(email=normalized_email).first()
 
 
 class CustomUser(AbstractUser):
+    attempts_count = models.PositiveIntegerField(
+        default=settings.MAX_AUTH_ATTEMPTS,
+    )
+
     class Meta:
         verbose_name = "Пользователь"
         verbose_name_plural = "Пользователи"
@@ -45,6 +68,10 @@ class CustomUser(AbstractUser):
 
 class User(CustomUser):
     objects = CustomUserManager()
+
+    def save(self, *args, **kwargs):
+        self.email = User.objects.normalize_email(self.email)
+        super().save(*args, **kwargs)
 
     class Meta:
         proxy = True

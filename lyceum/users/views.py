@@ -15,7 +15,7 @@ from users.forms import (
     SignUpForm,
     UserChangeForm,
 )
-from users.models import Profile
+from users.models import Profile, User
 
 
 def signup_view(request):
@@ -150,6 +150,25 @@ def logout_view(request):
     logout(request)
     messages.info(request, "Вы успешно вышли из системы.")
     return HttpResponseRedirect(reverse("users:login"))
+
+
+def unlock_account(request, signed_username):
+    template_name = "users/activation_success.html"
+    user_model = User
+    signer = signing.TimestampSigner()
+
+    try:
+        username = signer.unsign(signed_username, max_age=3600 * 7)
+        user = user_model.objects.get(username=username)
+    except (signing.BadSignature, user_model.DoesNotExist):
+        return HttpResponseNotFound(
+            "Неверная или просроченная ссылка активации",
+        )
+
+    user.is_active = True
+    user.save()
+
+    return render(request, template_name)
 
 
 __all__ = []

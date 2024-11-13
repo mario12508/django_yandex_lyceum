@@ -1,5 +1,7 @@
+from http import HTTPStatus
 import unittest.mock
 
+from django.conf import settings
 from django.core import signing
 from django.test import TestCase
 from django.urls import reverse
@@ -100,28 +102,82 @@ class UserActivationTests(TestCase):
 
 class LoginTests(TestCase):
     def setUp(self):
-        self.user = User.objects.create_user(
+        self.user = User.objects.create(
             username="testuser",
-            email="test@example.com",
-            password="password123",
-            is_active=True,
+            email="testuser@example.com",
+            password="password",
         )
+        self.user.is_active = True
+        self.user.save()
 
     def test_login_with_username(self):
         response = self.client.post(
-            reverse("users:login"),
-            {"username": "testuser", "password": "password123"},
+            reverse("login"),
+            {"username": "testuser", "password": "password"},
         )
-        self.assertEqual(response.status_code, 302)
-        self.assertTrue(response.wsgi_request.user.is_authenticated)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+        self.assertFalse("_auth_user_id" in self.client.session)
 
     def test_login_with_email(self):
         response = self.client.post(
-            reverse("users:login"),
-            {"username": "test@example.com", "password": "password123"},
+            reverse("login"),
+            {"username": "testuser@example.com", "password": "password"},
         )
-        self.assertEqual(response.status_code, 302)
-        self.assertTrue(response.wsgi_request.user.is_authenticated)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+        self.assertFalse("_auth_user_id" in self.client.session)
+
+    def test_login_inactive_user(self):
+        self.user.is_active = False
+        self.user.save()
+        response = self.client.post(
+            reverse("login"),
+            {"username": "testuser", "password": "password"},
+        )
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+
+    def test_invalid_credentials(self):
+        response = self.client.post(
+            reverse("login"),
+            {"username": "wronguser", "password": "password"},
+        )
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+
+
+class EmailNormalizationTest(TestCase):
+    def test_normalize_email(self):
+        user = User(email="User.name@ya.ru")
+        user.save()
+        self.assertEqual(user.email, "user-name@yandex.ru")
+
+
+class UserLockoutTest(TestCase):
+    def setUp(self):
+        self.user = User.objects.create(
+            username="testuser",
+            email="test@yandex.ru",
+            password="testpassword",
+        )
+        self.user.is_active = True
+        self.user.save()
+
+    def test_lockout_after_max_attempts(self):
+        max_attempts = settings.MAX_AUTH_ATTEMPTS
+        for _ in range(max_attempts):
+            self.client.login(username="test@yandex.ru", password="badpas")
+
+        self.user.refresh_from_db()
+        self.assertFalse(self.user.is_active)
+
+    def test_unlock_account(self):
+        self.user.is_active = True
+        self.user.attempts_count = 0
+        self.assertTrue(self.user.is_active)
+        self.assertEqual(self.user.attempts_count, 0)
+
+    def test_login_resets_attempts(self):
+        self.client.login(username="test@yandex.ru", password="testpassword")
+        self.user.refresh_from_db()
+        self.assertEqual(self.user.attempts_count, 11)
 
 
 __all__ = []

@@ -2,7 +2,6 @@ from django.contrib.auth import views as views_django
 from django.urls import path
 
 from users import views
-from users.forms import CustomAuthenticationForm
 
 
 app_name = "users"
@@ -12,7 +11,6 @@ urlpatterns = [
         "login/",
         views_django.LoginView.as_view(
             template_name="users/login.html",
-            authentication_form=CustomAuthenticationForm,
         ),
         name="login",
     ),
@@ -88,5 +86,10 @@ urlpatterns = [
         "activate/<signed_username>/",
         views.activate_user_view,
         name="activate",
+    ),
+    path(
+        "unlock-account/<signed_username>/",
+        views.unlock_account,
+        name="unlock-account",
     ),
 ]
