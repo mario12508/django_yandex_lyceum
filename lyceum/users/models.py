@@ -5,7 +5,6 @@ from django.conf import settings
 from django.contrib.auth.models import (
     AbstractUser,
     BaseUserManager as DjangoUserManager,
-    User as DefaultUser,
 )
 from django.core.exceptions import ValidationError
 from django.db import models
@@ -17,10 +16,6 @@ def is_migration_command():
     args, _ = parser.parse_known_args()
 
     return args.command in ["makemigrations", "migrate"]
-
-
-if not is_migration_command():
-    DefaultUser._meta.get_field("email")._unique = True
 
 
 class CustomUserManager(DjangoUserManager):
@@ -79,6 +74,10 @@ class User(CustomUser):
 
     def get_profile(self):
         return self.profile
+
+
+if not is_migration_command():
+    User._meta.get_field("email")._unique = True
 
 
 class Profile(models.Model):
