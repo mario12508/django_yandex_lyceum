@@ -1,7 +1,6 @@
 import argparse
 import re
 
-from django.conf import settings
 from django.contrib.auth.models import (
     AbstractUser,
     BaseUserManager as DjangoUserManager,
