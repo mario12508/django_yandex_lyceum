@@ -8,4 +8,4 @@ class PositiveIntegerConverter:
         return str(value)
 
 
-__all__ = ["PositiveIntegerConverter"]
+__all__ = ()

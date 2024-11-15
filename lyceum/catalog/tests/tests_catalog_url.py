@@ -12,4 +12,4 @@ class CatalogURLTests(TestCase):
         self.assertEqual(response.status_code, HTTPStatus.OK)
 
 
-__all__ = ["CatalogURLTests"]
+__all__ = ()

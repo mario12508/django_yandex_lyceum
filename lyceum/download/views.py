@@ -27,4 +27,4 @@ def download_image(request, file_path):
     return response
 
 
-__all__ = ["download_image"]
+__all__ = ()

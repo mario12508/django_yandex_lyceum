@@ -185,4 +185,4 @@ class Gallery(models.Model):
         verbose_name_plural = "изображения в галерее"
 
 
-__all__ = ["Category", "Item", "Gallery", "Tag"]
+__all__ = ()

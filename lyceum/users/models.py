@@ -114,4 +114,4 @@ class Profile(models.Model):
         return f"{self.user.username} - Профиль"
 
 
-__all__ = []
+__all__ = ()

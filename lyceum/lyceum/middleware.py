@@ -37,4 +37,4 @@ class ReverseRussianWordsMiddleware:
         return re.sub(r"\b[а-яА-ЯёЁ]+\b", lambda x: x.group()[::-1], text)
 
 
-__all__ = [ReverseRussianWordsMiddleware]
+__all__ = ()

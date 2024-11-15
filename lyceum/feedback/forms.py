@@ -82,4 +82,4 @@ class FeedbackFileForm(forms.ModelForm):
         }
 
 
-__all__ = ["FeedbackForm"]
+__all__ = ()

@@ -9,4 +9,4 @@ class CustomUserMiddleware(MiddlewareMixin):
             request.user = User.objects.get(pk=request.user.pk)
 
 
-__all__ = ["CustomUserMiddleware"]
+__all__ = ()

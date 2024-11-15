@@ -183,4 +183,4 @@ class CatalogViewsTests(TestCase):
         self.assertIsInstance(response.context["items"], QuerySet)
 
 
-__all__ = ["CatalogViewsTests"]
+__all__ = ()

@@ -180,4 +180,4 @@ class UserLockoutTest(TestCase):
         self.assertEqual(self.user.attempts_count, 1)
 
 
-__all__ = []
+__all__ = ()

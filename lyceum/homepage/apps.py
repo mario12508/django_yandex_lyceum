@@ -7,4 +7,4 @@ class HomepageConfig(AppConfig):
     verbose_name = "Главная страница"
 
 
-__all__ = ["HomepageConfig"]
+__all__ = ()

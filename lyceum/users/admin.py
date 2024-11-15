@@ -17,7 +17,10 @@ class ProfileInline(admin.TabularInline):
 
 class UserAdmin(BaseUserAdmin):
     inlines = (ProfileInline,)
-    readonly_fields = ("last_login", "date_joined")
+    readonly_fields = (
+        User.last_login.field.name,
+        User.date_joined.field.name,
+    )
 
 
 admin.site.register(User, UserAdmin)
@@ -25,4 +28,4 @@ admin.site.unregister(User)
 admin.site.register(User)
 
 
-__all__ = []
+__all__ = ()

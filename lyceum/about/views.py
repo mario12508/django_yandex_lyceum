@@ -7,4 +7,4 @@ def description(request):
     return render(request, template, context)
 
 
-__all__ = ["description"]
+__all__ = ()

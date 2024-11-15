@@ -7,4 +7,4 @@ class DownloadConfig(AppConfig):
     verbose_name = "Загрузка"
 
 
-__all__ = ["DownloadConfig"]
+__all__ = ()

@@ -52,4 +52,4 @@ def feedback(request):
     return render(request, template, context)
 
 
-__all__ = ["feedback"]
+__all__ = ()

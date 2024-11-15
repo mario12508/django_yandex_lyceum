@@ -22,4 +22,4 @@ class ValidateMustContain:
             )
 
 
-__all__ = ["ValidateMustContain"]
+__all__ = ()

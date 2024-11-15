@@ -78,4 +78,4 @@ class CategoryAndTags(DefaultModel):
             )
 
 
-__all__ = ["DefaultModel", "CategoryAndTags"]
+__all__ = ()

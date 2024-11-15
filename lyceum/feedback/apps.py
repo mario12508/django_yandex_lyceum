@@ -7,4 +7,4 @@ class FeedbackConfig(AppConfig):
     verbose_name = "Обратная связь"
 
 
-__all__ = ["FeedbackConfig"]
+__all__ = ()

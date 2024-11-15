@@ -131,4 +131,4 @@ class StatusLog(models.Model):
         return f"Текущее состояние ({self.id})"
 
 
-__all__ = ["Feedback"]
+__all__ = ()

@@ -79,4 +79,4 @@ def unverified_items(request):
     return render(request, template_name, content)
 
 
-__all__ = ["item_list", "item_detail", "number_view"]
+__all__ = ()

@@ -6,4 +6,4 @@ class UsersConfig(AppConfig):
     name = "users"
 
 
-__all__ = ["UsersConfig"]
+__all__ = ()

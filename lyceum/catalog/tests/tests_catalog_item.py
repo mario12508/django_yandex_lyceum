@@ -211,4 +211,4 @@ class CatalogItemTests(TestCase):
             similar_tag.full_clean()
 
 
-__all__ = ["CatalogItemTests"]
+__all__ = ()

@@ -57,4 +57,4 @@ class StatusLogAdmin(admin.ModelAdmin):
     )
 
 
-__all__ = ["FeedbackAdmin", "StatusLogAdmin"]
+__all__ = ()

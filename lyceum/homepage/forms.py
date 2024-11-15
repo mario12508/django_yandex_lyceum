@@ -10,4 +10,4 @@ class EchoForm(forms.Form):
     )
 
 
-__all__ = ["EchoForm"]
+__all__ = ()

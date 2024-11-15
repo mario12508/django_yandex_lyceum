@@ -164,7 +164,6 @@ THUMBNAIL_BACKEND = "sorl.thumbnail.base.ThumbnailBackend"
 
 EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
 EMAIL_FILE_PATH = BASE_DIR / "send_mail/"
-DEFAULT_FROM_EMAIL = "user@users.com"
 EMAIL_HOST = DJANGO_MAIL
 
 LOGIN_URL = "/auth/login/"
@@ -331,31 +330,4 @@ CACHES = {
 
 CKEDITOR_5_FILE_UPLOAD_PERMISSION = "staff"
 
-__all__ = [
-    "BASE_DIR",
-    "SECRET_KEY",
-    "DEBUG",
-    "ALLOWED_HOSTS",
-    "ALLOW_REVERSE",
-    "INSTALLED_APPS",
-    "MIDDLEWARE",
-    "ROOT_URLCONF",
-    "TEMPLATES",
-    "WSGI_APPLICATION",
-    "DATABASES",
-    "AUTH_PASSWORD_VALIDATORS",
-    "LANGUAGE_CODE",
-    "TIME_ZONE",
-    "USE_I18N",
-    "USE_TZ",
-    "STATIC_URL",
-    "STATICFILES_DIRS",
-    "DEFAULT_AUTO_FIELD",
-    "MEDIA_ROOT",
-    "MEDIA_URL",
-    "THUMBNAIL_BACKEND",
-    "CKEDITOR_UPLOAD_PATH",
-    "CKEDITOR_5_CUSTOM_CSS",
-    "CKEDITOR_5_CONFIGS",
-    "CKEDITOR_5_FILE_UPLOAD_PERMISSION",
-]
+__all__ = ()

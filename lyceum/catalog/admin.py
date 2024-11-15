@@ -49,4 +49,4 @@ class ItemAdmin(admin.ModelAdmin):
     readonly_fields = ("created_at", "updated_at")
 
 
-__all__ = ["GalleryInline", "ItemAdmin", "ItemAdminForm"]
+__all__ = ()

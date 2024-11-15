@@ -171,4 +171,4 @@ def unlock_account(request, signed_username):
     return render(request, template_name)
 
 
-__all__ = []
+__all__ = ()

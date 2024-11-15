@@ -66,4 +66,4 @@ class EmailBackend(ModelBackend):
             return None
 
 
-__all__ = []
+__all__ = ()

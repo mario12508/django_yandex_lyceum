@@ -122,4 +122,4 @@ class ItemModelTests(TestCase):
         item.full_clean()
 
 
-__all__ = ["ItemModelTests"]
+__all__ = ()

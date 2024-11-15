@@ -189,4 +189,4 @@ class FeedbackFormTests(TestCase):
         )
 
 
-__all__ = ["FeedbackFormTests"]
+__all__ = ()

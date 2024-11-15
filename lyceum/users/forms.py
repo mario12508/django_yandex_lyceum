@@ -108,4 +108,4 @@ class CustomAuthenticationForm(AuthenticationForm):
         return self.user_cache
 
 
-__all__ = []
+__all__ = ()

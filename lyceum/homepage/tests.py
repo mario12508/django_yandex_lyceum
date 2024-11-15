@@ -108,4 +108,4 @@ class HomepageViewsTests(TestCase):
             )
 
 
-__all__ = ["StaticURLTests"]
+__all__ = ()

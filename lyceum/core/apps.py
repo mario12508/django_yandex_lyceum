@@ -6,4 +6,4 @@ class CoreConfig(AppConfig):
     name = "core"
 
 
-__all__ = ["CoreConfig"]
+__all__ = ()
