@@ -1,4 +1,4 @@
-import argparse
+import sys
 import re
 
 from django.contrib.auth.models import (
@@ -7,14 +7,6 @@ from django.contrib.auth.models import (
 )
 from django.core.exceptions import ValidationError
 from django.db import models
-
-
-def is_migration_command():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("command", nargs="?")
-    args, _ = parser.parse_known_args()
-
-    return args.command in ["makemigrations", "migrate"]
 
 
 class CustomUserManager(DjangoUserManager):
@@ -57,11 +49,6 @@ class CustomUser(AbstractUser):
     def __str__(self):
         return self.username
 
-    def clean(self):
-        super().clean()
-        if CustomUser.objects.filter(email=self.email).exists():
-            raise ValidationError("Пользователь с таким email уже существует.")
-
 
 class User(CustomUser):
     objects = CustomUserManager()
@@ -77,7 +64,7 @@ class User(CustomUser):
         return self.profile
 
 
-if not is_migration_command():
+if "makemigrations" not in sys.argv and "migrate" not in sys.argv:
     User._meta.get_field("email")._unique = True
 
 

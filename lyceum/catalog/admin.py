@@ -46,7 +46,10 @@ class ItemAdmin(admin.ModelAdmin):
     list_display_links = (Item.name.field.name,)
     filter_horizontal = (Item.tags.field.name,)
     inlines = [MainImageInline, GalleryInline]
-    readonly_fields = ("created_at", "updated_at")
+    readonly_fields = (
+        Item.created_at.field.name,
+        Item.updated_at.field.name,
+    )
 
 
 __all__ = ()

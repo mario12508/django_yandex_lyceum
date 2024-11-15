@@ -30,35 +30,34 @@ def signup_view(request):
             user=user,
         )
 
-        signer = signing.TimestampSigner()
-        signed_username = signer.sign(user.username)
-        activate_link = request.build_absolute_uri(
-            reverse(
-                "users:activate",
-                kwargs={"signed_username": signed_username},
-            ),
-        )
-
-        send_mail(
-            subject="Активация профиля",
-            message=render_to_string(
-                "users/activation_email.txt",
-                {"activate_link": activate_link},
-            ),
-            from_email=settings.EMAIL_HOST,
-            recipient_list=[form.cleaned_data["email"]],
-        )
-
-        if settings.DEFAULT_USER_IS_ACTIVE:
-            messages.success(
-                request,
-                "Вы зарегистрированы. Войдите с новыми данными",
+        if not settings.DEFAULT_USER_IS_ACTIVE:
+            signer = signing.TimestampSigner()
+            signed_username = signer.sign(user.username)
+            activate_link = request.build_absolute_uri(
+                reverse(
+                    "users:activate",
+                    kwargs={"signed_username": signed_username},
+                ),
             )
-        else:
+
+            send_mail(
+                subject="Активация профиля",
+                message=render_to_string(
+                    "users/activation_email.txt",
+                    {"activate_link": activate_link},
+                ),
+                from_email=settings.EMAIL_HOST,
+                recipient_list=[form.cleaned_data["email"]],
+            )
             messages.warning(
                 request,
                 "Вам необходимо активировать Ваш профиль. "
                 "Проверьте указанную почту",
+            )
+        else:
+            messages.success(
+                request,
+                "Вы зарегистрированы. Войдите с новыми данными",
             )
 
         return redirect("users:login")
@@ -88,8 +87,10 @@ def activate_user_view(request, signed_username):
 
 @login_required
 def user_list_view(request):
-    users_list = Profile.objects.filter(
-        user__is_active=True,
+    users_list = (
+        Profile.objects.select_related('user')
+        .filter(user__is_active=True)
+        .values('user__username', 'user__email')
     )
     return render(request, "users/user_list.html", {"user_list": users_list})
 
@@ -106,8 +107,9 @@ def profile_view(request):
     profile_form = ProfileUpdateForm(
         request.POST or None,
         request.FILES or None,
-        instance=user.profile,
+        instance=user.profile or None,
     )
+
     user_form = UserChangeForm(
         request.POST or None,
         instance=user,
