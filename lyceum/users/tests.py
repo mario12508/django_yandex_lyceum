@@ -4,6 +4,7 @@ import unittest.mock
 from django.conf import settings
 from django.core import signing
 from django.test import TestCase
+from django.test.utils import override_settings
 from django.urls import reverse
 
 from users.models import User
@@ -20,6 +21,7 @@ class UserRegistrationTests(TestCase):
         }
 
     @unittest.mock.patch("users.views.send_mail")
+    @override_settings(DEFAULT_USER_IS_ACTIVE=False)
     def test_successful_registration(self, mock_send_mail):
         response = self.client.post(
             self.registration_url,

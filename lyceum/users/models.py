@@ -1,11 +1,10 @@
-import sys
 import re
+import sys
 
 from django.contrib.auth.models import (
     AbstractUser,
     BaseUserManager as DjangoUserManager,
 )
-from django.core.exceptions import ValidationError
 from django.db import models
 
 

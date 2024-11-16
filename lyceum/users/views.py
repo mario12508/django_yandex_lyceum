@@ -88,16 +88,26 @@ def activate_user_view(request, signed_username):
 @login_required
 def user_list_view(request):
     users_list = (
-        Profile.objects.select_related('user')
+        Profile.objects.select_related("user")
         .filter(user__is_active=True)
-        .values('user__username', 'user__email')
+        .only("user__username", "user__email", "id", "birthday", "image")
     )
     return render(request, "users/user_list.html", {"user_list": users_list})
 
 
 def user_detail_view(request, pk):
-    user = get_object_or_404(Profile, pk=pk)
-    return render(request, "users/user_detail.html", {"user": user})
+    template_name = "users/user_detail.html"
+    user = get_object_or_404(
+        Profile.objects,
+        user__is_active=True,
+        pk=pk,
+    )
+
+    content = {
+        "profile": user,
+    }
+    print()
+    return render(request, template_name, content)
 
 
 @login_required

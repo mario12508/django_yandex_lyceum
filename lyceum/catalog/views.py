@@ -40,9 +40,17 @@ def new_items(request):
     end_date = timezone.now()
     start_date = end_date - datetime.timedelta(weeks=1)
 
-    recent_items = Item.objects.published().filter(
+    queryset = Item.objects.published()
+    filtered_items = queryset.filter(
         created_at__range=(start_date, end_date),
-    ).only("id", "name", "category__name", "tags__name").order_by("?")[:5]
+    )
+    selected_fields = filtered_items.only(
+        "id",
+        "name",
+        "category__name",
+        "tags__name",
+    )
+    recent_items = selected_fields.order_by("?")[:5]
 
     content = {
         "items": recent_items,
@@ -54,14 +62,17 @@ def new_items(request):
 def friday_items(request):
     template_name = "catalog/item_list.html"
 
-    friday_items_list = Item.objects.published().filter(
+    queryset = Item.objects.published()
+    filtered_items = queryset.filter(
         updated_at__week_day=6,
-    ).only(
+    )
+    selected_fields = filtered_items.only(
         "id",
         "name",
         "updated_at",
         "category__name",
-    ).order_by("updated_at")[:5]
+    )
+    friday_items_list = selected_fields.order_by("updated_at")[:5]
 
     content = {
         "items": friday_items_list,
@@ -73,16 +84,19 @@ def friday_items(request):
 def unverified_items(request):
     template_name = "catalog/item_list.html"
 
-    items = Item.objects.published().filter(
-        created_at=models.F("updated_at"),
-    ).only("id", "name", "category__name")
+    items = (
+        Item.objects.published()
+        .filter(
+            created_at=models.F("updated_at"),
+        )
+        .only("id", "name", "category__name")
+    )
 
     content = {
         "items": items,
         "title": "Непроверенное",
     }
     return render(request, template_name, content)
-
 
 
 __all__ = ()

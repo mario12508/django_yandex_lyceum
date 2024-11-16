@@ -4,16 +4,20 @@
 
 <h1>Профиль пользователя</h1>
 
-<img src="{{ user.image.url }}" alt="Фото профиля" width="150" height="150">
+<strong>Изображения</strong>
+{% if profile.image %}
+  <img src="/media/{{ profile.image }}" alt="profile Image">
+{% else %}
+  <span class="text-muted"><em>неуказано</em></span>
+{% endif %}
+<p><strong>Имя пользователя:</strong> {{ profile.user.username }}</p>
+<p><strong>Email:</strong> {{ profile.user.email }}</p>
 
-<p><strong>Имя пользователя:</strong> {{ user.user.username }}</p>
-<p><strong>Email:</strong> {{ user.user.email }}</p>
+<p><strong>Имя:</strong> {% if profile.user.first_name %}{{ profile.user.first_name }}{% else %}не указано{% endif %}</p>
+<p><strong>Фамилия:</strong> {% if profile.user.last_name %}{{ profile.user.last_name }}{% else %}не указано{% endif %}</p>
+<p><strong>Дата рождения:</strong> {% if profile.birthday %}{{ profile.birthday|date:"d F" }}{% else %}не указано{% endif %}</p>
 
-<p><strong>Имя:</strong> {% if user.user.first_name %}{{ user.user.first_name }}{% else %}не указано{% endif %}</p>
-<p><strong>Фамилия:</strong> {% if user.user.last_name %}{{ user.user.last_name }}{% else %}не указано{% endif %}</p>
-<p><strong>Дата рождения:</strong> {% if user.birthday %}{{ user.birthday|date:"d F" }}{% else %}не указано{% endif %}</p>
-
-<p><strong>Количество попыток выпить кофе:</strong> {{ user.coffee_count }}</p>
+<p><strong>Количество попыток выпить кофе:</strong> {{ profile.coffee_count }}</p>
 
 <a href="{% url 'users:profile' %}">Редактировать профиль</a>
 

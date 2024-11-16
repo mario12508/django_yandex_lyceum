@@ -35,10 +35,14 @@ class Tag(CategoryAndTags):
 
 class ItemManager(models.Manager):
     def published(self):
-        queryset = self.get_queryset().filter(
-            is_published=True,
-            category__is_published=True,
-        ).select_related("category")
+        queryset = (
+            self.get_queryset()
+            .filter(
+                is_published=True,
+                category__is_published=True,
+            )
+            .select_related("category")
+        )
 
         tags_prefetch = models.Prefetch(
             "tags",
@@ -46,7 +50,10 @@ class ItemManager(models.Manager):
         )
 
         return queryset.prefetch_related(tags_prefetch).only(
-            "id", "name", "text", "category__name"
+            "id",
+            "name",
+            "text",
+            "category__name",
         )
 
     def on_main(self):
